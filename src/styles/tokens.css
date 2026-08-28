@@ -1,0 +1,46 @@
+@theme {
+  /* Instrument housing — a console, not a marketing page.
+     Colour is semantic and the whole scale is cool, the way a real readout is.
+     Saturation carries the meaning: fully saturated cyan is something happening
+     NOW, pale ice is something already recorded. Nothing here is decorative. */
+  --color-void: #04070e;
+  --color-panel: #0a1018;
+  --color-panel-2: #0f1724;
+  --color-line: #182333;
+  --color-line-bright: #294055;
+
+  /* Primary. Electric cyan = a live agent — the one colour the page spends freely. */
+  --color-signal: #00e1ff;
+  /* Reserved for one claim only: this costs nothing. Because it appears rarely,
+     it lands every time — and the page never becomes "black plus one acid accent". */
+  --color-free: #e8ff54;
+  /* Observed telemetry: cooler and calmer than signal, because it has already
+     happened — but NOT pale. A near-white accent stops reading as an accent, and
+     the active channel in the index becomes indistinguishable from an inactive one. */
+  --color-trace: #4fbeff;
+  --color-trace-dim: #123a5c;
+  --color-ion: #9b8cff;
+  --color-alert: #ff4d6d;
+
+  --color-ink: #e6eef8;
+  --color-muted: #7a8da1;
+  --color-faint: #4a5a70;
+
+  --font-display: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  --text-eyebrow: 0.6875rem;
+  --text-data: 0.75rem;
+  --text-hero: clamp(2.35rem, 1.1rem + 3.3vw, 4.15rem);
+  --text-section: clamp(1.75rem, 1.2rem + 1.9vw, 2.9rem);
+  --text-lead: clamp(1.05rem, 0.98rem + 0.35vw, 1.3rem);
+
+  --spacing-section: clamp(5rem, 3rem + 7vw, 11rem);
+  --spacing-rail: 4.5rem;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-snap: cubic-bezier(0.32, 0.9, 0.28, 1);
+  --duration-fast: 180ms;
+  --duration-normal: 420ms;
+}

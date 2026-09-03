@@ -16,11 +16,12 @@ type Props = { onDone: () => void; skip: boolean };
  * it holds the first frames until fonts are ready, so the hero never reflows
  * mid-reveal, and it sets the instrument premise before a word is read.
  *
- * The exit is a CRT power-down: the panel collapses to a single bright line, the
- * line blooms, then wipes. A curtain lift was the obvious move and read as a
- * generic page transition; a monitor switching off is the one exit that belongs to
- * a page pretending to be a monitor. On the way out the wordmark flies to the exact
- * box it will occupy in the nav, so the mark is never re-drawn — it lands.
+ * The exit is a fade with a small inward scale — the panel settles back rather
+ * than staying flat, so the cut into the hero reads as depth, not a wipe. An
+ * earlier version collapsed the panel to a bright line with a bloom, a CRT
+ * power-down; it read as a dated TV gimmick rather than as this page's own
+ * instrument, so it is gone. On the way out the wordmark still flies to the
+ * exact box it occupies in the nav, so the mark is never re-drawn — it lands.
  */
 export function BootSequence({ onDone, skip }: Props) {
   const root = useRef<HTMLDivElement>(null);
@@ -40,9 +41,9 @@ export function BootSequence({ onDone, skip }: Props) {
     if (!scope) return;
 
     // Two moments, deliberately separate. The hero is released the instant the
-    // panel starts collapsing, so it animates in behind a shrinking overlay rather
+    // panel starts fading, so it animates in behind a thinning overlay rather
     // than after a beat of empty screen. Tearing the overlay down waits for the
-    // beam to finish.
+    // fade to finish.
     const release = () => {
       if (released.current) return;
       released.current = true;
@@ -103,30 +104,13 @@ export function BootSequence({ onDone, skip }: Props) {
         const flight = flyMarkToNav(scope);
         if (flight) exit.to("[data-boot='mark']", { ...flight, duration: 0.62, ease: "expo.inOut" }, 0.1);
 
-        exit
-          // The collapse. transform-origin is centre, so the panel closes onto the beam.
-          .to(
-            "[data-boot='panel']",
-            { scaleY: 0.004, duration: 0.4, ease: "power3.in", onStart: release },
-            ">-0.06",
-          )
-          .set("[data-boot='mark']", { opacity: 0 }, "<")
-          // The beam takes over exactly as the panel finishes closing, and overshoots
-          // in brightness for a frame — the surge a tube makes as it gives up.
-          .set("[data-boot='panel']", { opacity: 0 })
-          .fromTo(
-            "[data-boot='beam']",
-            { opacity: 0, scaleX: 1, scaleY: 1 },
-            { opacity: 1, scaleY: 2.4, duration: 0.12, ease: "power2.out" },
-            "<",
-          )
-          .to("[data-boot='beam']", { scaleY: 1, duration: 0.16, ease: "power2.inOut" })
-          .to("[data-boot='beam']", {
-            scaleX: 0,
-            opacity: 0,
-            duration: 0.5,
-            ease: "expo.inOut",
-          });
+        // The hero is released as the fade begins, so it animates in behind a
+        // thinning panel rather than after a beat of empty screen.
+        exit.to(
+          "[data-boot='panel']",
+          { opacity: 0, scale: 0.985, duration: 0.55, ease: "power2.inOut", onStart: release },
+          ">-0.1",
+        );
       });
     }, scope);
 
@@ -206,14 +190,6 @@ export function BootSequence({ onDone, skip }: Props) {
           </ul>
         </div>
       </div>
-
-      {/* The line the tube collapses onto. Sits outside the panel so it survives the
-          panel's own scale, and carries a bloom so it reads as emitted, not drawn. */}
-      <span
-        data-boot="beam"
-        aria-hidden="true"
-        className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-signal opacity-0 shadow-[0_0_24px_6px_var(--color-signal)]"
-      />
     </div>
   );
 }

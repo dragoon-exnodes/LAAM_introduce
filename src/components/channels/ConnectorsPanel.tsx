@@ -3,35 +3,30 @@ import { ConnectorStreams } from "./ConnectorStreams";
 import { PanelFrame } from "./PanelFrame";
 
 /**
- * The two things a connector panel has to say, kept on separate axes so neither
- * is mistaken for the other:
+ * One axis only: is this connector wired up right now? Gold strand carrying
+ * traffic if yes, cool blue line to a hollow terminal if not — the same two
+ * states LAAM's own /constellation uses.
  *
- *   connected  — is it wired up right now? Drives the drawing: gold strand and
- *                traffic if yes, cool blue and a hollow terminal if not. Same
- *                two states LAAM's own /constellation uses.
- *   unattended — may its WRITE run without a person? That is declared per TOOL,
- *                not per connector: every service here has at least one write,
- *                and what differs is whether it is `workflowSafe` behind a
- *                recipient allowlist or fail-closed and held. Stays a label.
+ * The per-write allowlist/confirm split used to sit here as a second label
+ * column. It was a different question on a different axis (declared per TOOL,
+ * not per connector) and reading one off the other was easy to do and wrong.
+ * The copy beside this panel still makes that point in words — "write tools
+ * gated, never silent" — which is where a nuance like that belongs.
  *
- * Which are connected is fictional, like everything else on this page — a real
- * answer belongs to whoever is signed in. Some are off on purpose: an honest
+ * Which are connected is fictional, like everything else on this page: a real
+ * answer belongs to whoever is signed in. Some are off on purpose — an honest
  * picture of a working install has lights that are not lit yet.
- *
- * Four of the nine carry an unattended write. The registry has five
- * `workflowSafe: true` tools, but the fifth belongs to the credential-free
- * `demo` connector, which is internal QA and deliberately not shown.
  */
 const CONNECTORS = [
-  { name: "GitHub", connected: true, unattended: false },
-  { name: "Jira", connected: false, unattended: false },
-  { name: "Trello", connected: false, unattended: false },
-  { name: "Drive", connected: true, unattended: false },
-  { name: "Calendar", connected: false, unattended: false },
-  { name: "Gmail", connected: true, unattended: true },
-  { name: "Slack", connected: true, unattended: true },
-  { name: "WhatsApp", connected: false, unattended: true },
-  { name: "Zalo OA", connected: false, unattended: true },
+  { name: "GitHub", connected: true },
+  { name: "Jira", connected: false },
+  { name: "Trello", connected: false },
+  { name: "Drive", connected: true },
+  { name: "Calendar", connected: false },
+  { name: "Gmail", connected: true },
+  { name: "Slack", connected: true },
+  { name: "WhatsApp", connected: false },
+  { name: "Zalo OA", connected: false },
 ] as const;
 
 const CONNECTED = CONNECTORS.filter((c) => c.connected).length;
@@ -62,17 +57,10 @@ export function ConnectorsPanel() {
                   so the gap to its strand is identical on all nine rows. Ragged
                   left edges were leaving the short names visibly adrift. */}
               <span
-                className="w-[5.5rem] shrink-0 font-mono text-[11px]"
+                className="shrink-0 font-mono text-[11px]"
                 style={{ color: c.connected ? "#ffce7a" : "var(--color-muted)" }}
               >
                 {c.name}
-              </span>
-              <span
-                className={`w-[4.5rem] shrink-0 text-right font-mono text-[9px] uppercase tracking-[0.14em] ${
-                  c.unattended ? "text-signal/70" : "text-faint"
-                }`}
-              >
-                {c.unattended ? "allowlist" : "confirm"}
               </span>
             </li>
           ))}

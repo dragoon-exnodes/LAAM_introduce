@@ -27,6 +27,9 @@ export type Stream = {
 // is wired up, cool blue for one that is merely available.
 const GOLD = "255,206,122";
 const COOL = "120,170,205";
+// LAAM itself is the page's own accent, not the gold of the services attached to
+// it — the core reads as the thing being connected TO rather than another node.
+const CORE = "34,211,238";
 
 /** Vertical extent of the fan, as a fraction of canvas height. */
 const SPREAD = 0.86;
@@ -67,7 +70,7 @@ export function ConnectorStreams({ streams }: { streams: readonly Stream[] }) {
       coreY = H / 2;
       coreR = Math.min(W * 0.09, H * 0.17);
       // Where the strands gather before the last run into the core.
-      waistX = W * 0.40;
+      waistX = W * 0.46;
     }
 
     function buildPackets() {
@@ -87,16 +90,15 @@ export function ConnectorStreams({ streams }: { streams: readonly Stream[] }) {
      * Where a strand terminates, level with its label's row.
      *
      * Stops just short of the label column — far enough that the terminal ring
-     * clears the first letter of the name (at 0.71 it sat on it), close enough
-     * that the terminal still reads as attached to it.
-     * The names are left-aligned to a fixed mark on the panel side, so this one
-     * x sits the same distance from every row rather than leaving short names
-     * like "Jira" stranded.
+     * clears the first letter of the name, close enough that it still reads as
+     * attached. Measured, not guessed: this value puts the ring 15px from the
+     * text. It moved out when the confirm/allowlist column was removed and the
+     * labels shifted right with it, so it is tied to the label block's width.
      */
     function entry(i: number) {
       const span = H * SPREAD;
       const step = streams.length > 1 ? span / (streams.length - 1) : 0;
-      return { x: W * 0.685, y: (H - span) / 2 + i * step };
+      return { x: W * 0.881, y: (H - span) / 2 + i * step };
     }
 
     /**
@@ -174,8 +176,8 @@ export function ConnectorStreams({ streams }: { streams: readonly Stream[] }) {
       const glow = 0.35 + breathe * 0.25;
 
       const g = ctx!.createRadialGradient(coreX, coreY, 0, coreX, coreY, coreR * 1.6);
-      g.addColorStop(0, `rgba(${GOLD},${0.16 * glow})`);
-      g.addColorStop(1, `rgba(${GOLD},0)`);
+      g.addColorStop(0, `rgba(${CORE},${0.18 * glow})`);
+      g.addColorStop(1, `rgba(${CORE},0)`);
       ctx!.fillStyle = g;
       ctx!.beginPath();
       ctx!.arc(coreX, coreY, coreR * 1.6, 0, 6.3);
@@ -184,9 +186,9 @@ export function ConnectorStreams({ streams }: { streams: readonly Stream[] }) {
       // Three widening, dimming passes is what reads as a lit tube; one blurred
       // stroke reads as a flat circle. Same treatment as the hero's core.
       const passes: [number, string, number][] = [
-        [10 * DPR, `rgba(${GOLD},${0.16 * glow})`, 26 * DPR],
-        [5 * DPR, `rgba(${GOLD},${0.4 * glow})`, 16 * DPR],
-        [1.6 * DPR, `rgba(255,238,205,${0.9 * glow})`, 12 * DPR],
+        [10 * DPR, `rgba(${CORE},${0.16 * glow})`, 26 * DPR],
+        [5 * DPR, `rgba(${CORE},${0.4 * glow})`, 16 * DPR],
+        [1.6 * DPR, `rgba(205,245,255,${0.9 * glow})`, 12 * DPR],
       ];
       for (const [lw, stroke, blur] of passes) {
         ctx!.beginPath();
@@ -194,7 +196,7 @@ export function ConnectorStreams({ streams }: { streams: readonly Stream[] }) {
         ctx!.lineWidth = lw;
         ctx!.strokeStyle = stroke;
         ctx!.shadowBlur = blur;
-        ctx!.shadowColor = "#ffce7a";
+        ctx!.shadowColor = "#22d3ee";
         ctx!.stroke();
       }
       ctx!.shadowBlur = 0;

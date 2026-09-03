@@ -81,3 +81,43 @@ export function countUp(
     tween.kill();
   };
 }
+
+/**
+ * Grows every `[data-bar]` inside scope from empty to its resting width when it
+ * scrolls into view, alongside the count it sits beside.
+ *
+ * Transform, not width: the element's `width` inline style already holds the
+ * finished value the layout needs, so animating it would thrash layout on every
+ * frame. scaleX with a left transform-origin reaches the same picture — the fill
+ * growing from the left edge — entirely on the compositor.
+ */
+export function fillBarsOnScroll(scope: HTMLElement, reduced: boolean) {
+  const bars = gsap.utils.toArray<HTMLElement>(scope.querySelectorAll("[data-bar]"));
+  if (bars.length === 0) return () => {};
+
+  if (reduced) {
+    gsap.set(bars, { scaleX: 1 });
+    return () => {};
+  }
+
+  gsap.set(bars, { scaleX: 0, transformOrigin: "left center", willChange: "transform" });
+
+  const triggers = ScrollTrigger.batch(bars, {
+    start: "top 88%",
+    once: true,
+    onEnter: (batch) =>
+      gsap.to(batch, {
+        scaleX: 1,
+        duration: 1.1,
+        ease: "expo.out",
+        stagger: 0.09,
+        overwrite: true,
+        onComplete: () => gsap.set(batch, { willChange: "auto" }),
+      }),
+  });
+
+  return () => {
+    triggers.forEach((t) => t.kill());
+    gsap.set(bars, { clearProps: "all" });
+  };
+}

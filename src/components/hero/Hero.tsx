@@ -6,7 +6,7 @@ import { Button } from "../ui/Button";
 import { Eyebrow } from "../ui/Eyebrow";
 import { Reticle } from "../system/Reticle";
 import { ScopeReadout } from "./ScopeReadout";
-import { SplineStage } from "./SplineStage";
+import { ConstellationStage } from "./ConstellationStage";
 
 const HEADLINE = ["Every agent.", "Every machine.", "In plain sight."];
 
@@ -152,13 +152,13 @@ export function Hero({ ready }: { ready: boolean }) {
             />
 
             <div className="scanline absolute inset-0 opacity-40" aria-hidden="true" />
-            <SplineStage />
+            <ConstellationStage />
             <Reticle />
             <ScopeReadout />
           </div>
 
           <p className="mt-3 font-mono text-[length:var(--text-eyebrow)] uppercase tracking-[0.16em] text-faint">
-            Observed subject — one agent of many
+            Assistant map — every surface on one core
           </p>
         </div>
       </div>

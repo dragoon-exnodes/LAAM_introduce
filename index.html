@@ -10,6 +10,28 @@
       content="LAAM monitors the AI agents already running on your team's machines, adds a local-model assistant and durable workflow automation, and costs $0 in model spend."
     />
 
+    <!-- public/favicon.svg already existed but was never linked, so every visit
+         fell through to a 404 on the browser's default /favicon.ico probe. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <!-- Share-card metadata: this page is sent to partners as a link (Zalo, Slack,
+         email), where a bare URL with no preview reads as unfinished.
+         TODO(owner): add `og:url` and an `og:image` (1200x630 PNG) once the public
+         domain is fixed — without an image these render as a text-only card. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="LAAM" />
+    <meta property="og:title" content="LAAM — Every agent, every machine, in plain sight" />
+    <meta
+      property="og:description"
+      content="LAAM monitors the AI agents already running on your team's machines, adds a local-model assistant and durable workflow automation, and costs $0 in model spend."
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="LAAM — Every agent, every machine, in plain sight" />
+    <meta
+      name="twitter:description"
+      content="LAAM monitors the AI agents already running on your team's machines, adds a local-model assistant and durable workflow automation, and costs $0 in model spend."
+    />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

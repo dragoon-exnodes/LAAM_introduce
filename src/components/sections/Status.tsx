@@ -2,10 +2,20 @@ import { STATUS_FACTS } from "../../lib/content";
 import { Eyebrow } from "../ui/Eyebrow";
 import { Section } from "./Section";
 
+/*
+ * Verified against the artifacts, not the changelog headings — the previous list
+ * named three things that had already shipped (the collector + /api/ingest +
+ * machine registry; per-user chat with the cloud-first internal-model router;
+ * the Tailscale Funnel/Serve runbook in docs/DEPLOYMENT.md), which undersold the
+ * product to anyone who then saw it running. These three are genuinely open:
+ *   - audit_log today carries agent writes and token grants, not every action;
+ *   - vision is wired on the local model path only, not the cloud one;
+ *   - voice STT is the browser's Web Speech API, so it needs Chrome.
+ */
 const AHEAD = [
-  "Wider multi-machine collector",
-  "Per-user chat with smart routing",
-  "Tailscale, hardening, full audit trail",
+  "Audit coverage beyond writes and token grants",
+  "Vision on the cloud model path, not just the local one",
+  "Self-hosted speech-to-text, so voice stops needing Chrome",
 ] as const;
 
 export function Status() {

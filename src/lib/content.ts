@@ -16,7 +16,7 @@ export const PROBLEMS = [
   {
     route: "the meter",
     title: "Every small question bills a frontier model",
-    body: "Summaries, lookups, one-line rewrites — the everyday work that shouldn't need a paid API call, priced like it does.",
+    body: "Summaries, lookups, one-line rewrites — the everyday work that shouldn't need a paid API call, priced like it does. And when the invoice lands, nothing ties it back to a model, a session or a branch.",
   },
   {
     route: "the busywork",
@@ -51,10 +51,10 @@ export const CHANNELS: readonly Channel[] = [
     panel: "monitoring",
     tone: "signal",
     title: "Live agent telemetry",
-    body: "Every session from every machine, streaming over SSE. Sub-agent trees, tool-call waterfalls, and an alert the moment a run goes quiet for longer than it should.",
+    body: "Every session from every machine, streaming over SSE. Sub-agent trees, tool-call waterfalls, and an alert the moment a run goes quiet for longer than it should. The dashboard turns the same rows into spend you can attribute — per model, per session, per branch — and exports it as CSV or PDF.",
     points: [
       "Orchestrator → sub-agent graph",
-      "Hour × weekday heatmap, cost over time",
+      "Filter by project, model, branch, machine",
       "Configurable stuck-agent threshold",
     ],
   },
@@ -86,10 +86,10 @@ export const CHANNELS: readonly Channel[] = [
     panel: "workflow",
     tone: "signal",
     title: "Durable graph automation",
-    body: "Connector, agent, condition, foreach, MCP and custom-agent nodes on one canvas. Runs survive a crash, resume per node, and can be scheduled.",
+    body: "Connector, agent, condition, foreach, MCP and custom-agent nodes on one canvas. Runs survive a crash, resume per node, and can be scheduled. Describe the job in chat and the assistant drafts the graph — then dry-runs it against real data and rewrites itself from what came back.",
     points: [
       "Parallel DAG — fan-out, fan-in",
-      "Dry-run a draft against real data",
+      "AI-drafted graphs, corrected by dry-run",
       "Mid-run cancel, templates, clone",
     ],
   },

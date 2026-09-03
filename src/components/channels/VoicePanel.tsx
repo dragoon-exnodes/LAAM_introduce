@@ -73,9 +73,9 @@ export function VoicePanel({ active }: { active: boolean }) {
           </div>
           <dl className="space-y-1.5">
             {[
-              ["Nguyen T.", "42 refunds"],
-              ["Tran M.", "31 refunds"],
-              ["Le H.", "18 refunds"],
+              ["M. Bennett", "42 refunds"],
+              ["R. Doyle", "31 refunds"],
+              ["S. Fletcher", "18 refunds"],
             ].map(([store, value], index) => (
               <div key={store} className="flex items-center gap-3">
                 <dt className="w-24 shrink-0 font-mono text-[11px] text-muted">{store}</dt>

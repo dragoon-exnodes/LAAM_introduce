@@ -34,16 +34,36 @@ export function Problem() {
           isn't actually built from the same values. */}
       <div className="reveal mt-8 border border-line bg-panel/40 p-7 lg:p-10">
         <Eyebrow tone="trace">The answer</Eyebrow>
-        <p className="mt-4 max-w-2xl text-[length:var(--text-lead)]">
-          <span className="text-ink">
-            LAAM answers all three from the transcripts your agents already
-            write to disk.
-          </span>{" "}
-          <span className="text-muted">
-            Point it at a machine and it starts reporting — there is nothing to
-            add to the agent side.
-          </span>
-        </p>
+        {/* The paragraph alone left the right two-thirds of a full-width panel
+            empty — every other full-width panel on the page (the scoreboards in
+            Evidence) fills that space with content, not air. "All three" is a
+            literal claim, so the fix is to actually enumerate them: the same
+            three routes from the grid above, marked resolved with the ✓ idiom
+            this page already uses for a completed check (BootSequence, the
+            write-gate steps) — proof of the sentence, not a decoration next to it. */}
+        <div className="mt-4 grid gap-6 lg:grid-cols-[1fr_15rem] lg:gap-14">
+          <p className="text-[length:var(--text-lead)]">
+            <span className="text-ink">
+              LAAM answers all three from the transcripts your agents already
+              write to disk.
+            </span>{" "}
+            <span className="text-muted">
+              Point it at a machine and it starts reporting — there is nothing
+              to add to the agent side.
+            </span>
+          </p>
+          <ul className="space-y-2.5 border-t border-line pt-5 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
+            {PROBLEMS.map((problem) => (
+              <li
+                key={problem.route}
+                className="flex items-center gap-2.5 font-mono text-[length:var(--text-data)] uppercase tracking-[0.12em] text-trace"
+              >
+                <span className="text-signal">✓</span>
+                {problem.route}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </Section>
   );

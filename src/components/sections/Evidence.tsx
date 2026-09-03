@@ -67,7 +67,7 @@ export function Evidence() {
         ))}
       </div>
 
-      <div className="reveal mt-10 border border-line bg-panel/84 p-7 lg:p-10">
+      <div className="reveal mt-10 border border-line bg-panel/40 p-7 lg:p-10">
         <div className="flex flex-wrap items-baseline justify-between gap-4">
           <Eyebrow tone="trace">Current scoreboard</Eyebrow>
           <span className="font-mono text-[length:var(--text-data)] text-faint">
@@ -111,7 +111,7 @@ export function Evidence() {
       {/* The behaviour suite is a second, wider measurement: not "did it pick the
           right tool out of sixty" but "did the whole loop behave" — scored per
           dimension over 85 runs. Same rule as above: the weak number stays. */}
-      <div className="reveal mt-6 border border-line bg-panel/84 p-7 lg:p-10">
+      <div className="reveal mt-6 border border-line bg-panel/40 p-7 lg:p-10">
         <div className="flex flex-wrap items-baseline justify-between gap-4">
           <Eyebrow tone="trace">Behaviour, by dimension</Eyebrow>
           <span className="font-mono text-[length:var(--text-data)] text-faint">

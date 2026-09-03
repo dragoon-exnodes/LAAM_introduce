@@ -3,18 +3,11 @@
      Colour is semantic and the whole scale is cool, the way a real readout is.
      Saturation carries the meaning: fully saturated cyan is something happening
      NOW, pale ice is something already recorded. Nothing here is decorative. */
-  /* The surface ladder. It used to span 1.12x from the darkest ground to the
-     brightest panel — void to panel was 1.06x and panel to panel-2 another
-     1.06x, both under the ~1.2x where a step becomes visible at all. Three
-     tokens described three surfaces and the eye read one, which left every
-     piece of structure on the page to be carried by hairline borders.
-     Now roughly 1.23x per step, so a panel reads as a panel. void is untouched:
-     the page ground stays deep, and the ladder rises off it. */
   --color-void: #04070e;
-  --color-panel: #152136;
-  --color-panel-2: #21314a;
-  --color-line: #2d3f5a;
-  --color-line-bright: #425777;
+  --color-panel: #0a1018;
+  --color-panel-2: #0f1724;
+  --color-line: #182333;
+  --color-line-bright: #294055;
 
   /* Primary. Electric cyan = a live agent — the one colour the page spends freely. */
   --color-signal: #00e1ff;
@@ -30,7 +23,7 @@
      ion, with saturation held at 0.57 so it parts from ion on that axis too
      (ion is 0.45; matching it turned the two muddy where they meet). */
   --color-trace: #6ea0ff;
-  --color-trace-dim: #2a436f;
+  --color-trace-dim: #23385d;
   --color-ion: #9b8cff;
   --color-alert: #ff4d6d;
   /* A live link to a system outside LAAM. Distinct from signal, which is a live
@@ -47,15 +40,8 @@
   --color-link-hot: #ffe1aa;
 
   --color-ink: #e6eef8;
-  /* muted and faint rose with the surfaces: holding them still while the
-     panels lifted would have quietly cut the contrast under every label.
-     faint went further than that. Auditing every text node against its real
-     composited background, 108 of 114 AA failures on this page were this one
-     colour — 8-11px labels carrying actual meaning, not decoration. It now
-     clears 4.5:1 on the surface it mostly sits on, and still sits a visible
-     1.5x below muted, so the tier it exists to mark survives. */
-  --color-muted: #90a7bd;
-  --color-faint: #7186a1;
+  --color-muted: #7a8da1;
+  --color-faint: #4a5a70;
 
   --font-display: "Archivo", ui-sans-serif, system-ui, sans-serif;
   --font-body: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;

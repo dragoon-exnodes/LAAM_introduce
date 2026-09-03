@@ -139,7 +139,7 @@ export function Hero({ ready }: { ready: boolean }) {
 
         <div data-anim="scope" data-parallax="scope" className="relative">
           {/* The scope: LAAM's whole proposition is that something is being observed. */}
-          <div className="bracket relative aspect-square w-full border border-line bg-panel/84 sm:aspect-[5/4] lg:aspect-square">
+          <div className="bracket relative aspect-square w-full border border-line bg-panel/40 sm:aspect-[5/4] lg:aspect-square">
             <span
               data-anim="bracket"
               className="absolute -left-px -top-px h-4 w-4 border-l border-t border-signal"

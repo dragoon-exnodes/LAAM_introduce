@@ -183,7 +183,7 @@ export function WorkflowPanel({ active }: { active: boolean }) {
             CLIPS: the last node is meant to be cut by the bottom edge the way a
             viewport cuts a bigger graph. Without overflow-hidden it just spills
             over the caption underneath, which reads as broken, not as cropped. */}
-        <div className="relative min-h-[25rem] flex-1 overflow-hidden rounded-sm border border-line bg-panel-2/84 [background-image:radial-gradient(circle,rgba(148,175,205,0.13)_1px,transparent_1px)] [background-size:14px_14px]">
+        <div className="relative min-h-[25rem] flex-1 overflow-hidden rounded-sm border border-line bg-panel-2/40 [background-image:radial-gradient(circle,rgba(148,175,205,0.13)_1px,transparent_1px)] [background-size:14px_14px]">
           <svg
             className="absolute inset-0 h-full w-full"
             viewBox="0 0 100 100"

@@ -31,7 +31,7 @@ export function Workflows() {
         </p>
       </header>
 
-      <div className="reveal mt-14 border border-line bg-panel/80 p-5 sm:p-8">
+      <div className="reveal mt-14 border border-line bg-panel/35 p-5 sm:p-8">
         <WorkflowDiagram />
       </div>
 

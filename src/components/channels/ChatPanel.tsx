@@ -39,7 +39,7 @@ export function ChatPanel({ active }: { active: boolean }) {
       <div className="flex min-h-0 flex-1 flex-col gap-4">
         {/* A settled earlier turn, so the thread reads as a conversation in progress
             rather than a single staged question. */}
-        <div className="ml-auto max-w-[70%] border border-line bg-panel-2/88 px-3.5 py-2 opacity-55">
+        <div className="ml-auto max-w-[70%] border border-line bg-panel-2/50 px-3.5 py-2 opacity-55">
           <p className="text-[12px] text-muted">Which machines reported today?</p>
         </div>
         <div className="max-w-[80%] border-l-2 border-line-bright px-3.5 py-2 opacity-55">
@@ -59,7 +59,7 @@ export function ChatPanel({ active }: { active: boolean }) {
           <span className="font-mono text-[10px] text-faint">tool_result · ok · 1 match</span>
         </div>
 
-        <div className="max-w-[88%] border-l-2 border-signal bg-panel-2/90 px-3.5 py-2.5">
+        <div className="max-w-[88%] border-l-2 border-signal bg-panel-2/60 px-3.5 py-2.5">
           <p className="min-h-[3.5rem] text-[13px] text-muted">
             {ANSWER.slice(0, typed)}
             {typed < ANSWER.length && (

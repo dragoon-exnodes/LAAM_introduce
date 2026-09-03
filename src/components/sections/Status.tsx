@@ -77,7 +77,7 @@ export function Status() {
           </dl>
         </div>
 
-        <div className="reveal border border-line bg-panel/84 p-8">
+        <div className="reveal border border-line bg-panel/40 p-8">
           <Eyebrow tone="trace">Next</Eyebrow>
           <ul className="mt-7 space-y-5">
             {AHEAD.map((item) => (

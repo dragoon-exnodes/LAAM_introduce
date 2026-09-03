@@ -11,7 +11,6 @@ import { Hero } from "./components/hero/Hero";
 import { TelemetryRibbon } from "./components/hero/TelemetryRibbon";
 import { Problem } from "./components/sections/Problem";
 import { Channels } from "./components/sections/Channels";
-import { Workflows } from "./components/sections/Workflows";
 import { Evidence } from "./components/sections/Evidence";
 import { Status } from "./components/sections/Status";
 import { Contact } from "./components/sections/Contact";
@@ -68,7 +67,6 @@ export default function App() {
         <TelemetryRibbon />
         <Problem />
         <Channels />
-        <Workflows />
         <Evidence />
         <Status />
         <Contact />

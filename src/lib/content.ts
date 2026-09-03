@@ -3,7 +3,6 @@
 export const NAV_LINKS = [
   { href: "#watch", label: "What it watches" },
   { href: "#surfaces", label: "Surfaces" },
-  { href: "#workflows", label: "Workflows" },
   { href: "#evidence", label: "Evidence" },
 ] as const;
 
@@ -90,6 +89,7 @@ export const CHANNELS: readonly Channel[] = [
     points: [
       "Parallel DAG — fan-out, fan-in",
       "AI-drafted graphs, corrected by dry-run",
+      "Every write pauses on a confirmation card, bound to a recipient allowlist",
       "Mid-run cancel, templates, clone",
     ],
   },

@@ -177,6 +177,29 @@ export const BENCHMARK = {
   average: 67,
 } as const;
 
+/**
+ * The behaviour suite (`npm run eval`), a different measurement from BENCHMARK
+ * above: 17 scenarios replayed five times each — 85 runs — against the same
+ * agent loop production uses, scored per dimension rather than pass/fail.
+ * gpt-oss-120b, 2026-09-03.
+ *
+ * Grounding is the low number and it stays on the page. It is the honest one:
+ * it asks whether the answer actually cites the value the tool returned, which
+ * is the hardest thing to get right and the thing worth being measured on.
+ */
+export const RELIABILITY = {
+  caption: "Behaviour suite · 17 scenarios × 5 runs · gpt-oss-120b · 2026-09-03",
+  rows: [
+    { label: "restraint", score: 100, note: "no tool call when none is needed" },
+    { label: "write-intent", score: 100, note: "every write reaches the gate" },
+    { label: "rich-block", score: 100, note: "maps and charts render as blocks" },
+    { label: "args", score: 97, note: "arguments match the tool's schema" },
+    { label: "termination", score: 90, note: "loop stops inside its round budget" },
+    { label: "tool-selection", score: 86, note: "reaches for the right tool" },
+    { label: "grounding", score: 67, note: "answer cites what the tool returned" },
+  ],
+} as const;
+
 // Labels stay short enough to hold one line — a wrapped label drops its value
 // out of line with the rest of the row.
 export const STATUS_FACTS = [

@@ -19,24 +19,22 @@ import { useReducedMotion } from "../../hooks/useReducedMotion";
 
 export type Stream = {
   name: string;
-  /** True when the connector's write may run unattended behind an allowlist. */
-  unattended: boolean;
+  /** Authorized and carrying traffic. Drives the whole visual state. */
+  connected: boolean;
 };
+
+// The product's own two states, from /constellation: gold for a connector that
+// is wired up, cool blue for one that is merely available.
+const GOLD = "255,206,122";
+const COOL = "120,170,205";
 
 /** Vertical extent of the fan, as a fraction of canvas height. */
 const SPREAD = 0.86;
 
-export function ConnectorStreams({ streams, litIndex }: { streams: readonly Stream[]; litIndex: number }) {
+export function ConnectorStreams({ streams }: { streams: readonly Stream[] }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const reduced = useReducedMotion();
-  // Mirrored into a ref so the rAF loop can read the current value without the
-  // effect below tearing down and rebuilding the canvas every time it changes.
-  const litRef = useRef(litIndex);
-  useEffect(() => {
-    litRef.current = litIndex;
-  }, [litIndex]);
-
   useEffect(() => {
     const host = hostRef.current;
     const canvas = canvasRef.current;
@@ -76,9 +74,11 @@ export function ConnectorStreams({ streams, litIndex }: { streams: readonly Stre
       packets = [];
       if (reduced) return;
       for (let i = 0; i < streams.length; i++) {
-        const n = streams[i].unattended ? 3 : 2;
-        for (let k = 0; k < n; k++) {
-          packets.push({ i, t: Math.random(), sp: 0.0022 + Math.random() * 0.0018 });
+        // Nothing travels a strand that is not connected. Their line is the offer,
+        // not a flow.
+        if (!streams[i].connected) continue;
+        for (let k = 0; k < 3; k++) {
+          packets.push({ i, t: Math.random(), sp: 0.0024 + Math.random() * 0.0016 });
         }
       }
     }
@@ -116,45 +116,52 @@ export function ConnectorStreams({ streams, litIndex }: { streams: readonly Stre
     function frame() {
       T++;
       ctx!.clearRect(0, 0, W, H);
-      const lit = litRef.current;
 
-      // ---- strands ----
+      // ---- strands: gold if connected, cool blue if merely available ----
       for (let i = 0; i < streams.length; i++) {
         const p = pathPoints(i);
-        const isLit = i === lit;
-        const warm = streams[i].unattended;
+        const on = streams[i].connected;
 
         ctx!.beginPath();
         ctx!.moveTo(p[0], p[1]);
         ctx!.bezierCurveTo(p[2], p[3], p[4], p[5], p[6], p[7]);
-        ctx!.lineWidth = (isLit ? 1.6 : 0.9) * DPR;
-        ctx!.strokeStyle = isLit
-          ? "rgba(34,211,238,0.85)"
-          : warm
-            ? "rgba(34,211,238,0.22)"
-            : "rgba(148,175,205,0.16)";
-        ctx!.shadowBlur = isLit ? 10 * DPR : 0;
-        ctx!.shadowColor = "#22d3ee";
+        ctx!.lineWidth = (on ? 1.5 : 0.9) * DPR;
+        ctx!.strokeStyle = on ? `rgba(${GOLD},0.85)` : `rgba(${COOL},0.3)`;
+        ctx!.shadowBlur = on ? 8 * DPR : 0;
+        ctx!.shadowColor = "#ffce7a";
+        ctx!.stroke();
+        ctx!.shadowBlur = 0;
+
+        // Terminal marker, as on /constellation: a filled ring where a service is
+        // wired up, a hollow one where it is only on offer.
+        const [ex, ey] = [p[6], p[7]];
+        ctx!.beginPath();
+        ctx!.arc(ex, ey, 3.2 * DPR, 0, 6.3);
+        ctx!.lineWidth = 1.2 * DPR;
+        ctx!.strokeStyle = on ? `rgba(${GOLD},0.95)` : `rgba(${COOL},0.45)`;
+        if (on) {
+          ctx!.shadowBlur = 10 * DPR;
+          ctx!.shadowColor = "#ffce7a";
+        }
         ctx!.stroke();
         ctx!.shadowBlur = 0;
       }
 
       // ---- packets running inward ----
       for (const pk of packets) {
-        pk.t -= pk.sp * (pk.i === lit ? 2.6 : 1);
+        pk.t -= pk.sp;
         if (pk.t < 0) pk.t += 1;
         const p = pathPoints(pk.i);
         const x = bez(pk.t, p[0], p[2], p[4], p[6]);
         const y = bez(pk.t, p[1], p[3], p[5], p[7]);
-        const isLit = pk.i === lit;
-        // Fade in from the edge and out into the core, so packets arrive rather
-        // than stopping dead on the ring.
+        // Fade in from the far end and out into the core, so packets arrive
+        // rather than stopping dead on the ring.
         const edge = Math.min(1, Math.min(pk.t, 1 - pk.t) * 6);
         ctx!.beginPath();
-        ctx!.arc(x, y, (isLit ? 2 : 1.3) * DPR, 0, 6.3);
-        ctx!.fillStyle = `rgba(${isLit ? "180,240,255" : "140,200,225"},${edge * (isLit ? 0.95 : 0.5)})`;
-        ctx!.shadowBlur = (isLit ? 10 : 4) * DPR;
-        ctx!.shadowColor = "#22d3ee";
+        ctx!.arc(x, y, 1.8 * DPR, 0, 6.3);
+        ctx!.fillStyle = `rgba(255,225,170,${edge * 0.95})`;
+        ctx!.shadowBlur = 9 * DPR;
+        ctx!.shadowColor = "#ffce7a";
         ctx!.fill();
         ctx!.shadowBlur = 0;
       }
@@ -164,8 +171,8 @@ export function ConnectorStreams({ streams, litIndex }: { streams: readonly Stre
       const glow = 0.35 + breathe * 0.25;
 
       const g = ctx!.createRadialGradient(coreX, coreY, 0, coreX, coreY, coreR * 1.6);
-      g.addColorStop(0, `rgba(34,211,238,${0.16 * glow})`);
-      g.addColorStop(1, "rgba(34,211,238,0)");
+      g.addColorStop(0, `rgba(${GOLD},${0.16 * glow})`);
+      g.addColorStop(1, `rgba(${GOLD},0)`);
       ctx!.fillStyle = g;
       ctx!.beginPath();
       ctx!.arc(coreX, coreY, coreR * 1.6, 0, 6.3);
@@ -174,9 +181,9 @@ export function ConnectorStreams({ streams, litIndex }: { streams: readonly Stre
       // Three widening, dimming passes is what reads as a lit tube; one blurred
       // stroke reads as a flat circle. Same treatment as the hero's core.
       const passes: [number, string, number][] = [
-        [10 * DPR, `rgba(34,211,238,${0.16 * glow})`, 26 * DPR],
-        [5 * DPR, `rgba(34,211,238,${0.4 * glow})`, 16 * DPR],
-        [1.6 * DPR, `rgba(190,245,255,${0.85 * glow})`, 12 * DPR],
+        [10 * DPR, `rgba(${GOLD},${0.16 * glow})`, 26 * DPR],
+        [5 * DPR, `rgba(${GOLD},${0.4 * glow})`, 16 * DPR],
+        [1.6 * DPR, `rgba(255,238,205,${0.9 * glow})`, 12 * DPR],
       ];
       for (const [lw, stroke, blur] of passes) {
         ctx!.beginPath();
@@ -184,7 +191,7 @@ export function ConnectorStreams({ streams, litIndex }: { streams: readonly Stre
         ctx!.lineWidth = lw;
         ctx!.strokeStyle = stroke;
         ctx!.shadowBlur = blur;
-        ctx!.shadowColor = "#22d3ee";
+        ctx!.shadowColor = "#ffce7a";
         ctx!.stroke();
       }
       ctx!.shadowBlur = 0;

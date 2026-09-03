@@ -63,3 +63,29 @@ export function formatElapsed(totalSeconds: number): string {
   const pad = (n: number) => String(n).padStart(2, "0");
   return hours > 0 ? `${hours}:${pad(minutes)}:${pad(seconds)}` : `${pad(minutes)}:${pad(seconds)}`;
 }
+
+/**
+ * One orchestrator's sub-agent fan-out, for the tree the telemetry panel draws.
+ *
+ * This is the shape LAAM reconstructs from a transcript: an orchestrator session
+ * that called the sub-agent tool, and each child it spawned with its own type,
+ * status and duration. `subagent_type` values are the real preset names a Claude
+ * Code run reports; the descriptions are invented, like everything else in this
+ * file, because a real one carries the task text of whoever ran it.
+ */
+export type SubAgent = {
+  id: string;
+  /** `subagent_type` as it arrives in the transcript. */
+  type: string;
+  description: string;
+  status: "running" | "done";
+  /** Seconds; null while still running. */
+  durationSec: number | null;
+};
+
+export const SUB_AGENTS: readonly SubAgent[] = [
+  { id: "a1", type: "code-reviewer", description: "Review auth middleware", status: "done", durationSec: 142 },
+  { id: "a2", type: "general-purpose", description: "Map connector call sites", status: "done", durationSec: 96 },
+  { id: "a3", type: "test-runner", description: "Re-run failing suite", status: "running", durationSec: null },
+  { id: "a4", type: "general-purpose", description: "Draft migration notes", status: "done", durationSec: 61 },
+] as const;

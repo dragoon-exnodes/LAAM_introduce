@@ -199,6 +199,30 @@
   }
 }
 
+/* Telemetry tree: after a branch has drawn, the one whose sub-agent is still
+   running keeps its dashes moving toward the child — the same "this edge is
+   live" language the product uses on /graph. */
+@keyframes tele-flow {
+  to {
+    stroke-dashoffset: -8;
+  }
+}
+
+@keyframes tele-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+}
+
 /* The write gate is the one node in a run that waits on a human. It breathes so
    the eye lands there, not on the seven nodes that already finished. */
 @keyframes wf-gate {

@@ -1,10 +1,30 @@
 import { useEffect, useState } from "react";
-import { SESSIONS, formatElapsed, sessionColor, sessionLabel } from "../../lib/telemetry";
+import { SESSIONS, SUB_AGENTS, formatElapsed, sessionColor, sessionLabel } from "../../lib/telemetry";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { PanelFrame } from "./PanelFrame";
 
-/** A 24-point load trace. Fixed values — the shape should be the same every visit. */
-const TRACE = [8, 14, 11, 19, 26, 22, 31, 28, 37, 44, 39, 52, 47, 58, 66, 61, 55, 68, 74, 70, 81, 77, 88, 84];
+/*
+ * Layout for the sub-agent tree, in the SVG's own coordinate space. The viewBox
+ * keeps its aspect ratio (unlike a stretched one) so the curves stay curves at
+ * any panel width.
+ */
+// The viewBox ratio IS the rendered ratio: the svg takes the panel's full width
+// and derives its height from this box. Mismatch the ratio and `meet` shrinks the
+// whole tree to fit the shorter axis, stranding it in the middle of empty space.
+// Units are kept at roughly one-to-one with rendered pixels. With a small
+// viewBox the svg scales up to the panel width and drags the type up with it —
+// 7.5 units became ~16px, louder than the session rows above it.
+const VB = { w: 620, h: 170 };
+const ORCH = { x: 40, y: VB.h / 2 };
+const CHILD_X = 250;
+const ROW_H = 34;
+const FIRST_Y = VB.h / 2 - ((SUB_AGENTS.length - 1) * ROW_H) / 2;
+
+/** Out of the orchestrator, across, into the child — a wiring run, not a diagonal. */
+function branch(y: number): string {
+  const midX = (ORCH.x + CHILD_X) / 2;
+  return `M ${ORCH.x + 6} ${ORCH.y} C ${midX} ${ORCH.y}, ${midX} ${y}, ${CHILD_X - 6} ${y}`;
+}
 
 export function MonitoringPanel({ active }: { active: boolean }) {
   const reduced = useReducedMotion();
@@ -15,8 +35,6 @@ export function MonitoringPanel({ active }: { active: boolean }) {
     const id = window.setInterval(() => setTick((t) => t + 1), 1000);
     return () => window.clearInterval(id);
   }, [reduced, active]);
-
-  const points = TRACE.map((value, index) => `${(index / (TRACE.length - 1)) * 100},${100 - value}`).join(" ");
 
   return (
     <PanelFrame route="/monitoring" status="6 live" tone="signal">
@@ -49,35 +67,96 @@ export function MonitoringPanel({ active }: { active: boolean }) {
           ))}
         </ul>
 
-        <div className="mt-auto">
+        {/* The panel's own first claim is "orchestrator -> sub-agent graph", and
+            until now nothing here showed one — the slot held a sparkline, which
+            every product on earth has. This is the shape LAAM reconstructs from a
+            transcript, and it draws itself when the panel comes up: each branch
+            strokes out to its child, and the child that is still running keeps a
+            flowing dash while the finished ones settle to a static line. */}
+        <div className="mt-auto" key={active ? "on" : "off"}>
           <div className="mb-2 flex items-baseline justify-between">
             <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-faint">
-              tool calls / hour
+              orchestrator · sub-agents
             </span>
-            <span className="font-mono text-[11px] tabular-nums text-trace">+18%</span>
+            <span className="font-mono text-[11px] tabular-nums text-trace">
+              {SUB_AGENTS.length} spawned
+            </span>
           </div>
+
           <svg
-            viewBox="0 0 100 100"
-            preserveAspectRatio="none"
-            className="h-24 w-full lg:h-32"
-            aria-hidden="true"
+            viewBox={`0 0 ${VB.w} ${VB.h}`}
+            className="w-full"
+            role="img"
+            aria-label={`An orchestrator session that spawned ${SUB_AGENTS.length} sub-agents; one is still running.`}
           >
-            <defs>
-              <linearGradient id="trace-fill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="var(--color-signal)" stopOpacity="0.28" />
-                <stop offset="100%" stopColor="var(--color-signal)" stopOpacity="0" />
-              </linearGradient>
-            </defs>
-            <polygon points={`0,100 ${points} 100,100`} fill="url(#trace-fill)" />
-            <polyline
-              points={points}
-              fill="none"
-              stroke="var(--color-signal)"
-              strokeWidth="1.2"
-              vectorEffect="non-scaling-stroke"
-            />
+            {SUB_AGENTS.map((sub, i) => {
+              const y = FIRST_Y + i * ROW_H;
+              const running = sub.status === "running";
+              return (
+                <g key={sub.id}>
+                  <path
+                    d={branch(y)}
+                    fill="none"
+                    stroke={running ? "var(--color-signal)" : "var(--color-line-bright)"}
+                    strokeWidth={running ? 1.4 : 1}
+                    vectorEffect="non-scaling-stroke"
+                    pathLength={1}
+                    style={
+                      reduced
+                        ? undefined
+                        : {
+                            strokeDasharray: running ? "4 4" : 1,
+                            animation: running
+                              ? // Once drawn, the running branch keeps flowing —
+                                // the same dash treatment the product uses for a
+                                // live edge on /graph.
+                                `wf-edge-draw 560ms ease-out ${140 * i}ms backwards, tele-flow 900ms linear ${560 + 140 * i}ms infinite`
+                              : `wf-edge-draw 560ms ease-out ${140 * i}ms backwards`,
+                          }
+                    }
+                  />
+
+                  <circle
+                    cx={CHILD_X}
+                    cy={y}
+                    r={running ? 4.5 : 3.4}
+                    fill={running ? "var(--color-signal)" : "var(--color-trace)"}
+                    style={
+                      reduced
+                        ? undefined
+                        : { animation: `tele-pop 320ms var(--ease-out-expo) ${420 + 140 * i}ms backwards` }
+                    }
+                  />
+
+                  <text
+                    x={CHILD_X + 14}
+                    y={y - 2}
+                    className="fill-[var(--color-muted)] font-mono"
+                    style={{ fontSize: 11 }}
+                  >
+                    {sub.type}
+                  </text>
+                  <text
+                    x={CHILD_X + 14}
+                    y={y + 13}
+                    className="fill-[var(--color-faint)] font-mono"
+                    style={{ fontSize: 9.5 }}
+                  >
+                    {running ? "running" : `${sub.durationSec}s`}
+                  </text>
+                </g>
+              );
+            })}
+
+            {/* The orchestrator itself, drawn last so it sits over the branches. */}
+            <circle cx={ORCH.x} cy={ORCH.y} r={9} fill="var(--color-void)" stroke="var(--color-signal)" strokeWidth={1.4} vectorEffect="non-scaling-stroke" />
+            <circle cx={ORCH.x} cy={ORCH.y} r={3} fill="var(--color-signal)" />
+            <text x={ORCH.x} y={ORCH.y + 28} textAnchor="middle" className="fill-[var(--color-faint)] font-mono" style={{ fontSize: 9.5 }}>
+              sess-4f2a9c
+            </text>
           </svg>
         </div>
+
       </div>
     </PanelFrame>
   );

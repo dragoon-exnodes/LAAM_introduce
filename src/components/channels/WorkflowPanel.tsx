@@ -63,13 +63,13 @@ const NODES: readonly Node[] = [
   // the editor's is — it does not owe you the whole thing, and cropping the last
   // node at the bottom edge says "this continues" better than shrinking
   // everything until it fits.
-  { id: "brief", label: "brief", kind: "agent", state: "done", x: 50, y: 1, w: 34 },
-  { id: "r1", label: "research_laam", kind: "agent", state: "done", x: 17, y: 25, w: 31 },
-  { id: "r2", label: "research_web", kind: "agent", state: "done", x: 50, y: 25, w: 31 },
-  { id: "r3", label: "fetch_tasks", kind: "connector", state: "done", x: 83, y: 25, w: 31 },
-  { id: "synthesis", label: "synthesis", kind: "agent", state: "done", x: 50, y: 49, w: 34 },
-  { id: "gate", label: "confirm send", kind: "gate", state: "waiting", x: 50, y: 73, w: 38 },
-  { id: "send", label: "gmail_send", kind: "connector", state: "held", x: 50, y: 97, w: 34 },
+  { id: "brief", label: "brief", kind: "agent", state: "done", x: 50, y: 6, w: 34 },
+  { id: "r1", label: "research_laam", kind: "agent", state: "done", x: 17, y: 29, w: 31 },
+  { id: "r2", label: "research_web", kind: "agent", state: "done", x: 50, y: 29, w: 31 },
+  { id: "r3", label: "fetch_tasks", kind: "connector", state: "done", x: 83, y: 29, w: 31 },
+  { id: "synthesis", label: "synthesis", kind: "agent", state: "done", x: 50, y: 52, w: 34 },
+  { id: "gate", label: "confirm send", kind: "gate", state: "waiting", x: 50, y: 75, w: 38 },
+  { id: "send", label: "gmail_send", kind: "connector", state: "held", x: 50, y: 98, w: 34 },
 ] as const;
 
 /** [from, to] — every edge the run traverses. */
@@ -258,7 +258,9 @@ export function WorkflowPanel({ active }: { active: boolean }) {
                 />
 
                 <div
-                  className={`px-2.5 py-2 ${waiting ? "wf-gate-pulse" : ""}`}
+                  className={`relative px-2.5 py-2 ${
+                    waiting ? "wf-gate-pulse" : isRunning ? "wf-node-running" : ""
+                  }`}
                   style={{
                     background: WF.nodeBg,
                     borderStyle: "solid",
@@ -271,7 +273,9 @@ export function WorkflowPanel({ active }: { active: boolean }) {
                     borderBottomColor: isRunning ? kind.color : WF.nodeBorder,
                     borderLeftColor: kind.color,
                     borderRadius: 10,
-                    boxShadow: isRunning ? `0 0 0 2px ${kind.color}33` : "0 1px 3px rgba(0,0,0,.35)",
+                    // The running halo is the ported .wf-node-running pulse, not a
+                    // static ring, so this stays the resting shadow only.
+                    boxShadow: "0 1px 3px rgba(0,0,0,.35)",
                     opacity: held ? 0.42 : 1,
                     transition: "opacity 320ms ease, border-color 320ms ease, box-shadow 320ms ease",
                   }}
@@ -303,6 +307,16 @@ export function WorkflowPanel({ active }: { active: boolean }) {
               </div>
             );
           })}
+
+          {/* The editor puts up a chip while more than one node is executing. It is
+              the clearest statement the graph makes about running in parallel, so
+              it appears here for exactly the phase where that is true. */}
+          {activeIds.length > 1 && (
+            <span className="absolute right-2 top-2 inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.14em] text-signal" style={{ background: "rgba(34,211,238,0.14)" }}>
+              <span className="wf-run-dot h-1.5 w-1.5 rounded-full bg-signal" aria-hidden="true" />
+              {activeIds.length} running in parallel
+            </span>
+          )}
 
           {/* The one thing a person has to do. Called out rather than left as a
               node among nodes — a gate nobody notices is a workflow that stalls.

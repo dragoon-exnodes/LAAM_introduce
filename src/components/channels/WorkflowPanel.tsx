@@ -59,17 +59,22 @@ type Node = {
 // fan-out whose branches visually merge is the one thing this panel exists to
 // avoid saying.
 const NODES: readonly Node[] = [
-  // Tighter pitch and wider nodes. The canvas is a viewport onto a graph, the way
-  // the editor's is — it does not owe you the whole thing, and cropping the last
-  // node at the bottom edge says "this continues" better than shrinking
-  // everything until it fits.
-  { id: "brief", label: "brief", kind: "agent", state: "done", x: 50, y: 6, w: 34 },
-  { id: "r1", label: "research_laam", kind: "agent", state: "done", x: 17, y: 29, w: 31 },
-  { id: "r2", label: "research_web", kind: "agent", state: "done", x: 50, y: 29, w: 31 },
-  { id: "r3", label: "fetch_tasks", kind: "connector", state: "done", x: 83, y: 29, w: 31 },
-  { id: "synthesis", label: "synthesis", kind: "agent", state: "done", x: 50, y: 52, w: 34 },
-  { id: "gate", label: "confirm send", kind: "gate", state: "waiting", x: 50, y: 75, w: 38 },
-  { id: "send", label: "gmail_send", kind: "connector", state: "held", x: 50, y: 98, w: 34 },
+  // Node width is ~24% of the canvas, matching the proportion the real editor
+  // uses (~250px node in a ~1270px canvas). At the 34% they were before, the
+  // seven boxes covered a third of the whole canvas by area and the three
+  // parallel branches nearly touched — the graph read as a stack of cards
+  // rather than as a graph, because the edges had no room to be seen.
+  //
+  // The canvas is still a viewport onto a graph, the way the editor's is: it
+  // does not owe you the whole thing, and cropping the last node at the bottom
+  // edge says "this continues" better than shrinking everything until it fits.
+  { id: "brief", label: "brief", kind: "agent", state: "done", x: 50, y: 6, w: 24 },
+  { id: "r1", label: "research_laam", kind: "agent", state: "done", x: 17, y: 29, w: 22 },
+  { id: "r2", label: "research_web", kind: "agent", state: "done", x: 50, y: 29, w: 22 },
+  { id: "r3", label: "fetch_tasks", kind: "connector", state: "done", x: 83, y: 29, w: 22 },
+  { id: "synthesis", label: "synthesis", kind: "agent", state: "done", x: 50, y: 52, w: 24 },
+  { id: "gate", label: "confirm send", kind: "gate", state: "waiting", x: 50, y: 75, w: 27 },
+  { id: "send", label: "gmail_send", kind: "connector", state: "held", x: 50, y: 98, w: 24 },
 ] as const;
 
 /** [from, to] — every edge the run traverses. */
@@ -86,8 +91,11 @@ const EDGES: readonly [string, string][] = [
 
 const byId = (id: string) => NODES.find((n) => n.id === id)!;
 /** Node box height as a percentage of the canvas. Edges anchor off this, so a
- *  stale value leaves them starting inside the box they should be leaving. */
-const NODE_H = 15;
+ *  stale value leaves them starting inside the box they should be leaving.
+ *  Measured after the nodes were scaled down: 63px in a 480px canvas is 13.1%,
+ *  and 15.8% in the 400px one the stacked layout floors at — 14 splits the two,
+ *  since node height is fixed pixels while everything around it is a percentage. */
+const NODE_H = 14;
 
 /**
  * The run replays on a loop instead of the edges drawing once and freezing.
@@ -266,7 +274,7 @@ export function WorkflowPanel({ active }: { active: boolean }) {
                 />
 
                 <div
-                  className={`relative px-2.5 py-2 ${
+                  className={`relative px-2 py-1.5 ${
                     waiting ? "wf-gate-pulse" : isRunning ? "wf-node-running" : ""
                   }`}
                   style={{
@@ -289,13 +297,13 @@ export function WorkflowPanel({ active }: { active: boolean }) {
                   }}
                 >
                   <p
-                    className="font-mono text-[8.5px] uppercase leading-none tracking-[0.16em]"
+                    className="font-mono text-[7.5px] uppercase leading-none tracking-[0.14em]"
                     style={{ color: kind.color }}
                   >
                     {kind.label}
                   </p>
                   <p
-                    className="mt-1 truncate font-mono text-[10.5px] leading-tight"
+                    className="mt-0.5 truncate font-mono text-[9.5px] leading-tight"
                     style={{ color: WF.nodeText }}
                   >
                     {n.label}
@@ -305,7 +313,7 @@ export function WorkflowPanel({ active }: { active: boolean }) {
                   {n.kind !== "gate" && (
                     <span
                       aria-hidden="true"
-                      className="mt-1.5 inline-flex items-center gap-1 rounded-md px-1.5 py-px font-mono text-[8px]"
+                      className="mt-1 inline-flex items-center gap-1 rounded px-1 py-px font-mono text-[7px]"
                       style={{ color: "var(--color-signal)", background: "rgba(34,211,238,0.14)" }}
                     >
                       ⧉ output

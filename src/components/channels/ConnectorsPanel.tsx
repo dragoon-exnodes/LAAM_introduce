@@ -41,7 +41,7 @@ export function ConnectorsPanel() {
           against and it computes to 0 — which collapsed this box, sent the
           absolutely-positioned labels out through the top of the panel, and left
           the canvas with nothing to draw into. */}
-      <div className="relative h-full min-h-[19rem]">
+      <div className="relative min-h-0 flex-1">
         <ConnectorStreams streams={CONNECTORS} />
 
         {/* Labels stay HTML over the canvas: crisp at any DPR, selectable, and

@@ -38,7 +38,7 @@ export function MonitoringPanel({ active }: { active: boolean }) {
 
   return (
     <PanelFrame route="/monitoring" status="6 live" tone="signal">
-      <div className="flex h-full flex-col gap-4">
+      <div className="flex min-h-0 flex-1 flex-col gap-4">
         <ul className="space-y-px">
           {SESSIONS.map((session) => (
             <li

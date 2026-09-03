@@ -81,7 +81,7 @@ export function SearchPanel({ active }: { active: boolean }) {
 
   return (
     <PanelFrame route="/search" status="4 hits" tone="trace">
-      <div className="flex h-full flex-col gap-4">
+      <div className="flex min-h-0 flex-1 flex-col gap-4">
         <div className="flex items-center gap-2.5 border border-line-bright bg-panel-2 px-3.5 py-2.5">
           <span className="font-mono text-[11px] text-faint" aria-hidden="true">
             ⌕

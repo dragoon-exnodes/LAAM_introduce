@@ -172,8 +172,10 @@ function StackedChannels() {
           <p className="mt-4 text-[0.95rem] text-muted">{channel.body}</p>
 
           {/* Auto height: stacked panels size to their own content rather than
-              being cropped by a fixed frame borrowed from the pinned layout. */}
-          <div className="bracket relative mt-6 min-h-[22rem] border border-line bg-panel/50">
+              being cropped by a fixed frame borrowed from the pinned layout. The
+              min has to clear PanelFrame's own floor plus the frame chrome, or
+              the floor is what decides the height and the panel overflows. */}
+          <div className="bracket relative mt-6 min-h-[26rem] border border-line bg-panel/50">
             <ChannelPanel panel={channel.panel} active />
           </div>
         </article>

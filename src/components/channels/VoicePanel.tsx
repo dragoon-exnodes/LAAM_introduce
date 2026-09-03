@@ -25,7 +25,7 @@ export function VoicePanel({ active }: { active: boolean }) {
 
   return (
     <PanelFrame route="/constellation" status="listening" tone="ion">
-      <div className="flex h-full flex-col justify-between gap-5">
+      <div className="flex min-h-0 flex-1 flex-col justify-between gap-5">
         <div className="flex items-center gap-3">
           <span className="relative flex h-2 w-2">
             {!reduced && active && (

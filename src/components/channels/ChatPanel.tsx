@@ -36,7 +36,7 @@ export function ChatPanel({ active }: { active: boolean }) {
 
   return (
     <PanelFrame route="/chat" status="local · $0" tone="free">
-      <div className="flex h-full flex-col gap-4">
+      <div className="flex min-h-0 flex-1 flex-col gap-4">
         {/* A settled earlier turn, so the thread reads as a conversation in progress
             rather than a single staged question. */}
         <div className="ml-auto max-w-[70%] border border-line bg-panel-2/50 px-3.5 py-2 opacity-55">

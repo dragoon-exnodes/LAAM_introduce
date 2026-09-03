@@ -74,7 +74,7 @@ export function AccessPanel({ active }: { active: boolean }) {
 
   return (
     <PanelFrame route="/settings/access" status="rbac on" tone="signal">
-      <div className="flex h-full flex-col gap-4">
+      <div className="flex min-h-0 flex-1 flex-col gap-4">
         {/* Fixed row height, NOT flex-1. Sharing the leftover height means every
             row moves the moment anything else in the panel changes size — which
             is exactly what happened when the audit log grew a line. */}

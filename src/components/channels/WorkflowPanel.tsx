@@ -149,7 +149,7 @@ export function WorkflowPanel({ active }: { active: boolean }) {
 
   return (
     <PanelFrame route="/workflows" status="run #418" tone="signal">
-      <div className="flex h-full flex-col gap-4">
+      <div className="flex min-h-0 flex-1 flex-col gap-4">
         <dl className="grid shrink-0 grid-cols-3 gap-px border border-line bg-line">
           {[
             ["Workflow", "multi-source-report-email"],
@@ -163,11 +163,19 @@ export function WorkflowPanel({ active }: { active: boolean }) {
           ))}
         </dl>
 
-        {/* The canvas. Dotted ground matches the editor's own background, and it
+        {/* The canvas. Dotted ground matches the editor's own background.
+            The min-height is not cosmetic. Node POSITIONS are percentages of the
+            canvas height while node HEIGHT is fixed pixels (~60px with its output
+            chip), so the two only agree above a certain size: at the 106px this
+            was getting on a stacked layout the rows overlapped each other, and at
+            240px `research_web` still sat on top of `synthesis`. 25rem gives the
+            15% row pitch about 60px, which is what a node actually occupies. The
+            stacked frame is itself a min-height, so the panel grows to fit rather
+            than clipping. It also
             CLIPS: the last node is meant to be cut by the bottom edge the way a
             viewport cuts a bigger graph. Without overflow-hidden it just spills
             over the caption underneath, which reads as broken, not as cropped. */}
-        <div className="relative min-h-0 flex-1 overflow-hidden rounded-sm border border-line bg-panel-2/40 [background-image:radial-gradient(circle,rgba(148,175,205,0.13)_1px,transparent_1px)] [background-size:14px_14px]">
+        <div className="relative min-h-[25rem] flex-1 overflow-hidden rounded-sm border border-line bg-panel-2/40 [background-image:radial-gradient(circle,rgba(148,175,205,0.13)_1px,transparent_1px)] [background-size:14px_14px]">
           <svg
             className="absolute inset-0 h-full w-full"
             viewBox="0 0 100 100"

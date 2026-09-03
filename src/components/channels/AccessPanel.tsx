@@ -3,12 +3,12 @@ import { PanelFrame } from "./PanelFrame";
 // Deliberately generic handles: these are fabricated permission records, and they
 // should not read as claims about identifiable colleagues.
 const PEOPLE = [
-  { name: "a.nguyen", role: "owner", tokens: 3 },
-  { name: "b.le", role: "admin", tokens: 2 },
-  { name: "c.vo", role: "member", tokens: 1 },
-  { name: "d.pham", role: "viewer", tokens: 0 },
-  { name: "e.hoang", role: "member", tokens: 2 },
-  { name: "k.tran", role: "member", tokens: 1 },
+  { name: "a.bennett", role: "owner", tokens: 3 },
+  { name: "b.doyle", role: "admin", tokens: 2 },
+  { name: "c.fletcher", role: "member", tokens: 1 },
+  { name: "d.harper", role: "viewer", tokens: 0 },
+  { name: "e.mercer", role: "member", tokens: 2 },
+  { name: "k.whitfield", role: "member", tokens: 1 },
 ] as const;
 
 const ROLE_COLOR = {
@@ -23,9 +23,9 @@ const ROLE_COLOR = {
  * not `role_changed`. A row is { id, userId, action, target, createdAt }.
  */
 const AUDIT = [
-  "token_issued_for · a.nguyen",
-  "role_change · d.pham → viewer",
-  "user_disabled · k.tran",
+  "token_issued_for · a.bennett",
+  "role_change · d.harper → viewer",
+  "user_disabled · k.whitfield",
   "agent_write · gmail_send · redacted",
 ] as const;
 

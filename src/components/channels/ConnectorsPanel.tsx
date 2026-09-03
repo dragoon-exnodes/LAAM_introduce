@@ -63,7 +63,7 @@ export function ConnectorsPanel() {
                   left edges were leaving the short names visibly adrift. */}
               <span
                 className="shrink-0 font-mono text-[11px]"
-                style={{ color: c.connected ? "#ffce7a" : "var(--color-muted)" }}
+                style={{ color: c.connected ? "var(--color-link)" : "var(--color-muted)" }}
               >
                 {c.name}
               </span>

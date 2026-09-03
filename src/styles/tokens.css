@@ -14,13 +14,30 @@
   /* Reserved for one claim only: this costs nothing. Because it appears rarely,
      it lands every time — and the page never becomes "black plus one acid accent". */
   --color-free: #e8ff54;
-  /* Observed telemetry: cooler and calmer than signal, because it has already
-     happened — but NOT pale. A near-white accent stops reading as an accent, and
-     the active channel in the index becomes indistinguishable from an inactive one. */
-  --color-trace: #4fbeff;
-  --color-trace-dim: #123a5c;
+  /* Observed telemetry: already happened, so it recedes from signal.
+     It used to recede by LIGHTNESS, and that was the wrong axis — #4fbeff sat
+     15 degrees of hue from signal, closer than any other pair in this palette,
+     so at 1px borders and 11px mono the two simply read as one cyan. Measured
+     across the page, 92% of all accent ink was that single band.
+     Separation is by HUE now: 219 degrees, a clear 32 from signal and 29 from
+     ion, with saturation held at 0.57 so it parts from ion on that axis too
+     (ion is 0.45; matching it turned the two muddy where they meet). */
+  --color-trace: #6ea0ff;
+  --color-trace-dim: #20365f;
   --color-ion: #9b8cff;
   --color-alert: #ff4d6d;
+  /* A live link to a system outside LAAM. Distinct from signal, which is a live
+     agent INSIDE it — the hero tints Workflows and Connectors with this because
+     they are the two surfaces that hold links outward, and a connector strand
+     wears it once that link is actually established.
+     It is also the page's only warm colour, against an otherwise entirely cool
+     scale. That contrast arrived by accident, copied hex by hex out of
+     /constellation; it earns its place, so it is declared here rather than
+     living as sixteen literals the palette knew nothing about. */
+  --color-link: #ffce7a;
+  /* The same link lifted toward white: what travels ALONG a strand, so a packet
+     reads as motion on the line rather than a second colour beside it. */
+  --color-link-hot: #ffe1aa;
 
   --color-ink: #e6eef8;
   --color-muted: #7a8da1;

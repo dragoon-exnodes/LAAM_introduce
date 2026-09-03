@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
+import { tokenHex, tokenRgb } from "../../lib/tokens";
 import { CYCLE_MS, NODES, levelAt, modeAt, placeNodes, type Mode, type Placed } from "../../lib/constellation";
 
 /**
@@ -21,7 +22,6 @@ const RADIUS = 39;
 const SQUASH = 0.9;
 
 type Rgb = readonly [number, number, number];
-const GOLD: Rgb = [255, 206, 122];
 const THINK: Rgb = [180, 232, 255];
 
 export function ConstellationStage() {
@@ -30,6 +30,11 @@ export function ConstellationStage() {
   const reduced = useReducedMotion();
 
   useEffect(() => {
+    // Workflows and Connectors wear this: they are the two surfaces that hold a
+    // link outward. Read from the token rather than repeated as a literal.
+    const GOLD_HEX = tokenHex("--color-link", "#ffce7a");
+    const GOLD: Rgb = tokenRgb("--color-link", "#ffce7a");
+    const GOLD_LIT = tokenRgb("--color-link-hot", "#ffd98f").join(",");
     const host = hostRef.current;
     const canvas = canvasRef.current;
     if (!host || !canvas) return;
@@ -170,12 +175,12 @@ export function ConstellationStage() {
         }
         ctx!.lineWidth = (gold ? 1.6 : idle ? 0.7 : 1.1) * DPR;
         ctx!.strokeStyle = gold
-          ? "rgba(255,206,122,0.5)"
+          ? `rgba(${GOLD.join(",")},0.5)`
           : idle
             ? "rgba(140,175,200,0.14)"
             : "rgba(91,214,255,0.3)";
         ctx!.shadowBlur = (gold ? 6 : idle ? 0 : 3) * DPR;
-        ctx!.shadowColor = gold ? "#ffce7a" : "#5bd6ff";
+        ctx!.shadowColor = gold ? GOLD_HEX : "#5bd6ff";
         ctx!.stroke();
         ctx!.shadowBlur = 0;
 
@@ -215,9 +220,9 @@ export function ConstellationStage() {
         const gold = placed[f.ni]?.tint === "gold";
         ctx!.beginPath();
         ctx!.arc(x, y, 1.6 * DPR, 0, 6.3);
-        ctx!.fillStyle = gold ? "rgba(255,217,143,0.9)" : "rgba(169,233,255,0.85)";
+        ctx!.fillStyle = gold ? `rgba(${GOLD_LIT},0.9)` : "rgba(169,233,255,0.85)";
         ctx!.shadowBlur = 8 * DPR;
-        ctx!.shadowColor = gold ? "#ffce7a" : "#5bd6ff";
+        ctx!.shadowColor = gold ? GOLD_HEX : "#5bd6ff";
         ctx!.fill();
         ctx!.shadowBlur = 0;
       }
@@ -385,13 +390,13 @@ export function ConstellationStage() {
           >
             <span
               className={`flex items-center gap-1.5 whitespace-nowrap font-mono text-[0.6rem] uppercase tracking-[0.14em] sm:text-[0.65rem] ${
-                n.tint === "gold" ? "text-[#ffce7a]" : n.tint === "idle" ? "text-faint" : "text-[#a9e9ff]"
+                n.tint === "gold" ? "text-link" : n.tint === "idle" ? "text-faint" : "text-[#a9e9ff]"
               }`}
             >
               <span
                 className="h-1.5 w-1.5 shrink-0 rounded-full"
                 style={{
-                  background: n.tint === "gold" ? "#ffce7a" : n.tint === "idle" ? "#6b8296" : "#5bd6ff",
+                  background: n.tint === "gold" ? "var(--color-link)" : n.tint === "idle" ? "#6b8296" : "#5bd6ff",
                   boxShadow: n.tint === "idle" ? "none" : "0 0 8px currentColor",
                 }}
               />

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
+import { tokenHex, tokenRgb } from "../../lib/tokens";
 
 /**
  * Nine services converging on one core, drawn to the panel's own canvas.
@@ -23,13 +24,11 @@ export type Stream = {
   connected: boolean;
 };
 
-// The product's own two states, from /constellation: gold for a connector that
-// is wired up, cool blue for one that is merely available.
-const GOLD = "255,206,122";
+// The product's own two states, from /constellation: an established link for a
+// connector that is wired up, cool blue for one that is merely available.
+// Resolved from the stylesheet inside the effect — see lib/tokens.ts for why
+// module scope is the wrong place to read a custom property.
 const COOL = "120,170,205";
-// LAAM itself is the page's own accent, not the gold of the services attached to
-// it — the core reads as the thing being connected TO rather than another node.
-const CORE = "34,211,238";
 
 /** Vertical extent of the fan, as a fraction of canvas height. */
 const SPREAD = 0.86;
@@ -44,6 +43,16 @@ export function ConnectorStreams({ streams }: { streams: readonly Stream[] }) {
     if (!host || !canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+
+    const GOLD = tokenRgb("--color-link", "#ffce7a").join(",");
+    const GOLD_HEX = tokenHex("--color-link", "#ffce7a");
+    // Packets are the link's own colour lifted toward white, so they read as
+    // something travelling ALONG the strand rather than a second colour on it.
+    const PACKET = tokenRgb("--color-link-hot", "#ffe1aa").join(",");
+    // LAAM itself is the page's own accent, not the link colour of the services
+    // attached to it — the core reads as the thing being connected TO.
+    const CORE = tokenRgb("--color-signal", "#00e1ff").join(",");
+    const CORE_HEX = tokenHex("--color-signal", "#00e1ff");
 
     const DPR = Math.min(window.devicePixelRatio || 1, 1.6);
     let raf = 0;
@@ -139,7 +148,7 @@ export function ConnectorStreams({ streams }: { streams: readonly Stream[] }) {
         ctx!.lineWidth = (on ? 1.5 : 0.9) * DPR;
         ctx!.strokeStyle = on ? `rgba(${GOLD},0.85)` : `rgba(${COOL},0.3)`;
         ctx!.shadowBlur = on ? 8 * DPR : 0;
-        ctx!.shadowColor = "#ffce7a";
+        ctx!.shadowColor = GOLD_HEX;
         ctx!.stroke();
         ctx!.shadowBlur = 0;
 
@@ -152,7 +161,7 @@ export function ConnectorStreams({ streams }: { streams: readonly Stream[] }) {
         ctx!.strokeStyle = on ? `rgba(${GOLD},0.95)` : `rgba(${COOL},0.45)`;
         if (on) {
           ctx!.shadowBlur = 10 * DPR;
-          ctx!.shadowColor = "#ffce7a";
+          ctx!.shadowColor = GOLD_HEX;
         }
         ctx!.stroke();
         ctx!.shadowBlur = 0;
@@ -170,9 +179,9 @@ export function ConnectorStreams({ streams }: { streams: readonly Stream[] }) {
         const edge = Math.min(1, Math.min(pk.t, 1 - pk.t) * 6);
         ctx!.beginPath();
         ctx!.arc(x, y, 1.8 * DPR, 0, 6.3);
-        ctx!.fillStyle = `rgba(255,225,170,${edge * 0.95})`;
+        ctx!.fillStyle = `rgba(${PACKET},${edge * 0.95})`;
         ctx!.shadowBlur = 9 * DPR;
-        ctx!.shadowColor = "#ffce7a";
+        ctx!.shadowColor = GOLD_HEX;
         ctx!.fill();
         ctx!.shadowBlur = 0;
       }
@@ -202,7 +211,7 @@ export function ConnectorStreams({ streams }: { streams: readonly Stream[] }) {
         ctx!.lineWidth = lw;
         ctx!.strokeStyle = stroke;
         ctx!.shadowBlur = blur;
-        ctx!.shadowColor = "#22d3ee";
+        ctx!.shadowColor = CORE_HEX;
         ctx!.stroke();
       }
       ctx!.shadowBlur = 0;

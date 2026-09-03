@@ -31,12 +31,12 @@ export type Session = {
 };
 
 export const SESSIONS: readonly Session[] = [
-  { id: "4f2a9c", project: "ennam.kg.go", machine: "ws-01", model: "claude-sonnet-4-6", status: "running", stuck: false, seed: 257, tools: 12 },
-  { id: "8b1e04", project: "ennam.kg.python", machine: "ws-01", model: "qwen3-vl:8b", status: "running", stuck: false, seed: 1042, tools: 31 },
-  { id: "d33071", project: "ennam.kg.next", machine: "ws-02", model: "claude-sonnet-4-6", status: "idle", stuck: false, seed: 88, tools: 4 },
-  { id: "0ac5f8", project: "ennam.kg.python", machine: "ws-03", model: "qwen3-vl:8b", status: "running", stuck: true, seed: 2314, tools: 7 },
+  { id: "4f2a9c", project: "orbit.api", machine: "ws-01", model: "claude-sonnet-4-6", status: "running", stuck: false, seed: 257, tools: 12 },
+  { id: "8b1e04", project: "orbit.worker", machine: "ws-01", model: "qwen3-vl:8b", status: "running", stuck: false, seed: 1042, tools: 31 },
+  { id: "d33071", project: "orbit.web", machine: "ws-02", model: "claude-sonnet-4-6", status: "idle", stuck: false, seed: 88, tools: 4 },
+  { id: "0ac5f8", project: "orbit.worker", machine: "ws-03", model: "qwen3-vl:8b", status: "running", stuck: true, seed: 2314, tools: 7 },
   { id: "6e92b7", project: "LAAM", machine: "ws-02", model: "gpt-oss-120b", status: "running", stuck: false, seed: 431, tools: 19 },
-  { id: "b70d15", project: "ennam.kg.go", machine: "ws-01", model: "claude-opus-4-8", status: "done", stuck: false, seed: 3908, tools: 46 },
+  { id: "b70d15", project: "orbit.api", machine: "ws-01", model: "claude-opus-4-8", status: "done", stuck: false, seed: 3908, tools: 46 },
 ] as const;
 
 export const STATUS_COLOR: Record<SessionStatus, string> = {

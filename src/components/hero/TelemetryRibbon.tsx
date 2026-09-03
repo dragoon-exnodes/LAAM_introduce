@@ -19,7 +19,7 @@ export function TelemetryRibbon() {
   const lane = [...SESSIONS, ...SESSIONS];
 
   return (
-    <div className="relative overflow-hidden border-y border-line bg-panel/60">
+    <div className="relative overflow-hidden border-y border-line bg-panel/90">
       <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-void to-transparent" />
       <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-void to-transparent" />
 

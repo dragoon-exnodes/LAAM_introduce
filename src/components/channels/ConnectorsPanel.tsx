@@ -77,7 +77,7 @@ export function ConnectorsPanel() {
           <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">laam</p>
           <p className="mt-1.5 font-mono text-[10px] text-faint">
             + any MCP server
-            <span className="ml-2 text-line-bright">fail-closed · per user</span>
+            <span className="ml-2 text-faint">fail-closed · per user</span>
           </p>
         </div>
       </div>

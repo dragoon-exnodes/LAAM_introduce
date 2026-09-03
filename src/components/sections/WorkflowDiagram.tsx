@@ -40,7 +40,11 @@ const KIND_COLOR: Record<Node["kind"], string> = {
   read: "var(--color-trace)",
   agent: "var(--color-ink)",
   gate: "var(--color-signal)",
-  write: "var(--color-signal)",
+  // The gate is an internal check; the send is the step that leaves the
+  // building. They shared signal, which made the diagram say the two were the
+  // same kind of event — and left the one moment on this page where LAAM
+  // actually reaches outside looking like every other node.
+  write: "var(--color-link)",
 };
 
 function nodeById(id: string): Node {

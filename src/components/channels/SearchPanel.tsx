@@ -21,8 +21,8 @@ const GROUPS = [
     kind: "sessions",
     note: "org-shared",
     hits: [
-      { primary: "ennam.kg.python", meta: "running · sess-8b1e04" },
-      { primary: "ennam.kg.go", meta: "done · sess-b70d15" },
+      { primary: "orbit.worker", meta: "running · sess-8b1e04" },
+      { primary: "orbit.api", meta: "done · sess-b70d15" },
     ],
   },
   {

@@ -6,7 +6,7 @@ import { Section } from "./Section";
 export function Contact() {
   return (
     <Section id="contact" className="!py-0">
-      <div className="reveal bracket relative overflow-hidden border border-line bg-panel/45 px-6 py-16 text-center sm:px-12 lg:py-24">
+      <div className="reveal bracket relative overflow-hidden border border-line bg-panel/86 px-6 py-16 text-center sm:px-12 lg:py-24">
         {/* Light falls from just above the panel's top edge, so the CTA reads as
             the one lit surface at the end of a dark page. */}
         {/*

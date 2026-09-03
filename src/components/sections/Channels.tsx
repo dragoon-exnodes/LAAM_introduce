@@ -81,7 +81,7 @@ function PinnedConsole() {
       style={{ height: `${CHANNELS.length * TRACK_PER_CHANNEL * 100}vh` }}
     >
       <div className="sticky top-[16vh] grid h-[68vh] grid-cols-[1.05fr_0.95fr] gap-8">
-        <div className="bracket relative border border-line bg-panel/50">
+        <div className="bracket relative border border-line bg-panel/88">
           <Reticle />
           {CHANNELS.map((item, i) => (
             <div
@@ -130,7 +130,7 @@ function PinnedConsole() {
               <ul className="mt-6 space-y-2 border-t border-line pt-5">
                 {channel.points.map((point) => (
                   <li key={point} className="flex gap-3 font-mono text-[length:var(--text-data)] text-faint">
-                    <span aria-hidden="true" className="text-line-bright">
+                    <span aria-hidden="true" className="text-faint">
                       ›
                     </span>
                     {point}
@@ -175,7 +175,7 @@ function StackedChannels() {
               being cropped by a fixed frame borrowed from the pinned layout. The
               min has to clear PanelFrame's own floor plus the frame chrome, or
               the floor is what decides the height and the panel overflows. */}
-          <div className="bracket relative mt-6 min-h-[26rem] border border-line bg-panel/50">
+          <div className="bracket relative mt-6 min-h-[26rem] border border-line bg-panel/88">
             <ChannelPanel panel={channel.panel} active />
           </div>
         </article>

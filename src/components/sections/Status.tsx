@@ -34,25 +34,50 @@ export function Status() {
           </p>
 
           <dl className="reveal mt-10 grid grid-cols-2 gap-px border border-line bg-line sm:grid-cols-4">
-            {STATUS_FACTS.map((fact) => (
-              <div key={fact.label} className="bg-void p-5">
-                <dt className="font-mono text-[length:var(--text-eyebrow)] uppercase tracking-[0.14em] text-faint">
-                  {fact.label}
-                </dt>
-                {/* The cost figure is the one fact that gets the reserved colour. */}
-                <dd
-                  className={`mt-3 font-display text-2xl font-bold [font-stretch:118%] ${
-                    fact.value === "$0" ? "text-free" : "text-ink"
-                  }`}
+            {STATUS_FACTS.map((fact) => {
+              /* One fact answers the objection the whole page is arguing against,
+                 and it is the only one wearing the reserved colour. It used to be
+                 set at the same size as the other three, which meant the colour
+                 was being SAVED rather than spent — five small marks across the
+                 page, none of them large enough to register at a glance. It gets
+                 the weight here instead, and the other three read as its context. */
+              const isCost = fact.value === "$0";
+              return (
+                <div
+                  key={fact.label}
+                  className="relative flex flex-col justify-between bg-void p-5"
+                  style={
+                    isCost
+                      ? {
+                          backgroundImage:
+                            "radial-gradient(120% 100% at 0% 100%, color-mix(in oklab, var(--color-free) 9%, transparent), transparent 70%)",
+                        }
+                      : undefined
+                  }
                 >
-                  {fact.value}
-                </dd>
-              </div>
-            ))}
+                  <dt
+                    className={`font-mono text-[length:var(--text-eyebrow)] uppercase tracking-[0.14em] ${
+                      isCost ? "text-free" : "text-faint"
+                    }`}
+                  >
+                    {fact.label}
+                  </dt>
+                  <dd
+                    className={`font-display font-bold [font-stretch:118%] ${
+                      isCost
+                        ? "mt-4 text-free text-[clamp(2.75rem,1.6rem+3.4vw,4.5rem)] leading-[0.85]"
+                        : "mt-3 text-2xl text-ink"
+                    }`}
+                  >
+                    {fact.value}
+                  </dd>
+                </div>
+              );
+            })}
           </dl>
         </div>
 
-        <div className="reveal border border-line bg-panel/40 p-8">
+        <div className="reveal border border-line bg-panel/84 p-8">
           <Eyebrow tone="trace">Next</Eyebrow>
           <ul className="mt-7 space-y-5">
             {AHEAD.map((item) => (

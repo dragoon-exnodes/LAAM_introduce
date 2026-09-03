@@ -21,8 +21,8 @@ export function ChannelPanel({ panel, active }: { panel: PanelKey; active: boole
     case "connectors":
       return <ConnectorsPanel />;
     case "search":
-      return <SearchPanel />;
+      return <SearchPanel active={active} />;
     case "access":
-      return <AccessPanel />;
+      return <AccessPanel active={active} />;
   }
 }

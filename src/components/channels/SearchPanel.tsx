@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { PanelFrame } from "./PanelFrame";
 
 const QUERY = "pgvector";
@@ -41,7 +43,42 @@ const KIND_COLOR = {
   workflows: "text-ion",
 } as const;
 
-export function SearchPanel() {
+const TYPE_MS = 110;   // per character
+const SETTLE_MS = 420; // between groups landing
+
+/**
+ * The query types itself and the groups land one after another.
+ *
+ * The panel's point is a boundary, not a search box: one query reaches three
+ * places, and the two that are yours come back to you alone. A finished list
+ * shows the three headings; watching them arrive separately is what makes the
+ * ORG-SHARED / YOURS ONLY split land as a rule rather than a caption.
+ */
+export function SearchPanel({ active }: { active: boolean }) {
+  const reduced = useReducedMotion();
+  const [tick, setTick] = useState(0);
+
+  const typed = Math.min(QUERY.length, tick);
+  const landed = Math.max(0, Math.floor((tick - QUERY.length) / (SETTLE_MS / TYPE_MS)));
+  const done = QUERY.length + GROUPS.length * (SETTLE_MS / TYPE_MS);
+
+  // Runs ONCE per activation and then holds. Looping it meant clearing the query
+  // to retype, which left the whole panel blank for about a second at the top of
+  // every cycle — that reads as broken, not as animated.
+  useEffect(() => {
+    if (reduced || !active || tick >= done) return;
+    const id = window.setTimeout(() => setTick((t) => t + 1), TYPE_MS);
+    return () => window.clearTimeout(id);
+  }, [tick, active, reduced, done]);
+
+  // No rewind on leaving: scrolling back should show the result that was already
+  // found, not replay the search. Nothing here needs a reset effect.
+
+  // Off screen (or reduced motion) the finished result stands, rather than a
+  // half-typed query frozen mid-air.
+  const query = reduced || !active ? QUERY : QUERY.slice(0, typed);
+  const shown = reduced || !active ? GROUPS.length : landed;
+
   return (
     <PanelFrame route="/search" status="4 hits" tone="trace">
       <div className="flex h-full flex-col gap-4">
@@ -49,13 +86,23 @@ export function SearchPanel() {
           <span className="font-mono text-[11px] text-faint" aria-hidden="true">
             ⌕
           </span>
-          <span className="font-mono text-[12px] text-ink">{QUERY}</span>
+          <span className="font-mono text-[12px] text-ink">{query}</span>
           <span className="ml-0.5 inline-block h-3.5 w-px animate-pulse bg-signal" aria-hidden="true" />
         </div>
 
-        <div className="space-y-4">
-          {GROUPS.map((group) => (
-            <section key={group.kind}>
+        {/* Groups share the height so the result set fills the frame instead of
+            clumping under the query box. */}
+        <div className="flex min-h-0 flex-1 flex-col justify-around gap-4">
+          {GROUPS.slice(0, shown).map((group, gi) => (
+            <section
+              key={group.kind}
+              style={
+                reduced
+                  ? undefined
+                  : { animation: `channel-in 380ms var(--ease-out-expo) both` }
+              }
+              data-group={gi}
+            >
               <div className="flex items-baseline gap-2.5 border-b border-line pb-1.5">
                 <h4
                   className={`font-mono text-[9px] uppercase tracking-[0.18em] ${KIND_COLOR[group.kind]}`}
@@ -78,7 +125,7 @@ export function SearchPanel() {
           ))}
         </div>
 
-        <p className="mt-auto font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
+        <p className="shrink-0 font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
           trigram index · vi · en · zh
         </p>
       </div>

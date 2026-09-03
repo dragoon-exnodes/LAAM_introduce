@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
+import { ConnectorStreams } from "./ConnectorStreams";
 import { PanelFrame } from "./PanelFrame";
 
 /**
- * Connectors as things that PLUG INTO LAAM, which is what the panel is about —
- * a bus down the left with a port per service, not a grid of nine names that
- * could belong to any product.
- *
  * Read/write is declared per TOOL, not per connector: every service here has at
  * least one write. What differs is whether that write is `workflowSafe` — allowed
  * to run unattended behind a recipient allowlist — or fail-closed and held for a
@@ -17,14 +14,7 @@ import { PanelFrame } from "./PanelFrame";
  * internal QA and deliberately not shown — the header used to count it and read
  * "5 unattended" above four visible ALLOWLIST labels.
  */
-type Port = {
-  name: string;
-  /** The tool that actually moves when this port is exercised. */
-  tool: string;
-  unattended: boolean;
-};
-
-const PORTS: readonly Port[] = [
+const CONNECTORS = [
   { name: "GitHub", tool: "github_list_repos", unattended: false },
   { name: "Jira", tool: "jira_search_issues", unattended: false },
   { name: "Trello", tool: "trello_list_cards", unattended: false },
@@ -34,10 +24,10 @@ const PORTS: readonly Port[] = [
   { name: "Slack", tool: "slack_send_message", unattended: true },
   { name: "WhatsApp", tool: "whatsapp_send", unattended: true },
   { name: "Zalo OA", tool: "zalo_send_message", unattended: true },
-];
+] as const;
 
-/** How long each port stays lit as traffic moves down the bus. */
-const DWELL_MS = 1100;
+/** How long traffic dwells on one connector before moving to the next. */
+const DWELL_MS = 1600;
 
 export function ConnectorsPanel({ active }: { active: boolean }) {
   const reduced = useReducedMotion();
@@ -45,7 +35,7 @@ export function ConnectorsPanel({ active }: { active: boolean }) {
 
   useEffect(() => {
     if (reduced || !active) return;
-    const id = window.setTimeout(() => setLit((i) => (i + 1) % PORTS.length), DWELL_MS);
+    const id = window.setTimeout(() => setLit((i) => (i + 1) % CONNECTORS.length), DWELL_MS);
     return () => window.clearTimeout(id);
   }, [lit, active, reduced]);
 
@@ -54,100 +44,57 @@ export function ConnectorsPanel({ active }: { active: boolean }) {
 
   return (
     <PanelFrame route="/connectors" status="4 unattended" tone="trace">
-      <div className="flex h-full gap-0">
-        {/* The bus. Everything to its right is docked into it. */}
-        <div className="relative w-16 shrink-0">
-          <span
-            aria-hidden="true"
-            className="absolute inset-y-0 right-0 w-px"
-            style={{ background: "linear-gradient(to bottom, transparent, var(--color-line-bright) 12%, var(--color-line-bright) 88%, transparent)" }}
-          />
-          <span className="absolute left-0 top-1/2 -translate-y-1/2 -rotate-90 whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.3em] text-faint">
-            laam
-          </span>
-        </div>
+      <div className="relative h-full">
+        <ConnectorStreams streams={CONNECTORS} litIndex={current} />
 
-        <ul className="flex min-w-0 flex-1 flex-col justify-between py-0.5">
-          {PORTS.map((port, i) => {
+        {/* Labels stay HTML over the canvas: crisp at any DPR, selectable, and
+            readable as the list of services they are. The canvas draws each
+            strand to the row's vertical centre, so the two stay registered. */}
+        <ul className="absolute inset-y-0 right-0 m-0 flex list-none flex-col justify-center gap-0 p-0" style={{ height: "100%" }}>
+          {CONNECTORS.map((c, i) => {
             const isLit = i === current;
             return (
               <li
-                key={port.name}
-                className="relative flex items-center gap-2.5"
+                key={c.name}
+                className="flex flex-1 items-center justify-end gap-2.5 pr-1 text-right"
                 style={
                   reduced
                     ? undefined
-                    : { animation: `dock-in 420ms var(--ease-out-expo) ${i * 55}ms backwards` }
+                    : { animation: `dock-in 460ms var(--ease-out-expo) ${i * 55}ms backwards` }
                 }
               >
-                {/* The lead from the bus into this port. */}
-                <span
-                  aria-hidden="true"
-                  className="h-px w-5 shrink-0 transition-colors duration-300"
-                  style={{ background: isLit ? "var(--color-signal)" : "var(--color-line-bright)" }}
-                />
-                {/* The port itself: filled while traffic is on it, hollow at rest. */}
-                <span
-                  aria-hidden="true"
-                  className="h-1.5 w-1.5 shrink-0 rotate-45 transition-colors duration-300"
-                  style={{
-                    background: isLit ? "var(--color-signal)" : "transparent",
-                    boxShadow: isLit ? "0 0 8px var(--color-signal)" : "none",
-                    border: `1px solid ${isLit ? "var(--color-signal)" : "var(--color-line-bright)"}`,
-                  }}
-                />
-
-                <span className="w-20 shrink-0 truncate font-mono text-[11px] text-ink">
-                  {port.name}
+                {/* Only the connector carrying traffic names its tool — nine at
+                    once is a wall of monospace nobody reads. */}
+                <span className="min-w-0 truncate font-mono text-[10px] text-faint transition-opacity duration-300" style={{ opacity: isLit ? 1 : 0 }}>
+                  {c.tool}
                 </span>
-
-                {/* The tool name only surfaces on the port being exercised — nine of
-                    them at once is a wall of monospace nobody reads. */}
-                <span className="min-w-0 flex-1 truncate font-mono text-[10px] text-faint">
-                  {isLit ? port.tool : ""}
-                </span>
-
                 <span
-                  className={`shrink-0 font-mono text-[9px] uppercase tracking-[0.16em] ${
-                    port.unattended ? "text-signal" : "text-faint"
+                  className="shrink-0 font-mono text-[11px] transition-colors duration-300"
+                  style={{ color: isLit ? "var(--color-signal)" : "var(--color-ink)" }}
+                >
+                  {c.name}
+                </span>
+                <span
+                  className={`w-[4.5rem] shrink-0 font-mono text-[9px] uppercase tracking-[0.14em] ${
+                    c.unattended ? "text-signal/70" : "text-faint"
                   }`}
                 >
-                  {port.unattended ? "allowlist" : "confirm only"}
+                  {c.unattended ? "allowlist" : "confirm"}
                 </span>
               </li>
             );
           })}
-
-          {/* The open port. Dashed because it is not a service — it is the socket
-              anything speaking MCP plugs into, which is the second half of this
-              panel's headline. */}
-          <li
-            className="relative flex items-center gap-2.5"
-            style={
-              reduced
-                ? undefined
-                : { animation: `dock-in 420ms var(--ease-out-expo) ${PORTS.length * 55}ms backwards` }
-            }
-          >
-            <span
-              aria-hidden="true"
-              className="h-px w-5 shrink-0"
-              style={{ backgroundImage: "repeating-linear-gradient(to right, var(--color-line-bright) 0 3px, transparent 3px 6px)" }}
-            />
-            <span
-              aria-hidden="true"
-              className="h-1.5 w-1.5 shrink-0 rotate-45 border border-dashed"
-              style={{ borderColor: "var(--color-line-bright)" }}
-            />
-            <span className="w-20 shrink-0 font-mono text-[11px] text-muted">+ MCP</span>
-            <span className="min-w-0 flex-1 truncate font-mono text-[10px] text-faint">
-              any server · per user
-            </span>
-            <span className="shrink-0 font-mono text-[9px] uppercase tracking-[0.16em] text-faint">
-              fail-closed
-            </span>
-          </li>
         </ul>
+
+        {/* The core's own caption, and the open socket. Bottom-left, clear of the
+            strands, which all leave the core to the right. */}
+        <div className="absolute bottom-0 left-0">
+          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">laam</p>
+          <p className="mt-1.5 font-mono text-[10px] text-faint">
+            + any MCP server
+            <span className="ml-2 text-line-bright">fail-closed · per user</span>
+          </p>
+        </div>
       </div>
     </PanelFrame>
   );

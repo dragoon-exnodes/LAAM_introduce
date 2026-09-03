@@ -65,14 +65,20 @@ export function AccessPanel({ active }: { active: boolean }) {
   // Derived, not stored: leaving the panel costs no render and no reset effect.
   const state = active && !reduced ? PHASES[phase].state : "idle";
   const gone = state === "revoked";
-  const audit = gone ? [AUDIT_OFFBOARD, ...AUDIT_BASE] : AUDIT_BASE;
+  // Always four rows, with the off-boarding line LAST. Prepending on the event
+  // would grow the block and shove the people list above it — the same jerk, one
+  // panel over. Reserving the slot at the top instead left a visible hole under
+  // the heading while it waited; at the bottom the reserved space falls into the
+  // panel's own padding and reads as nothing at all.
+  const audit = [...AUDIT_BASE, AUDIT_OFFBOARD];
 
   return (
     <PanelFrame route="/settings/access" status="rbac on" tone="signal">
       <div className="flex h-full flex-col gap-4">
-        {/* Rows share the height rather than stacking at the top and leaving the
-            lower half of the frame empty. */}
-        <ul className="flex flex-1 flex-col">
+        {/* Fixed row height, NOT flex-1. Sharing the leftover height means every
+            row moves the moment anything else in the panel changes size — which
+            is exactly what happened when the audit log grew a line. */}
+        <ul>
           {PEOPLE.map((person) => {
             const leaving = person.name === LEAVER;
             const off = leaving && gone;
@@ -81,7 +87,7 @@ export function AccessPanel({ active }: { active: boolean }) {
             return (
               <li
                 key={person.name}
-                className="flex flex-1 items-center justify-between gap-3 border-b border-line/60 transition-colors duration-300 last:border-0"
+                className="flex items-center justify-between gap-3 border-b border-line/60 py-5 transition-colors duration-300 last:border-0"
                 style={flashing ? { background: "rgba(255,86,86,0.06)" } : undefined}
               >
                 <span
@@ -123,19 +129,24 @@ export function AccessPanel({ active }: { active: boolean }) {
           })}
         </ul>
 
-        <div className="shrink-0 border-t border-line pt-3.5">
+        {/* Sits directly under the roster, not pushed to the floor. `mt-auto` put
+            the slack in the MIDDLE of the panel, which reads as a gap; collected
+            at the bottom instead it reads as the frame's own padding. */}
+        <div className="border-t border-line pt-3.5">
           <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-faint">audit log</p>
           <ul className="space-y-1.5">
             {audit.map((entry, i) => {
-              const isNew = gone && i === 0;
+              const isOffboard = i === audit.length - 1;
               return (
                 <li
                   key={entry}
                   className="truncate font-mono text-[10px]"
                   style={{
-                    color: isNew ? "var(--color-alert)" : "var(--color-muted)",
-                    animation: isNew && !reduced ? "channel-in 420ms var(--ease-out-expo) both" : undefined,
+                    color: isOffboard ? "var(--color-alert)" : "var(--color-muted)",
+                    opacity: isOffboard && !gone ? 0 : 1,
+                    transition: reduced ? undefined : "opacity 360ms var(--ease-out-expo)",
                   }}
+                  aria-hidden={isOffboard && !gone}
                 >
                   <span className="text-faint">›</span> {entry}
                 </li>

@@ -90,18 +90,22 @@ export function SearchPanel({ active }: { active: boolean }) {
           <span className="ml-0.5 inline-block h-3.5 w-px animate-pulse bg-signal" aria-hidden="true" />
         </div>
 
-        {/* Groups share the height so the result set fills the frame instead of
-            clumping under the query box. */}
-        <div className="flex min-h-0 flex-1 flex-col justify-around gap-4">
-          {GROUPS.slice(0, shown).map((group, gi) => (
+        {/* Every group is laid out from the first frame and only its OPACITY
+            changes as it lands. Mounting them one at a time — or letting flex
+            distribute the leftover height — re-positions the groups already on
+            screen each time another arrives, which is the jerk: nothing drops a
+            frame, the content just moves under you. */}
+        <div className="space-y-5">
+          {GROUPS.map((group, gi) => (
             <section
               key={group.kind}
-              style={
-                reduced
-                  ? undefined
-                  : { animation: `channel-in 380ms var(--ease-out-expo) both` }
-              }
+              style={{
+                opacity: gi < shown ? 1 : 0,
+                transform: gi < shown || reduced ? "none" : "translate3d(0,6px,0)",
+                transition: reduced ? undefined : "opacity 320ms var(--ease-out-expo), transform 320ms var(--ease-out-expo)",
+              }}
               data-group={gi}
+              aria-hidden={gi >= shown}
             >
               <div className="flex items-baseline gap-2.5 border-b border-line pb-1.5">
                 <h4
@@ -125,7 +129,7 @@ export function SearchPanel({ active }: { active: boolean }) {
           ))}
         </div>
 
-        <p className="shrink-0 font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
+        <p className="mt-auto font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
           trigram index · vi · en · zh
         </p>
       </div>

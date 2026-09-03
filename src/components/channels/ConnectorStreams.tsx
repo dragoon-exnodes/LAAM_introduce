@@ -67,7 +67,7 @@ export function ConnectorStreams({ streams }: { streams: readonly Stream[] }) {
       coreY = H / 2;
       coreR = Math.min(W * 0.09, H * 0.17);
       // Where the strands gather before the last run into the core.
-      waistX = W * 0.36;
+      waistX = W * 0.40;
     }
 
     function buildPackets() {
@@ -86,14 +86,17 @@ export function ConnectorStreams({ streams }: { streams: readonly Stream[] }) {
     /**
      * Where a strand terminates, level with its label's row.
      *
-     * Stops well short of the right edge: the labels live over there, and a
-     * strand run to the edge passes straight through its own service name —
-     * the lit one drew a line through "Drive" and its status.
+     * Stops just short of the label column — far enough that the terminal ring
+     * clears the first letter of the name (at 0.71 it sat on it), close enough
+     * that the terminal still reads as attached to it.
+     * The names are left-aligned to a fixed mark on the panel side, so this one
+     * x sits the same distance from every row rather than leaving short names
+     * like "Jira" stranded.
      */
     function entry(i: number) {
       const span = H * SPREAD;
       const step = streams.length > 1 ? span / (streams.length - 1) : 0;
-      return { x: W * 0.62, y: (H - span) / 2 + i * step };
+      return { x: W * 0.685, y: (H - span) / 2 + i * step };
     }
 
     /**

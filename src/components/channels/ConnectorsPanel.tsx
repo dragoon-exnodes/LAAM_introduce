@@ -51,21 +51,24 @@ export function ConnectorsPanel() {
           {CONNECTORS.map((c, i) => (
             <li
               key={c.name}
-              className="flex flex-1 items-center justify-end gap-3 pr-1 text-right"
+              className="flex flex-1 items-center gap-3 pr-1"
               style={
                 reduced
                   ? undefined
                   : { animation: `dock-in 460ms var(--ease-out-expo) ${i * 55}ms backwards` }
               }
             >
+              {/* Fixed width and left-aligned: every name starts at the same mark,
+                  so the gap to its strand is identical on all nine rows. Ragged
+                  left edges were leaving the short names visibly adrift. */}
               <span
-                className="shrink-0 font-mono text-[11px]"
+                className="w-[5.5rem] shrink-0 font-mono text-[11px]"
                 style={{ color: c.connected ? "#ffce7a" : "var(--color-muted)" }}
               >
                 {c.name}
               </span>
               <span
-                className={`w-[4.5rem] shrink-0 font-mono text-[9px] uppercase tracking-[0.14em] ${
+                className={`w-[4.5rem] shrink-0 text-right font-mono text-[9px] uppercase tracking-[0.14em] ${
                   c.unattended ? "text-signal/70" : "text-faint"
                 }`}
               >

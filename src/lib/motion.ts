@@ -6,8 +6,14 @@ gsap.registerPlugin(ScrollTrigger);
 export { gsap, ScrollTrigger };
 
 /**
- * Standard scroll reveal: elements marked `.reveal` inside `scope` rise into place
- * once, staggered in DOM order.
+ * Scroll reveal for elements marked `.reveal` inside `scope`.
+ *
+ * Batched per element, not per section. The previous version hung one trigger on
+ * the whole section, so arriving at its top played everything in it — including
+ * the parts still a screen below, which had therefore finished animating before
+ * anyone could see them. ScrollTrigger.batch fires each element as IT enters and
+ * staggers whatever crosses together, which is the behaviour the effect was
+ * always meant to have.
  *
  * The hidden start state lives here rather than in CSS on purpose. Markup is
  * visible by default, so a reduced-motion visitor — or anyone whose JS failed to
@@ -16,25 +22,34 @@ export { gsap, ScrollTrigger };
 export function revealOnScroll(scope: HTMLElement, reduced: boolean) {
   if (reduced) return () => {};
 
-  const targets = scope.querySelectorAll<HTMLElement>(".reveal");
+  const targets = gsap.utils.toArray<HTMLElement>(scope.querySelectorAll(".reveal"));
   if (targets.length === 0) return () => {};
 
-  const tween = gsap.fromTo(
-    targets,
-    { opacity: 0, y: 18 },
-    {
-      opacity: 1,
-      y: 0,
-      duration: 0.85,
-      ease: "expo.out",
-      stagger: 0.07,
-      scrollTrigger: { trigger: scope, start: "top 78%", once: true },
-    },
-  );
+  // Transform and opacity only: both run on the compositor, so a reveal never
+  // competes with Lenis for layout work while the page is being scrolled.
+  gsap.set(targets, { opacity: 0, y: 26, scale: 0.988, willChange: "transform, opacity" });
+
+  const triggers = ScrollTrigger.batch(targets, {
+    start: "top 88%",
+    once: true,
+    onEnter: (batch) =>
+      gsap.to(batch, {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.9,
+        ease: "expo.out",
+        stagger: 0.09,
+        overwrite: true,
+        // Dropped once it has landed: a permanent will-change keeps a layer alive
+        // for every revealed element on the page, which is most of them.
+        onComplete: () => gsap.set(batch, { willChange: "auto" }),
+      }),
+  });
 
   return () => {
-    tween.scrollTrigger?.kill();
-    tween.kill();
+    triggers.forEach((t) => t.kill());
+    gsap.set(targets, { clearProps: "all" });
   };
 }
 

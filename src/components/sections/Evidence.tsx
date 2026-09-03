@@ -99,10 +99,14 @@ export function Evidence() {
                     aria-hidden="true"
                   >
                     <span
-                      data-bar
-                      className={`absolute inset-y-0 left-0 ${row.score === 0 ? "bg-alert" : "bg-signal"}`}
+                      className="absolute inset-y-0 left-0 overflow-hidden"
                       style={{ width: `${Math.max(row.score, 1.5)}%` }}
-                    />
+                    >
+                      <span
+                        data-bar
+                        className={`block h-full w-full ${row.score === 0 ? "bg-alert" : "bg-signal"}`}
+                      />
+                    </span>
                   </span>
                   <span
                     className={`w-44 shrink-0 whitespace-nowrap text-right font-mono text-[length:var(--text-data)] tabular-nums ${
@@ -150,10 +154,14 @@ export function Evidence() {
                     aria-hidden="true"
                   >
                     <span
-                      data-bar
-                      className={`absolute inset-y-0 left-0 ${row.score < 70 ? "bg-alert" : "bg-signal"}`}
+                      className="absolute inset-y-0 left-0 overflow-hidden"
                       style={{ width: `${row.score}%` }}
-                    />
+                    >
+                      <span
+                        data-bar
+                        className={`block h-full w-full ${row.score < 70 ? "bg-alert" : "bg-signal"}`}
+                      />
+                    </span>
                   </span>
                   <span
                     className={`w-12 shrink-0 text-right font-mono text-[length:var(--text-data)] tabular-nums ${

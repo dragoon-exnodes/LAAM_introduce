@@ -17,7 +17,7 @@ export function ChannelPanel({ panel, active }: { panel: PanelKey; active: boole
     case "voice":
       return <VoicePanel active={active} />;
     case "workflow":
-      return <WorkflowPanel />;
+      return <WorkflowPanel active={active} />;
     case "connectors":
       return <ConnectorsPanel />;
     case "search":

@@ -33,11 +33,13 @@ export function VoicePanel({ active }: { active: boolean }) {
             )}
             <span className="relative inline-flex h-2 w-2 rounded-full bg-ion" />
           </span>
-          {/* The real question this was demonstrated with, against DAAB's
-              "Pharmacy Chain" datasource. Left in Vietnamese because that is how
-              it was actually asked. */}
+          {/* The question this was demonstrated with, asked out loud. It was
+              originally asked in Vietnamese — the assistant answers in whichever
+              of vi/en/zh it is spoken to — but this page is written in English
+              throughout, and a lone Vietnamese string here reads as an oversight
+              rather than as the multilingual point it was meant to make. */}
           <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
-            "Nhân viên nào hoàn tiền nhiều nhất?"
+            "Which staff member issued the most refunds?"
           </p>
         </div>
 

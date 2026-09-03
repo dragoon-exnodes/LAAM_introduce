@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { CHANNELS } from "../../lib/content";
 import { ScrollTrigger } from "../../lib/motion";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
-import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { ChannelPanel } from "../channels/ChannelPanel";
 import { Reticle } from "../system/Reticle";
 import { Eyebrow } from "../ui/Eyebrow";
@@ -55,9 +54,6 @@ export function Channels() {
 function PinnedConsole() {
   const track = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
-  // Reduced motion keeps the original cross-fade: the depth is the decoration
-  // here, the panel content is the information.
-  const reduced = useReducedMotion();
 
   useEffect(() => {
     const el = track.current;
@@ -85,63 +81,19 @@ function PinnedConsole() {
       style={{ height: `${CHANNELS.length * TRACK_PER_CHANNEL * 100}vh` }}
     >
       <div className="sticky top-[16vh] grid h-[68vh] grid-cols-[1.05fr_0.95fr] gap-8">
-        {/* The console is a deck seen slightly from the front, not seven flat
-            panels swapping places. Seven equal, coplanar surfaces read as seven
-            unrelated things; a stack reads as one system with a current face and
-            more behind it — and it answers "where am I in the seven" without
-            making anyone find the 04 / 07 counter.
-            `perspective` lives here so every card shares one vanishing point. */}
-        <div
-          className="bracket relative border border-line bg-panel/50"
-          style={{ perspective: "1400px", perspectiveOrigin: "50% 30%" }}
-        >
+        <div className="bracket relative border border-line bg-panel/50">
           <Reticle />
-          {CHANNELS.map((item, i) => {
-            const offset = i - index;
-            // Only the next three are worth drawing: past that the cards are
-            // sub-pixel slivers and just add overdraw.
-            const behind = offset > 0 && offset <= 3;
-            const isCurrent = offset === 0;
-            return (
-              <div
-                key={item.route}
-                aria-hidden={!isCurrent}
-                // Each card carries its own opaque surface and border. Without
-                // them the ones behind show straight through to the frame and
-                // read as ghosts of the front panel rather than as more cards.
-                className={`absolute inset-x-0 bottom-0 top-7 border border-line bg-void transition-[transform,opacity] duration-[600ms] ease-[var(--ease-out-expo)] ${
-                  isCurrent ? "" : "pointer-events-none"
-                } ${reduced ? (isCurrent ? "opacity-100" : "opacity-0") : ""}`}
-                style={
-                  reduced
-                    ? undefined
-                    : {
-                        // Cards recede up and back, so each one leaves a sliver of
-                        // its top edge showing above the face — the tell that there
-                        // is more behind. Past cards drop forward and fade out.
-                        // translateZ shrinks a card about its centre, which pushes
-                        // its top edge DOWN by roughly half the height it loses —
-                        // enough to cancel a small lift and hide the card entirely
-                        // behind the front one. The lift has to cover that first,
-                        // then add the sliver you actually want to see.
-                        transform: isCurrent
-                          ? "translate3d(0,0,0)"
-                          : behind
-                            ? `translate3d(0,${-30 * offset}px,${-70 * offset}px)`
-                            : offset < 0
-                              ? "translate3d(0,26px,90px)"
-                              : "translate3d(0,-110px,-280px)",
-                        opacity: isCurrent ? 1 : behind ? 0.5 - offset * 0.12 : 0,
-                        // Keeps the stack ordered front-to-back for the compositor
-                        // regardless of DOM order.
-                        zIndex: CHANNELS.length - Math.abs(offset),
-                      }
-                }
-              >
-                <ChannelPanel panel={item.panel} active={isCurrent} />
-              </div>
-            );
-          })}
+          {CHANNELS.map((item, i) => (
+            <div
+              key={item.route}
+              aria-hidden={i !== index}
+              className={`absolute inset-0 transition-opacity duration-500 ease-[var(--ease-out-expo)] ${
+                i === index ? "opacity-100" : "pointer-events-none opacity-0"
+              }`}
+            >
+              <ChannelPanel panel={item.panel} active={i === index} />
+            </div>
+          ))}
         </div>
 
         <div className="flex flex-col py-2">

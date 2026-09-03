@@ -36,7 +36,12 @@ export function ConnectorsPanel() {
 
   return (
     <PanelFrame route="/connectors" status={`${CONNECTED} connected`} tone="trace">
-      <div className="relative h-full">
+      {/* min-h as well as h-full. In the stacked mobile layout the frame only has
+          a MIN height, so there is no definite height for `h-full` to resolve
+          against and it computes to 0 — which collapsed this box, sent the
+          absolutely-positioned labels out through the top of the panel, and left
+          the canvas with nothing to draw into. */}
+      <div className="relative h-full min-h-[19rem]">
         <ConnectorStreams streams={CONNECTORS} />
 
         {/* Labels stay HTML over the canvas: crisp at any DPR, selectable, and

@@ -70,7 +70,7 @@ export function ConnectorStreams({ streams }: { streams: readonly Stream[] }) {
       coreY = H / 2;
       coreR = Math.min(W * 0.09, H * 0.17);
       // Where the strands gather before the last run into the core.
-      waistX = W * 0.46;
+      waistX = (W - 72 * DPR) * 0.52;
     }
 
     function buildPackets() {
@@ -91,14 +91,20 @@ export function ConnectorStreams({ streams }: { streams: readonly Stream[] }) {
      *
      * Stops just short of the label column — far enough that the terminal ring
      * clears the first letter of the name, close enough that it still reads as
-     * attached. Measured, not guessed: this value puts the ring 15px from the
-     * text. It moved out when the confirm/allowlist column was removed and the
-     * labels shifted right with it, so it is tied to the label block's width.
+     * attached.
+     *
+     * Offset in CSS PIXELS from the right edge, not a fraction of the width. The
+     * label block is a roughly constant number of pixels wide whatever the panel
+     * is, so a fraction tuned on a 605px desktop panel landed on top of the text
+     * once the panel narrowed to 411px on mobile. 72px reproduces the 15px gap
+     * that was measured on desktop, and holds at every width.
      */
+    const LABEL_GUTTER_PX = 72;
+
     function entry(i: number) {
       const span = H * SPREAD;
       const step = streams.length > 1 ? span / (streams.length - 1) : 0;
-      return { x: W * 0.881, y: (H - span) / 2 + i * step };
+      return { x: W - LABEL_GUTTER_PX * DPR, y: (H - span) / 2 + i * step };
     }
 
     /**

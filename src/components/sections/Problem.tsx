@@ -27,11 +27,13 @@ export function Problem() {
       {/* Was a bare paragraph with a left border — the single most generic pull-
           quote pattern on the web, and the one thing on the page not framed as a
           panel. The grid above it is a bordered console readout; this answers it,
-          so it gets the same bg-panel/84 treatment the scoreboard panels use in
-          Evidence, not a floating aside. Eyebrow ties it back to the "route"
-          labels on the three cards it's resolving. */}
-      <div className="reveal mt-8 border border-line bg-panel/84 p-7 lg:p-10">
-        <Eyebrow tone="signal">The answer</Eyebrow>
+          so it gets the exact panel treatment Evidence and Status already use —
+          bg-panel/40, tone="trace" — not a one-off. A different opacity or tone
+          here would have fixed the "bare paragraph" problem while creating a new,
+          quieter version of it: a panel that LOOKS like the others' panels but
+          isn't actually built from the same values. */}
+      <div className="reveal mt-8 border border-line bg-panel/40 p-7 lg:p-10">
+        <Eyebrow tone="trace">The answer</Eyebrow>
         <p className="mt-4 max-w-2xl text-[length:var(--text-lead)]">
           <span className="text-ink">
             LAAM answers all three from the transcripts your agents already

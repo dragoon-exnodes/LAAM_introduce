@@ -223,6 +223,14 @@
   }
 }
 
+/* An edge the run is currently crossing. Dashes travel toward the target for as
+   long as that node is executing, then the edge goes solid and spent. */
+@keyframes wf-edge-flow {
+  to {
+    stroke-dashoffset: -6;
+  }
+}
+
 /* The write gate is the one node in a run that waits on a human. It breathes so
    the eye lands there, not on the seven nodes that already finished. */
 @keyframes wf-gate {

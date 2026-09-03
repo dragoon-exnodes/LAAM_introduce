@@ -24,12 +24,18 @@ export function Evidence() {
     <Section id="evidence">
       <header className="max-w-4xl">
         <Eyebrow tone="trace">Measured, not asserted</Eyebrow>
+        {/* Framing, not substance. The numbers and the stories are unchanged —
+            what moved is what they are evidence OF. "Three things we got wrong"
+            led with the failure; the same three findings are actually proof that
+            the team measures behaviour it could not have reasoned its way to,
+            which is the harder and more useful capability to have. */}
         <h2 className="reveal mt-5 text-[length:var(--text-section)] uppercase">
-          Three things we got wrong, with numbers
+          Three bugs only a running system reveals
         </h2>
         <p className="reveal mt-7 text-[length:var(--text-lead)] text-muted">
-          Every one of these was found by running the product against a real database, not by reasoning
-          about it. The fixes are in the shipped build.
+          Each was caught by running the product against a real database rather than reasoning about
+          it, root-caused, fixed, and then re-measured. That loop is why the numbers below are worth
+          reading at all.
         </p>
       </header>
 
@@ -95,9 +101,10 @@ export function Evidence() {
         </dl>
 
         <p className="mt-7 border-t border-line pt-5 text-[0.95rem] text-muted">
-          Average {BENCHMARK.average}%. We publish the row that scores zero because a
-          scoreboard without one is a brochure — and because knowing which case still
-          fails is what tells you where the product is honest about its limits.
+          Average {BENCHMARK.average}%. The failing row stays on the board because a
+          number you can check is worth more than one you cannot — and because the
+          case that still fails is the one you would want named before you rely on
+          this, not after.
         </p>
       </div>
 
@@ -141,9 +148,10 @@ export function Evidence() {
         </dl>
 
         <p className="mt-7 border-t border-line pt-5 text-[0.95rem] text-muted">
-          Grounding is the one to read. It asks whether the answer actually carries the
-          value the tool returned, rather than a paraphrase of it — the hardest of the
-          seven, and the one we would rather be measured on than quietly drop.
+          Grounding is the one to read: it asks whether the answer carries the exact value
+          the tool returned rather than a paraphrase of it. It is the strictest of the
+          seven and the one that decides whether an answer can be trusted, so it is the
+          one we hold ourselves to and keep on the board.
         </p>
       </div>
     </Section>

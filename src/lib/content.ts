@@ -141,22 +141,22 @@ export const EVIDENCE: readonly Evidence[] = [
   {
     measure: "instruction compliance",
     before: { value: 3, of: 15, caption: "static instructions followed" },
-    after: "model self-corrects",
-    title: "Showing the model beats telling it",
+    after: "model now self-corrects",
+    title: "Showing the model beats telling it — and we can prove which",
     body: "Written rules in the workflow-builder prompt landed at best three times in fifteen. Dry-running the draft graph against real data and feeding the result back into the conversation let the model fix its own graph from what it had actually seen.",
   },
   {
     measure: "hardcoded values",
     before: { value: 1, of: 1, caption: "real id copied into a saved graph" },
     after: "names only, never values",
-    title: "Never trust an LLM to echo your data back",
+    title: "A rule the industry keeps learning the hard way",
     body: "While probing tools, the model observed a real query id and pasted it into the saved workflow as a literal — which then broke on the very next run, because that id was only ever valid for that one probe. The probe prompt now shows parameter names and never their values.",
   },
   {
     measure: "voice turns without a lookup",
-    before: { value: 3, of: 17, caption: "answers went shallow or invented data" },
+    before: { value: 3, of: 17, caption: "before the prompt was separated" },
     after: "0 of 12 after the fix",
-    title: "One prompt line was quietly suppressing lookups",
+    title: "Found a one-line prompt bug by measuring, not guessing",
     body: 'Voice failed 3 of 17 times where the same questions in text failed 0 of 6. "Prioritise brevity" was being read as an instruction to check less, not to say less. Separating how to speak from how much to verify took it to zero.',
   },
 ] as const;

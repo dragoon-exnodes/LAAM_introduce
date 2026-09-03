@@ -16,16 +16,33 @@ export function Problem() {
         {PROBLEMS.map((problem) => (
           <li key={problem.route} className="reveal bg-void p-7 lg:p-9">
             <Eyebrow tone="signal">{problem.route}</Eyebrow>
-            <h3 className="mt-5 text-xl leading-[1.15] text-ink [font-stretch:110%]">{problem.title}</h3>
+            <h3 className="mt-5 text-xl leading-[1.15] text-ink [font-stretch:110%]">
+              {problem.title}
+            </h3>
             <p className="mt-4 text-[0.95rem] text-muted">{problem.body}</p>
           </li>
         ))}
       </ol>
 
-      <p className="reveal mt-12 max-w-2xl border-l-2 border-signal pl-6 text-[length:var(--text-lead)] text-ink">
-        LAAM answers all three from the transcripts your agents already write to disk. Point it at a
-        machine and it starts reporting — there is nothing to add to the agent side.
-      </p>
+      {/* Was a bare paragraph with a left border — the single most generic pull-
+          quote pattern on the web, and the one thing on the page not framed as a
+          panel. The grid above it is a bordered console readout; this answers it,
+          so it gets the same bg-panel/84 treatment the scoreboard panels use in
+          Evidence, not a floating aside. Eyebrow ties it back to the "route"
+          labels on the three cards it's resolving. */}
+      <div className="reveal mt-8 border border-line bg-panel/84 p-7 lg:p-10">
+        <Eyebrow tone="signal">The answer</Eyebrow>
+        <p className="mt-4 max-w-2xl text-[length:var(--text-lead)]">
+          <span className="text-ink">
+            LAAM answers all three from the transcripts your agents already
+            write to disk.
+          </span>{" "}
+          <span className="text-muted">
+            Point it at a machine and it starts reporting — there is nothing to
+            add to the agent side.
+          </span>
+        </p>
+      </div>
     </Section>
   );
 }

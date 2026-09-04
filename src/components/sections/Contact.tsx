@@ -40,11 +40,7 @@ export function Contact() {
           </p>
 
           <div className="mt-10 flex flex-wrap justify-center gap-3">
-            {/* TODO(owner): replace with a real, monitored destination before this
-                page goes anywhere. The domain below is correct (exnodes.vn, as used
-                throughout the LAAM repo) but the mailbox is a placeholder — this is
-                the primary call to action on the whole site. */}
-            <Button href="mailto:hello@exnodes.vn?subject=LAAM%20walkthrough">
+            <Button href="mailto:contact@exnodes.vn?subject=LAAM%20walkthrough">
               Book a walkthrough
             </Button>
             <Button href="#top" variant="ghost">

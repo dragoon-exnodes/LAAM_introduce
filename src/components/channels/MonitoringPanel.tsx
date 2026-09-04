@@ -14,6 +14,12 @@ import { PanelFrame } from "./PanelFrame";
 // Units are kept at roughly one-to-one with rendered pixels. With a small
 // viewBox the svg scales up to the panel width and drags the type up with it —
 // 7.5 units became ~16px, louder than the session rows above it.
+// Derived, not typed in. The badge used to read a hardcoded "6 live" while two of
+// the six rows below it visibly said `idle` and `done` — the one panel on the page
+// whose whole claim is that you can see exactly what is running, contradicting its
+// own list. `ConnectorsPanel` already counts its badge from the data; so does this.
+const LIVE = SESSIONS.filter((session) => session.status === "running").length;
+
 const VB = { w: 620, h: 170 };
 const ORCH = { x: 40, y: VB.h / 2 };
 const CHILD_X = 250;
@@ -37,7 +43,7 @@ export function MonitoringPanel({ active }: { active: boolean }) {
   }, [reduced, active]);
 
   return (
-    <PanelFrame route="/monitoring" status="6 live" tone="signal">
+    <PanelFrame route="/monitoring" status={`${LIVE} live`} tone="signal">
       <div className="flex min-h-0 flex-1 flex-col gap-4">
         <ul className="space-y-px">
           {SESSIONS.map((session) => (

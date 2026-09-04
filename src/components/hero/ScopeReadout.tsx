@@ -1,8 +1,15 @@
 import { useEffect, useState } from "react";
-import { formatElapsed } from "../../lib/telemetry";
+import { SESSIONS, formatElapsed } from "../../lib/telemetry";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 
-const BASE_SECONDS = 257;
+/**
+ * The scope features one real row from the same session list the ribbon and the
+ * monitoring panel render. Every field here used to be re-typed by hand against
+ * that row, and the model had already drifted apart from it: the hero called
+ * sess-4f2a9c a local model while the telemetry called it a Claude one — the same
+ * session, two answers, one page. Reading the row is the only way that stays true.
+ */
+const FEATURED = SESSIONS[0];
 
 /**
  * The readout laid over the scope. It ticks because the claim on this page is
@@ -10,7 +17,7 @@ const BASE_SECONDS = 257;
  */
 export function ScopeReadout() {
   const reduced = useReducedMotion();
-  const [elapsed, setElapsed] = useState(BASE_SECONDS);
+  const [elapsed, setElapsed] = useState(FEATURED.seed);
 
   useEffect(() => {
     if (reduced) return;
@@ -40,7 +47,7 @@ export function ScopeReadout() {
           session active
         </span>
         <span className="font-mono text-[length:var(--text-eyebrow)] tracking-[0.14em] text-faint">
-          sess-4f2a9c
+          sess-{FEATURED.id}
         </span>
       </div>
 
@@ -51,11 +58,11 @@ export function ScopeReadout() {
         </div>
         <div>
           <dt className="text-faint uppercase">model</dt>
-          <dd className="mt-1 text-ink">qwen3-vl:8b</dd>
+          <dd className="mt-1 text-ink">{FEATURED.model}</dd>
         </div>
         <div>
           <dt className="text-faint uppercase">tool calls</dt>
-          <dd className="mt-1 text-ink tabular-nums">12</dd>
+          <dd className="mt-1 text-ink tabular-nums">{FEATURED.tools}</dd>
         </div>
         <div className="hidden sm:block">
           <dt className="text-faint uppercase">cost</dt>

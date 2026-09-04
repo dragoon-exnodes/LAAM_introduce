@@ -6,21 +6,33 @@ export const NAV_LINKS = [
   { href: "#evidence", label: "Evidence" },
 ] as const;
 
+/**
+ * `answeredBy` names the mechanism that actually closes each problem, and it exists
+ * because the answer panel used to claim LAAM solved all three "from the transcripts
+ * your agents already write to disk". Only the first one comes from the transcripts.
+ * Reading a log cannot lower a frontier-model bill or send a Slack message — those
+ * are the assistant and the automation, two different surfaces. The hero already
+ * separated them correctly; the panel was the outlier, and naming the mechanism per
+ * row is what stops the claim from quietly collapsing back into one.
+ */
 export const PROBLEMS = [
   {
     route: "the blind spot",
     title: "Agents run everywhere, and nobody can see them",
     body: "A dozen Claude Code sessions across four machines. One has been stuck for forty minutes. You find out when someone asks why the branch never landed.",
+    answeredBy: "The transcript reader",
   },
   {
     route: "the meter",
     title: "Every small question bills a frontier model",
     body: "Summaries, lookups, one-line rewrites — the everyday work that shouldn't need a paid API call, priced like it does. And when the invoice lands, nothing ties it back to a model, a session or a branch.",
+    answeredBy: "The assistant, and cost attribution",
   },
   {
     route: "the busywork",
     title: "Cross-app chores stay manual",
     body: "Read the data, summarise it, send the mail, post to Slack, update the ticket. Five tools, every time, by hand.",
+    answeredBy: "Workflow automation",
   },
 ] as const;
 

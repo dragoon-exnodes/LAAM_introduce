@@ -36,30 +36,33 @@ export function Problem() {
         <Eyebrow tone="trace">The answer</Eyebrow>
         {/* The paragraph alone left the right two-thirds of a full-width panel
             empty — every other full-width panel on the page (the scoreboards in
-            Evidence) fills that space with content, not air. "All three" is a
-            literal claim, so the fix is to actually enumerate them: the same
-            three routes from the grid above, marked resolved with the ✓ idiom
-            this page already uses for a completed check (BootSequence, the
-            write-gate steps) — proof of the sentence, not a decoration next to it. */}
+            Evidence) fills that space with content, not air. The list earns that
+            space by carrying the part the sentence can no longer assert: WHICH
+            mechanism answers which problem. Three routes marked ✓ against one
+            shared cause was the visual form of the old overclaim; pairing each
+            route with its own answer is the same reassurance without it. */}
         <div className="mt-4 grid gap-6 lg:grid-cols-[1fr_15rem] lg:gap-14">
           <p className="text-[length:var(--text-lead)]">
-            <span className="text-ink">
-              LAAM answers all three from the transcripts your agents already
-              write to disk.
-            </span>{" "}
+            <span className="text-ink">Three problems, three answers, one screen.</span>{" "}
             <span className="text-muted">
-              Point it at a machine and it starts reporting — there is nothing
-              to add to the agent side.
+              The blind spot closes from the transcripts your agents already
+              write to disk — point it at a machine and it starts reporting,
+              with nothing to add on the agent side. The other two are answered
+              by what sits beside that readout: an assistant you can ask without
+              starting a frontier model's meter, and automation that runs the
+              five-tool chore once.
             </span>
           </p>
-          <ul className="space-y-2.5 border-t border-line pt-5 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
+          <ul className="space-y-4 border-t border-line pt-5 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
             {PROBLEMS.map((problem) => (
-              <li
-                key={problem.route}
-                className="flex items-center gap-2.5 font-mono text-[length:var(--text-data)] uppercase tracking-[0.12em] text-trace"
-              >
-                <span className="text-signal">✓</span>
-                {problem.route}
+              <li key={problem.route}>
+                <span className="flex items-center gap-2.5 font-mono text-[length:var(--text-data)] uppercase tracking-[0.12em] text-trace">
+                  <span className="text-signal">✓</span>
+                  {problem.route}
+                </span>
+                <span className="mt-1 block pl-[1.35rem] text-[0.8rem] text-faint">
+                  {problem.answeredBy}
+                </span>
               </li>
             ))}
           </ul>

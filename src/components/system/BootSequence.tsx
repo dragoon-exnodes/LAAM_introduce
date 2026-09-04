@@ -1,12 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "../../lib/motion";
+import { CHANNELS } from "../../lib/content";
+import { SESSIONS } from "../../lib/telemetry";
 import { AuroraField } from "./AuroraField";
 
-const CHANNELS = [
+// Both counts are read off the same data the rest of the page renders. Typed in by
+// hand they had already drifted: the boot screen claimed "4 hosts" against three
+// machines in the telemetry, and "6/6 channels" against a section headed "Seven
+// channels, one console" — the console announcing a system that does not match the
+// one it then shows you.
+const HOSTS = new Set(SESSIONS.map((session) => session.machine)).size;
+
+const BOOT_LINES = [
   "calibrating measurement grid",
   "mounting transcript reader",
-  "resolving machines · 4 hosts",
-  "telemetry channels 6/6 online",
+  `resolving machines · ${HOSTS} hosts`,
+  `telemetry channels ${CHANNELS.length}/${CHANNELS.length} online`,
 ] as const;
 
 type Props = { onDone: () => void; skip: boolean };
@@ -178,7 +187,7 @@ export function BootSequence({ onDone, skip }: Props) {
           />
 
           <ul className="mt-6 space-y-1.5">
-            {CHANNELS.map((line) => (
+            {BOOT_LINES.map((line) => (
               <li
                 key={line}
                 data-boot="line"

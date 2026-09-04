@@ -31,7 +31,10 @@ export type Session = {
 };
 
 export const SESSIONS: readonly Session[] = [
-  { id: "4f2a9c", project: "orbit.api", machine: "ws-01", model: "claude-sonnet-4-6", status: "running", stuck: false, seed: 257, tools: 12 },
+  // The hero's scope readout features this session and reports its cost as $0.00,
+  // so the session it features has to be one that actually cost nothing to run —
+  // it used to be pinned to a Claude model here while the hero showed it as local.
+  { id: "4f2a9c", project: "orbit.api", machine: "ws-01", model: "qwen3-vl:8b", status: "running", stuck: false, seed: 257, tools: 12 },
   { id: "8b1e04", project: "orbit.worker", machine: "ws-01", model: "qwen3-vl:8b", status: "running", stuck: false, seed: 1042, tools: 31 },
   { id: "d33071", project: "orbit.web", machine: "ws-02", model: "claude-sonnet-4-6", status: "idle", stuck: false, seed: 88, tools: 4 },
   { id: "0ac5f8", project: "orbit.worker", machine: "ws-03", model: "qwen3-vl:8b", status: "running", stuck: true, seed: 2314, tools: 7 },

@@ -74,8 +74,21 @@ export default function App() {
       <Rail />
 
       <main>
-        <Hero ready={booted} />
-        <InquiryRibbon />
+        {/* The hero and the ribbon are one unit, and it is as tall as the screen.
+            The ribbon is the page's fastest argument — six questions from six
+            different trades — so it belongs ON the fold, where it also tells the
+            visitor there is more below. Left to flow, it sat wherever the hero
+            happened to end: tight on a laptop, marooned mid-screen on a large
+            display.
+
+            `min-h`, not `h`: a short window must still be allowed to grow rather
+            than crop the hero. And `svh` rather than `vh`, because mobile `vh`
+            counts the address bar — a `100vh` hero jumps the moment the bar
+            retracts, and the strip pinned to its bottom jumps with it. */}
+        <div className="flex min-h-[100svh] flex-col">
+          <Hero ready={booted} />
+          <InquiryRibbon />
+        </div>
         <Problem />
         <Channels />
         <Evidence />

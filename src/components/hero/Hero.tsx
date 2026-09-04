@@ -97,14 +97,14 @@ export function Hero({ ready }: { ready: boolean }) {
     // Clipped because the parallax grid is deliberately oversized — it has to be
     // able to travel without widening the document.
     //
-    // The top and bottom padding are tighter than the section rhythm elsewhere on
-    // the page, and deliberately: the ribbon underneath is the page's fastest
-    // argument — six questions from six different trades — and it was landing ~100px
-    // below the fold on a 900px screen, so nobody met it without scrolling. Trimming
-    // the lead paragraph recovered most of that; these two values recover the rest.
-    // Measured, not guessed: ribbon top was 997px, then 898, and the target is a
-    // viewport height of 900 with the strip fully visible.
-    <section ref={root} id="top" className="relative overflow-hidden pt-20 sm:pt-24 lg:pt-28">
+    // `flex-1` + `justify-center`: the parent in App.tsx is a screen-height column
+    // holding this and the ribbon, so the hero absorbs whatever slack the screen
+    // has and centres its content in it, and the ribbon lands on the fold at every
+    // height rather than only at the one the padding was tuned for.
+    //
+    // The top padding still has a job the flexbox cannot do: the nav is fixed and
+    // 64px tall, so the content has to clear it.
+    <section ref={root} id="top" className="relative flex flex-1 flex-col justify-center overflow-hidden pt-24 sm:pt-28 lg:pt-32">
       <div
         data-parallax="grid"
         className="grid-field pointer-events-none absolute -inset-16 opacity-[0.55] [mask-image:radial-gradient(ellipse_at_50%_0%,black,transparent_72%)]"

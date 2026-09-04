@@ -29,7 +29,7 @@ const AHEAD = [
 
 export function Status() {
   return (
-    <Section>
+    <Section id="status">
       <div className="grid gap-14 lg:grid-cols-[1.1fr_0.9fr]">
         <div>
           <Eyebrow>Where it stands</Eyebrow>

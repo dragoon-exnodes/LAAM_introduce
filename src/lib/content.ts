@@ -4,6 +4,10 @@ export const NAV_LINKS = [
   { href: "#watch", label: "What it watches" },
   { href: "#surfaces", label: "Surfaces" },
   { href: "#evidence", label: "Evidence" },
+  // Status was the one section with no way to reach it: it holds the release,
+  // the honest limitations and what is still open — the page a sceptical reader
+  // goes looking for, and the one they had to scroll the whole page to find.
+  { href: "#status", label: "Where it stands" },
 ] as const;
 
 /**
@@ -61,7 +65,13 @@ export const CHANNELS: readonly Channel[] = [
     label: "Telemetry",
     panel: "monitoring",
     tone: "signal",
-    title: "Live agent telemetry",
+    // "Live agent telemetry" was a category label sitting on the most important
+    // tab on the page, while the tabs around it earned their titles ("Find the run
+    // you half-remember", "Access that survives an off-boarding"). The section
+    // above already wrote the better line by describing its absence — "You find
+    // out when someone asks why the branch never landed" — so this is that
+    // sentence turned the right way round.
+    title: "The stuck one finds you",
     // Three corrections against the shipped code, all in the direction of claiming
     // less: sub-agents render as a flat list with no parent/child edges (not a
     // tree); nothing polls, so a quiet run is flagged on the next update rather
@@ -113,6 +123,11 @@ export const CHANNELS: readonly Channel[] = [
     points: [
       "Continuous listen → answer → listen loop",
       "In-place transcript review",
+      // The Chrome dependency was disclosed only in the roadmap, three sections
+      // further down, while "Hands-free" and "Continuous listen" read here as
+      // though it runs anywhere. Someone evaluating the voice console should
+      // learn its one hard constraint in the voice console's own copy.
+      "Speech-to-text is the browser's today, so voice needs Chrome",
     ],
   },
   {
@@ -120,7 +135,12 @@ export const CHANNELS: readonly Channel[] = [
     label: "Automation",
     panel: "workflow",
     tone: "signal",
-    title: "Durable graph automation",
+    // Recovered from the standalone Workflows section that was folded into this
+    // tab. The merge kept every fact and dropped the argument: "Durable graph
+    // automation" is a category any tool can claim, while this sentence answers
+    // the first objection anyone has to handing an AI write access to their Gmail
+    // and their tickets. The three bullets below are what makes it true.
+    title: "Nothing irreversible happens without you",
     /*
      * Two corrections. There are FIVE node kinds, not six — `custom-agent` is a
      * preset field on the agent node ("Deliberately NOT a new WfNodeKind", says
@@ -179,13 +199,6 @@ export const CHANNELS: readonly Channel[] = [
       "Rate limiting and account lockout",
     ],
   },
-] as const;
-
-export const WRITE_GATE_STEPS = [
-  { id: "read", label: "Read", note: "Runs unattended" },
-  { id: "agent", label: "Agent", note: "Declares its output shape" },
-  { id: "gate", label: "Write gate", note: "Confirmation card" },
-  { id: "send", label: "Send", note: "Recipient allowlist" },
 ] as const;
 
 export type Evidence = {

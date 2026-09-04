@@ -40,8 +40,14 @@ export function Channels() {
             /dashboard, not /monitoring. And "mock-up" was the wrong word to
             reach for on a page whose panels ARE mock-ups: the point being made
             is that these surfaces shipped, not that the drawings are real. */}
+        {/* Saying the data is invented costs nothing and buys two things: it
+            answers "is any of this real?" before a visitor has to wonder, and it
+            is the honest reason — real sessions are someone's actual work and do
+            not belong on a marketing page. A page that argues for measurement
+            cannot leave its own most obvious question unanswered. */}
         <p className="reveal max-w-sm text-[0.95rem] text-muted">
-          Every readout below is a surface people open daily — shipped, not roadmap.
+          Every readout below is a surface people open daily — shipped, not roadmap. The data in
+          them is invented; real sessions belong to whoever is signed in.
         </p>
       </header>
 

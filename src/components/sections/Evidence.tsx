@@ -182,10 +182,12 @@ export function Evidence() {
 
           <p className="mt-7 border-t border-line pt-5 text-[0.95rem] text-muted">
             Grounding is the one to read: it asks whether the answer carries the
-            exact value the tool returned rather than a paraphrase of it. It is
-            the strictest of the seven and the one that decides whether an
-            answer can be trusted, so it is the one we hold ourselves to and
-            keep on the board.
+            exact value the tool returned rather than a paraphrase of it. The
+            score does not separate a paraphrase of the right number from the
+            wrong number — both count as a miss, which is why it reads lower
+            than the other six. That strictness is the point: a number you have
+            to go and check yourself is not yet an answer, so this is the one we
+            hold ourselves to and keep on the board.
           </p>
         </div>
       </div>

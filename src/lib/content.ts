@@ -152,16 +152,23 @@ export const CHANNELS: readonly Channel[] = [
     body: "Connector, agent, condition, foreach and MCP nodes on one canvas. Runs survive a crash, resume per node, and can be scheduled. Describe the job in chat and the assistant drafts the graph — then dry-runs it against real data and feeds the result back so the model can correct its own graph.",
     points: [
       "Parallel DAG — fan-out, fan-in",
-      "AI-drafted graphs, corrected by dry-run",
+      // "AI-drafted graphs, corrected by dry-run" lived here until the tab ran
+      // 15px past the console's fixed height. It was the right bullet to lose:
+      // the body sentence above already tells that story end to end — drafts the
+      // graph, dry-runs it against real data, feeds the result back — so the
+      // bullet was the same claim a second time, in less detail.
       // Was "Every write pauses on a confirmation card, bound to a recipient
       // allowlist" — three errors in one line: the card is a chat mechanism,
       // workflow runs fail closed rather than prompting, and a write with no
-      // recipient field never reaches the allowlist check at all. Naming the
-      // three moments separately is both true and a stronger promise than the
-      // single vague one it replaces.
+      // recipient field never reaches the allowlist check at all.
+      //
+      // Naming the three moments separately fixed the claim but cost three
+      // bullets and a wrap — eight lines where the panel budgets six, which
+      // stretched this tab's column past the sticky console's fixed height and
+      // pushed it over the progress row below. Two lines carry the same three
+      // facts: drafting never fires, chat confirms, a run fails closed.
       "Writes never fire while the assistant drafts — they become nodes",
-      "In chat, every write stops on a confirmation card",
-      "At run time writes are fail-closed; messaging is bound to a recipient allowlist",
+      "Confirmed in chat, fail-closed in a run, sends allowlisted",
       "Custom-agent presets, saved once and reused across every graph",
       "Mid-run cancel, templates, clone",
     ],

@@ -10,6 +10,39 @@
 
   html {
     -webkit-text-size-adjust: 100%;
+    /* The page scrollbar was the last piece of unstyled browser chrome on the
+       screen: a pale slab down the right edge of a near-black instrument, and
+       the one element the design never touched. `.scroll-x` below already
+       settled how a scrollbar should look here, so this is that treatment
+       applied to the window rather than a second opinion about it.
+       Not hidden. The left rail already reports progress, so the bar is not
+       needed as an indicator — but hiding it takes away dragging from the
+       people who scroll that way, and costs a real affordance to win a detail
+       nobody was looking at. Thin and dark keeps both. */
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-line-bright) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    /* Inset by a transparent border rather than sized down: the thumb keeps the
+       full 10px hit target while reading as a 6px line. */
+    background: var(--color-line-bright);
+    background-clip: content-box;
+    border: 2px solid transparent;
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-faint);
+    background-clip: content-box;
   }
 
   body {

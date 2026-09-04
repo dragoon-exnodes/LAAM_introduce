@@ -34,9 +34,12 @@ export function Evidence() {
           Three bugs only a running system reveals
         </h2>
         <p className="reveal mt-7 text-[length:var(--text-lead)] text-muted">
-          Each was caught by running the product against a real database rather
-          than reasoning about it, root-caused, fixed, and then re-measured.
-          That loop is why the numbers below are worth reading at all.
+          <span className="text-ink">
+            Each was caught by running the product against a real database rather
+            than reasoning about it.
+          </span>{" "}
+          Root-caused, fixed, and then re-measured — that loop is why the numbers
+          below are worth reading at all.
         </p>
       </header>
 
@@ -59,7 +62,7 @@ export function Evidence() {
                   </span>
                   <span className="text-2xl text-faint">/{item.before.of}</span>
                 </p>
-                <p className="mt-2 text-[0.85rem] text-faint">
+                <p className="mt-2 text-[0.85rem] text-muted">
                   {item.before.caption}
                 </p>
                 <p className="mt-5 border-t border-line pt-4 font-mono text-[length:var(--text-data)] text-trace">
@@ -82,7 +85,7 @@ export function Evidence() {
         <div className="reveal mt-10 border border-line bg-panel/40 p-7 lg:p-10">
           <div className="flex flex-wrap items-baseline justify-between gap-4">
             <Eyebrow tone="trace">Current scoreboard</Eyebrow>
-            <span className="font-mono text-[length:var(--text-data)] text-faint">
+            <span className="font-mono text-[length:var(--text-data)] text-muted">
               {BENCHMARK.caption}
             </span>
           </div>
@@ -154,7 +157,7 @@ export function Evidence() {
         <div className="reveal mt-6 border border-line bg-panel/40 p-7 lg:p-10">
           <div className="flex flex-wrap items-baseline justify-between gap-4">
             <Eyebrow tone="trace">Behaviour, by dimension</Eyebrow>
-            <span className="font-mono text-[length:var(--text-data)] text-faint">
+            <span className="font-mono text-[length:var(--text-data)] text-muted">
               {RELIABILITY.caption}
             </span>
           </div>
@@ -197,7 +200,7 @@ export function Evidence() {
                     </span>
                   </span>
                 </div>
-                <p className="order-3 w-full pl-0 text-[0.8rem] text-faint sm:w-auto sm:basis-full sm:pl-44">
+                <p className="order-3 w-full pl-0 text-[0.8rem] text-muted sm:w-auto sm:basis-full sm:pl-44">
                   {row.note}
                 </p>
               </div>

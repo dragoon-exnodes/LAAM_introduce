@@ -131,9 +131,12 @@ export function Hero({ ready }: { ready: boolean }) {
               paragraph describes. Naming the script costs one clause and removes
               the objection a technical buyer would otherwise raise in the demo. */}
           <p data-anim="lead" className="mt-8 max-w-xl text-[length:var(--text-lead)] text-muted">
-            LAAM reads the transcripts your Claude Code agents already write — no SDK changes, no
-            wrappers, nothing to change in your agents. One zero-dependency script per machine ships
-            them over. Then it puts an assistant and durable workflow automation on the same screen.
+            <span className="text-ink">
+              LAAM reads the transcripts your Claude Code agents already write.
+            </span>{" "}
+            No SDK changes, no wrappers, nothing to change in your agents — one zero-dependency
+            script per machine ships them over. Then it puts an assistant and durable workflow
+            automation on the same screen.
           </p>
 
           <div data-anim="actions" className="mt-10 flex flex-wrap items-center gap-3">
@@ -164,7 +167,7 @@ export function Hero({ ready }: { ready: boolean }) {
             <ScopeReadout />
           </div>
 
-          <p className="mt-3 font-mono text-[length:var(--text-eyebrow)] uppercase tracking-[0.16em] text-faint">
+          <p className="mt-3 font-mono text-[length:var(--text-eyebrow)] uppercase tracking-[0.16em] text-muted">
             Assistant map — every surface on one core
           </p>
         </div>

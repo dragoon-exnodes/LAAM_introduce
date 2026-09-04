@@ -81,7 +81,7 @@ export function MonitoringPanel({ active }: { active: boolean }) {
             flowing dash while the finished ones settle to a static line. */}
         <div className="mt-auto" key={active ? "on" : "off"}>
           <div className="mb-2 flex items-baseline justify-between">
-            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-faint">
+            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted">
               orchestrator · sub-agents
             </span>
             <span className="font-mono text-[11px] tabular-nums text-trace">
@@ -145,7 +145,7 @@ export function MonitoringPanel({ active }: { active: boolean }) {
                   <text
                     x={CHILD_X + 14}
                     y={y + 13}
-                    className="fill-[var(--color-faint)] font-mono"
+                    className="fill-[var(--color-muted)] font-mono"
                     style={{ fontSize: 9.5 }}
                   >
                     {running ? "running" : `${sub.durationSec}s`}

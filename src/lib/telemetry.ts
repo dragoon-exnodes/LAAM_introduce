@@ -42,9 +42,14 @@ export const SESSIONS: readonly Session[] = [
   { id: "b70d15", project: "orbit.api", machine: "ws-01", model: "claude-opus-4-8", status: "done", stuck: false, seed: 3908, tools: 46 },
 ] as const;
 
+/* This colours the status DOT and the status LABEL from one value, so it has to
+   clear the readable line: "idle" is a word the reader has to be able to read,
+   not just a dimness. Muted is still the quietest thing on the row — running is
+   full-saturation cyan, stuck is alert, done is trace — so idle still recedes
+   from all three without dropping out of the text scale. */
 export const STATUS_COLOR: Record<SessionStatus, string> = {
   running: "var(--color-signal)",
-  idle: "var(--color-faint)",
+  idle: "var(--color-muted)",
   done: "var(--color-trace)",
 };
 

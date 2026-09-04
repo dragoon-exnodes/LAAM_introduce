@@ -20,7 +20,7 @@ const ROLE_COLOR: Record<string, string> = {
   owner: "text-signal border-signal/40",
   admin: "text-trace border-trace-dim",
   member: "text-muted border-line-bright",
-  viewer: "text-faint border-line",
+  viewer: "text-muted border-line",
   disabled: "text-alert border-alert/40",
 };
 
@@ -90,9 +90,13 @@ export function AccessPanel({ active }: { active: boolean }) {
                 className="flex items-center justify-between gap-3 border-b border-line/60 py-5 transition-colors duration-300 last:border-0"
                 style={flashing ? { background: "rgba(255,86,86,0.06)" } : undefined}
               >
+                {/* Dimming carries the state, but the drop from ink to muted
+                    already reads as one — and this is the exact moment the panel
+                    wants you looking at the name, so it has to stay legible
+                    while it fades. */}
                 <span
                   className="font-mono text-[11px] transition-colors duration-500"
-                  style={{ color: off ? "var(--color-faint)" : "var(--color-ink)" }}
+                  style={{ color: off ? "var(--color-muted)" : "var(--color-ink)" }}
                 >
                   {person.name}
                 </span>
@@ -113,7 +117,7 @@ export function AccessPanel({ active }: { active: boolean }) {
                       />
                     ))}
                   </span>
-                  <span className="w-12 shrink-0 text-right font-mono text-[10px] tabular-nums text-faint">
+                  <span className="w-12 shrink-0 text-right font-mono text-[10px] tabular-nums text-muted">
                     {keys} {keys === 1 ? "key" : "keys"}
                   </span>
                   <span
@@ -133,7 +137,7 @@ export function AccessPanel({ active }: { active: boolean }) {
             the slack in the MIDDLE of the panel, which reads as a gap; collected
             at the bottom instead it reads as the frame's own padding. */}
         <div className="border-t border-line pt-3.5">
-          <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-faint">audit log</p>
+          <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted">audit log</p>
           <ul className="space-y-1.5">
             {audit.map((entry, i) => {
               const isOffboard = i === audit.length - 1;

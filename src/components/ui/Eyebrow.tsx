@@ -8,7 +8,7 @@ type Props = {
 };
 
 const TONE: Record<NonNullable<Props["tone"]>, string> = {
-  muted: "text-faint",
+  muted: "text-muted",
   signal: "text-signal",
   trace: "text-trace",
   ion: "text-ion",

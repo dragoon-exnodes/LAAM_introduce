@@ -35,8 +35,9 @@ export function Contact() {
             We'll show you the live console
           </h2>
           <p className="mt-6 text-[length:var(--text-lead)] text-muted">
-            Forty minutes, real sessions, real workflows — including the parts still on the roadmap. Bring
-            the questions you'd ask before running something like this yourself.
+            <span className="text-ink">Forty minutes, real sessions, real workflows</span> — including
+            the parts still on the roadmap. Bring the questions you'd ask before running something
+            like this yourself.
           </p>
 
           <div className="mt-10 flex flex-wrap justify-center gap-3">

@@ -388,9 +388,14 @@ export function ConstellationStage() {
               animation: reduced ? undefined : `node-in 420ms cubic-bezier(0.16,1,0.3,1) ${560 + i * 90}ms backwards`,
             }}
           >
+            {/* Idle nodes were faint, which is below the readable line at 0.6rem
+                — and these labels are the map's content: the caption under this
+                scope promises "every surface on one core", and the surfaces are
+                exactly what these words name. Muted still falls clearly away
+                from the gold and cyan nodes, so idle still reads as idle. */}
             <span
               className={`flex items-center gap-1.5 whitespace-nowrap font-mono text-[0.6rem] uppercase tracking-[0.14em] sm:text-[0.65rem] ${
-                n.tint === "gold" ? "text-link" : n.tint === "idle" ? "text-faint" : "text-[#a9e9ff]"
+                n.tint === "gold" ? "text-link" : n.tint === "idle" ? "text-muted" : "text-[#a9e9ff]"
               }`}
             >
               <span

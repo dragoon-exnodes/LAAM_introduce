@@ -37,9 +37,12 @@ export function Status() {
             An internal tool, in daily use
           </h2>
           <p className="reveal mt-7 max-w-xl text-[length:var(--text-lead)] text-muted">
-            LAAM was built for our own engineers and it runs on our own machines. It is not a hosted
-            product and we are not pretending otherwise — what we can show you is a working system, the
-            decisions behind it, and what it would take to stand one up for your team.
+            <span className="text-ink">
+              LAAM was built for our own engineers and it runs on our own machines.
+            </span>{" "}
+            It is not a hosted product and we are not pretending otherwise — what we can show you is a
+            working system, the decisions behind it, and what it would take to stand one up for your
+            team.
           </p>
 
           <dl className="reveal mt-10 grid grid-cols-2 gap-px border border-line bg-line sm:grid-cols-4">
@@ -66,7 +69,7 @@ export function Status() {
                 >
                   <dt
                     className={`font-mono text-[length:var(--text-eyebrow)] uppercase tracking-[0.14em] ${
-                      isCost ? "text-free" : "text-faint"
+                      isCost ? "text-free" : "text-muted"
                     }`}
                   >
                     {fact.label}

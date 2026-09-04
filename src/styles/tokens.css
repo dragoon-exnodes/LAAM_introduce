@@ -39,6 +39,19 @@
      reads as motion on the line rather than a second colour beside it. */
   --color-link-hot: #ffe1aa;
 
+  /* Three text weights, and only the first two are readable text.
+     Measured on this ground: ink 17.2:1, muted 5.9:1, faint 4.0:1 — and faint is
+     only ever set between 9px and 14px, so WCAG asks 4.5 of it every time. It
+     misses, everywhere.
+     Raising it does not fix that, it deletes it: the value that clears 4.5 on
+     panel-2 is #6c819d, which lands within a whisker of muted's 5.3 and collapses
+     two steps into one. The contrast budget on a ground this dark funds two
+     readable weights, not three.
+     So faint is NOT a third text colour. It is for marks that carry no
+     information of their own: bullet glyphs, an index already drawn as a bar, a
+     version string repeated in the status block, an input placeholder, a
+     deliberately dimmed earlier turn, the idle nodes in a canvas. If a reader has
+     to read it to learn something, it is muted or ink — never this. */
   --color-ink: #e6eef8;
   --color-muted: #7a8da1;
   --color-faint: #5d718c;

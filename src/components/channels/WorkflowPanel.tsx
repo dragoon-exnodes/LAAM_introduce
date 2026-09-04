@@ -367,7 +367,7 @@ export function WorkflowPanel({ active }: { active: boolean }) {
           </span>
         </div>
 
-        <p className="shrink-0 border-t border-line pt-3.5 font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
+        <p className="shrink-0 border-t border-line pt-3.5 font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
           2 steps read an external mcp datasource · 3 branches ran in parallel · resumes from the held node
         </p>
       </div>

@@ -114,7 +114,7 @@ function PinnedConsole() {
               <li key={item.route}>
                 <span
                   className={`font-mono text-[10px] uppercase tracking-[0.18em] transition-colors duration-300 ${
-                    i === index ? TONE_TEXT[item.tone] : "text-faint"
+                    i === index ? TONE_TEXT[item.tone] : "text-muted"
                   }`}
                 >
                   {item.label}
@@ -141,7 +141,7 @@ function PinnedConsole() {
             {channel.points.length > 0 && (
               <ul className="mt-6 space-y-2 border-t border-line pt-5">
                 {channel.points.map((point) => (
-                  <li key={point} className="flex gap-3 font-mono text-[length:var(--text-data)] text-faint">
+                  <li key={point} className="flex gap-3 font-mono text-[length:var(--text-data)] text-muted">
                     <span aria-hidden="true" className="text-faint">
                       ›
                     </span>

@@ -113,7 +113,7 @@ export function SearchPanel({ active }: { active: boolean }) {
                 >
                   {group.kind}
                 </h4>
-                <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-faint">
+                <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-muted">
                   {group.note}
                 </span>
               </div>
@@ -121,7 +121,7 @@ export function SearchPanel({ active }: { active: boolean }) {
                 {group.hits.map((hit) => (
                   <li key={hit.primary} className="flex items-baseline justify-between gap-3">
                     <span className="truncate font-mono text-[11px] text-muted">{hit.primary}</span>
-                    <span className="shrink-0 font-mono text-[10px] text-faint">{hit.meta}</span>
+                    <span className="shrink-0 font-mono text-[10px] text-muted">{hit.meta}</span>
                   </li>
                 ))}
               </ul>
@@ -129,7 +129,7 @@ export function SearchPanel({ active }: { active: boolean }) {
           ))}
         </div>
 
-        <p className="mt-auto font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
+        <p className="mt-auto font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
           trigram index · vi · en · zh
         </p>
       </div>

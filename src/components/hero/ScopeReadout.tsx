@@ -53,19 +53,19 @@ export function ScopeReadout() {
 
       <dl className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2 font-mono text-[length:var(--text-eyebrow)] tracking-[0.12em]">
         <div>
-          <dt className="text-faint uppercase">elapsed</dt>
+          <dt className="text-muted uppercase">elapsed</dt>
           <dd className="mt-1 text-base text-ink tabular-nums">{formatElapsed(elapsed)}</dd>
         </div>
         <div>
-          <dt className="text-faint uppercase">model</dt>
+          <dt className="text-muted uppercase">model</dt>
           <dd className="mt-1 text-ink">{FEATURED.model}</dd>
         </div>
         <div>
-          <dt className="text-faint uppercase">tool calls</dt>
+          <dt className="text-muted uppercase">tool calls</dt>
           <dd className="mt-1 text-ink tabular-nums">{FEATURED.tools}</dd>
         </div>
         <div className="hidden sm:block">
-          <dt className="text-faint uppercase">cost</dt>
+          <dt className="text-muted uppercase">cost</dt>
           <dd className="mt-1 text-free">$0.00</dd>
         </div>
       </dl>

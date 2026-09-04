@@ -62,7 +62,7 @@ export function VoicePanel({ active }: { active: boolean }) {
 
         <div className="border border-line bg-panel-2/70 p-3.5">
           <div className="mb-2.5 flex items-center justify-between">
-            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-faint">
+            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted">
               display panel
             </span>
             {/* The badge is a trust boundary: "from tool" means the table came

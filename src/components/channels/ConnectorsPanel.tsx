@@ -75,9 +75,9 @@ export function ConnectorsPanel() {
             strands, which all leave the core to the right. */}
         <div className="absolute bottom-0 left-0">
           <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">laam</p>
-          <p className="mt-1.5 font-mono text-[10px] text-faint">
+          <p className="mt-1.5 font-mono text-[10px] text-muted">
             + any MCP server
-            <span className="ml-2 text-faint">fail-closed · per user</span>
+            <span className="ml-2 text-muted">fail-closed · per user</span>
           </p>
         </div>
       </div>

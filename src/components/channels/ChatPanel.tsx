@@ -66,7 +66,7 @@ export function ChatPanel({ active }: { active: boolean }) {
           <span className="border border-trace-dim bg-trace/10 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-trace">
             laam_find_stuck
           </span>
-          <span className="font-mono text-[10px] text-faint">
+          <span className="font-mono text-[10px] text-muted">
             tool_result · ok · 1 match
           </span>
         </div>

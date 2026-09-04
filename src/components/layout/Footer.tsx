@@ -8,14 +8,14 @@ export function Footer() {
             is load-bearing and it restates this page's positioning in four words,
             while "Life" carries no meaning and "Assistant" is vaguer than "Agent"
             on a page headed "Every agent. Every machine." */}
-        <p className="font-mono text-[length:var(--text-eyebrow)] uppercase tracking-[0.18em] text-faint">
+        <p className="font-mono text-[length:var(--text-eyebrow)] uppercase tracking-[0.18em] text-muted">
           LAAM — Local AI Agent Monitoring
         </p>
         {/* The only outbound link on the page, so it carries the hover treatment
             the nav links use rather than inventing a second one — and it moves the
             underline onto the word itself, since "Internal platform" is not part
             of what you are clicking through to. */}
-        <p className="font-mono text-[length:var(--text-eyebrow)] uppercase tracking-[0.18em] text-faint">
+        <p className="font-mono text-[length:var(--text-eyebrow)] uppercase tracking-[0.18em] text-muted">
           Internal platform ·{" "}
           <a
             href="https://ennam.vn/"

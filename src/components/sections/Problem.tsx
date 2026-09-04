@@ -60,7 +60,7 @@ export function Problem() {
                   <span className="text-signal">✓</span>
                   {problem.route}
                 </span>
-                <span className="mt-1 block pl-[1.35rem] text-[0.8rem] text-faint">
+                <span className="mt-1 block pl-[1.35rem] text-[0.8rem] text-muted">
                   {problem.answeredBy}
                 </span>
               </li>

@@ -62,7 +62,24 @@
 
   --text-eyebrow: 0.6875rem;
   --text-data: 0.75rem;
-  --text-hero: clamp(2.35rem, 1.1rem + 3.3vw, 4.15rem);
+  /* The hero headline is authored as three lines, one mask each, and it never
+     achieved three lines on a desktop: the longest of them measures 10.14
+     font-sizes wide, so the column has to stay at least 10.14x the font, and this
+     ramp grew faster than the column did. At 1512 the column caps at 634px (the
+     1400px container) while the font capped at 66.4px and wanted 673px — short by
+     39px at EVERY width from 1478 up, because both sides stop growing. Lower down
+     it was worse: at 1024 all three lines wrapped, so a three-line headline set as
+     six.
+
+     The cap comes down to 3.8rem and the slope to 2.85vw, which holds the ratio
+     across the range; paired with the hero's two-column split moving to xl, the
+     1024-1279 band gets the full width instead of 431px of it. The slope is what
+     is actually binding — the tightest point is 1280, the moment the two-column
+     layout starts — and it is set to leave about 17px of slack at every width
+     rather than the 4px that merely satisfies the arithmetic: a headline this
+     size should not re-wrap because a different machine rasterises Archivo a
+     hair wider, or because the measurement landed before the webfont did. */
+  --text-hero: clamp(2.35rem, 1.1rem + 2.85vw, 3.8rem);
   --text-section: clamp(1.75rem, 1.2rem + 1.9vw, 2.9rem);
   --text-lead: clamp(1.05rem, 0.98rem + 0.35vw, 1.3rem);
 

@@ -103,10 +103,16 @@ export function Hero({ ready }: { ready: boolean }) {
         className="grid-field pointer-events-none absolute -inset-16 opacity-[0.55] [mask-image:radial-gradient(ellipse_at_50%_0%,black,transparent_72%)]"
       />
 
-      <div className="relative mx-auto grid max-w-[1400px] items-center gap-12 px-5 pb-16 sm:px-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 lg:pb-24 lg:pl-[calc(var(--spacing-rail)+2rem)]">
+      <div className="relative mx-auto grid max-w-[1400px] items-center gap-12 px-5 pb-16 sm:px-8 lg:pb-24 lg:pl-[calc(var(--spacing-rail)+2rem)] xl:grid-cols-[1.05fr_0.95fr] xl:gap-14">
         <div>
           {/* Separators only appear once the row is guaranteed to fit on one line —
-              a wrapped list ending in a stray divider looks like a mistake. */}
+              a wrapped list ending in a stray divider looks like a mistake.
+              `sm` is the right gate and always was: the row is a fixed ~501px at
+              every width (the eyebrow size does not scale), so it fits from 576px
+              of column upward. The one place it used to wrap was 1024-1279, where
+              the two-column hero left this column just 431px — that cause is gone
+              now that the split starts at xl, and pushing the separators to xl to
+              compensate only made three labels read as one run-on string. */}
           <div data-anim="eyebrow" className="flex flex-wrap items-center gap-x-3 gap-y-1">
             <Eyebrow tone="signal">Local-first</Eyebrow>
             <span className="hidden h-3 w-px bg-line-bright sm:block" aria-hidden="true" />

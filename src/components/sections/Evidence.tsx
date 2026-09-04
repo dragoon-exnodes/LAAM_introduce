@@ -88,14 +88,39 @@ export function Evidence() {
           </div>
 
           <dl className="mt-7 space-y-4">
+            {/* The row was one flex line with a 10rem label and an 11rem value
+                pinned at either end. That is 364px of fixed width before the bar
+                gets anything, and a phone's content column is about 294px — so
+                the bar, being the only flexible child, was squeezed to zero and
+                the value ran off the right edge. The scoreboard lost the one
+                thing it exists to show.
+
+                Below `sm` the label and the value share the first line and the
+                bar takes a full-width line of its own. Giving the bar its own
+                line is not just about fitting: bar LENGTH is the measurement, so
+                every track has to be the same length or the rows stop being
+                comparable — which is exactly what would happen if the value were
+                left to size itself ("8 / 8" is a third the width of "0 / 8 — as
+                of this run"). From `sm` up the original single line returns,
+                via order rather than duplicated markup. */}
             {BENCHMARK.rows.map((row) => (
-              <div key={row.label} className="flex items-center gap-4">
-                <dt className="w-40 shrink-0 font-mono text-[length:var(--text-data)] text-muted">
+              <div
+                key={row.label}
+                className="flex flex-wrap items-center gap-x-4 gap-y-2.5 sm:flex-nowrap"
+              >
+                <dt className="font-mono text-[length:var(--text-data)] text-muted sm:w-40 sm:shrink-0">
                   {row.label}
                 </dt>
-                <dd className="flex flex-1 items-center gap-4">
+                <dd
+                  className={`order-1 ml-auto whitespace-nowrap font-mono text-[length:var(--text-data)] tabular-nums sm:order-2 sm:ml-0 sm:w-44 sm:text-right ${
+                    row.score === 0 ? "text-alert" : "text-ink"
+                  }`}
+                >
+                  {row.detail}
+                </dd>
+                <div className="order-2 w-full sm:order-1 sm:w-auto sm:flex-1">
                   <span
-                    className="relative h-[3px] flex-1 bg-line"
+                    className="relative block h-[3px] w-full bg-line"
                     aria-hidden="true"
                   >
                     <span
@@ -108,14 +133,7 @@ export function Evidence() {
                       />
                     </span>
                   </span>
-                  <span
-                    className={`w-44 shrink-0 whitespace-nowrap text-right font-mono text-[length:var(--text-data)] tabular-nums ${
-                      row.score === 0 ? "text-alert" : "text-ink"
-                    }`}
-                  >
-                    {row.detail}
-                  </span>
-                </dd>
+                </div>
               </div>
             ))}
           </dl>
@@ -147,12 +165,25 @@ export function Evidence() {
                 key={row.label}
                 className="flex flex-wrap items-center gap-x-4 gap-y-1"
               >
-                <dt className="w-40 shrink-0 font-mono text-[length:var(--text-data)] text-muted">
+                {/* Same stacking as the scoreboard above. This block's value is
+                    only 3rem wide so it did fit on a phone, but it left the bar
+                    about 56px — a track too short to read a 67 against a 90 on.
+                    Consistency matters more than the few pixels saved: these two
+                    blocks sit one above the other and are meant to be read the
+                    same way. */}
+                <dt className="font-mono text-[length:var(--text-data)] text-muted sm:w-40 sm:shrink-0">
                   {row.label}
                 </dt>
-                <dd className="flex flex-1 items-center gap-4">
+                <dd
+                  className={`order-1 ml-auto text-right font-mono text-[length:var(--text-data)] tabular-nums sm:order-2 sm:ml-0 sm:w-12 ${
+                    row.score < 70 ? "text-alert" : "text-ink"
+                  }`}
+                >
+                  {row.score}%
+                </dd>
+                <div className="order-2 w-full sm:order-1 sm:w-auto sm:flex-1">
                   <span
-                    className="relative h-[3px] flex-1 bg-line"
+                    className="relative block h-[3px] w-full bg-line"
                     aria-hidden="true"
                   >
                     <span
@@ -165,15 +196,8 @@ export function Evidence() {
                       />
                     </span>
                   </span>
-                  <span
-                    className={`w-12 shrink-0 text-right font-mono text-[length:var(--text-data)] tabular-nums ${
-                      row.score < 70 ? "text-alert" : "text-ink"
-                    }`}
-                  >
-                    {row.score}%
-                  </span>
-                </dd>
-                <p className="w-full pl-0 text-[0.8rem] text-faint sm:w-auto sm:basis-full sm:pl-44">
+                </div>
+                <p className="order-3 w-full pl-0 text-[0.8rem] text-faint sm:w-auto sm:basis-full sm:pl-44">
                   {row.note}
                 </p>
               </div>

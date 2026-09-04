@@ -38,14 +38,24 @@ export function ChatPanel({ active }: { active: boolean }) {
     <PanelFrame route="/chat" status="local · $0" tone="free">
       <div className="flex min-h-0 flex-1 flex-col gap-4">
         {/* A settled earlier turn, so the thread reads as a conversation in progress
-            rather than a single staged question. */}
+            rather than a single staged question. Also the one place this panel
+            demonstrates the assistant isn't only for querying agents — geocode,
+            weather and nearby-place lookups are real tools it reaches, not a
+            devops-only chatbot. A rich block rather than prose, matching the
+            same claim Evidence's behaviour suite measures. */}
         <div className="ml-auto max-w-[70%] border border-line bg-panel-2/50 px-3.5 py-2 opacity-55">
-          <p className="text-[12px] text-muted">Which machines reported today?</p>
-        </div>
-        <div className="max-w-[80%] border-l-2 border-line-bright px-3.5 py-2 opacity-55">
-          <p className="text-[12px] text-faint">
-            Three — ws-01, ws-02, ws-03. All seen within the last four minutes.
+          <p className="text-[12px] text-muted">
+            Weather in Da Nang before I book flights?
           </p>
+        </div>
+        <div className="max-w-[85%] border-l-2 border-line-bright px-3.5 py-2 opacity-55">
+          <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-faint">
+            <span className="text-signal">◎</span> laam_weather · resolved
+          </div>
+          <p className="mt-1.5 font-mono text-[11px] text-faint">
+            Da Nang, VN · 15.97°N 108.20°E
+          </p>
+          <p className="text-[12px] text-faint">27°C, light rain</p>
         </div>
 
         <div className="ml-auto max-w-[80%] border border-line-bright bg-panel-2 px-3.5 py-2.5">
@@ -56,21 +66,28 @@ export function ChatPanel({ active }: { active: boolean }) {
           <span className="border border-trace-dim bg-trace/10 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-trace">
             laam_find_stuck
           </span>
-          <span className="font-mono text-[10px] text-faint">tool_result · ok · 1 match</span>
+          <span className="font-mono text-[10px] text-faint">
+            tool_result · ok · 1 match
+          </span>
         </div>
 
         <div className="max-w-[88%] border-l-2 border-signal bg-panel-2/60 px-3.5 py-2.5">
           <p className="min-h-[3.5rem] text-[13px] text-muted">
             {ANSWER.slice(0, typed)}
             {typed < ANSWER.length && (
-              <span className="ml-0.5 inline-block h-3.5 w-1.5 translate-y-0.5 bg-signal" aria-hidden="true" />
+              <span
+                className="ml-0.5 inline-block h-3.5 w-1.5 translate-y-0.5 bg-signal"
+                aria-hidden="true"
+              />
             )}
           </p>
         </div>
 
         <div className="mt-auto flex items-center gap-2 border border-line px-3 py-2.5">
           <span className="font-mono text-[11px] text-faint">/</span>
-          <span className="font-mono text-[11px] text-faint">Ask, or pick a tool…</span>
+          <span className="font-mono text-[11px] text-faint">
+            Ask, or pick a tool…
+          </span>
           <span className="ml-auto font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
             qwen3-vl:8b
           </span>

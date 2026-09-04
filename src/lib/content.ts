@@ -67,6 +67,7 @@ export const CHANNELS: readonly Channel[] = [
     points: [
       "Vision, PDF/DOCX, OCR (vi/en/zh)",
       "Web search via self-hosted SearXNG",
+      "Geocoding, weather and nearby-place lookups",
       "Export to Markdown, JSON, PDF",
     ],
   },
@@ -77,7 +78,10 @@ export const CHANNELS: readonly Channel[] = [
     tone: "ion",
     title: "Hands-free, on the glass",
     body: "A fullscreen voice console. Streaming neural TTS reads the narrative; tables and charts land on a floating panel instead of being spelled out loud.",
-    points: ["Continuous listen → answer → listen loop", "In-place transcript review"],
+    points: [
+      "Continuous listen → answer → listen loop",
+      "In-place transcript review",
+    ],
   },
   {
     route: "/workflows",
@@ -100,7 +104,10 @@ export const CHANNELS: readonly Channel[] = [
     tone: "trace",
     title: "Nine services, plus anything speaking MCP",
     body: "GitHub, Jira, Trello, Drive, Calendar, Gmail, Slack, WhatsApp and Zalo OA — most with one-click authorize. Any external MCP server mounts per user.",
-    points: ["Write tools gated, never silent", "Credentials encrypted per user"],
+    points: [
+      "Write tools gated, never silent",
+      "Credentials encrypted per user",
+    ],
   },
   {
     route: "/search",
@@ -118,7 +125,10 @@ export const CHANNELS: readonly Channel[] = [
     tone: "signal",
     title: "Access that survives an off-boarding",
     body: "Four roles enforced at the route. Everyone manages their own keys; owners can issue and revoke on someone's behalf, and every issuance is logged.",
-    points: ["Per-user credential encryption (HKDF)", "Rate limiting and account lockout"],
+    points: [
+      "Per-user credential encryption (HKDF)",
+      "Rate limiting and account lockout",
+    ],
   },
 ] as const;
 
@@ -188,15 +198,32 @@ export const BENCHMARK = {
  * is the hardest thing to get right and the thing worth being measured on.
  */
 export const RELIABILITY = {
-  caption: "Behaviour suite · 17 scenarios × 5 runs · gpt-oss-120b · 2026-09-03",
+  caption:
+    "Behaviour suite · 17 scenarios × 5 runs · gpt-oss-120b · 2026-09-03",
   rows: [
-    { label: "restraint", score: 100, note: "no tool call when none is needed" },
+    {
+      label: "restraint",
+      score: 100,
+      note: "no tool call when none is needed",
+    },
     { label: "write-intent", score: 100, note: "every write reaches the gate" },
-    { label: "rich-block", score: 100, note: "maps and charts render as blocks" },
+    {
+      label: "rich-block",
+      score: 100,
+      note: "maps and charts render as blocks",
+    },
     { label: "args", score: 97, note: "arguments match the tool's schema" },
-    { label: "termination", score: 90, note: "loop stops inside its round budget" },
+    {
+      label: "termination",
+      score: 90,
+      note: "loop stops inside its round budget",
+    },
     { label: "tool-selection", score: 86, note: "reaches for the right tool" },
-    { label: "grounding", score: 67, note: "answer cites what the tool returned" },
+    {
+      label: "grounding",
+      score: 67,
+      note: "answer cites what the tool returned",
+    },
   ],
 } as const;
 

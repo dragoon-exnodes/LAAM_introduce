@@ -34,8 +34,14 @@ export function Channels() {
             Seven channels, one console
           </h2>
         </div>
+        {/* Two words carried a claim they couldn't keep. "A route" asserted a
+            one-to-one mapping the product doesn't have — the telemetry tab
+            describes filtering, cost and tool timings that live on /agents and
+            /dashboard, not /monitoring. And "mock-up" was the wrong word to
+            reach for on a page whose panels ARE mock-ups: the point being made
+            is that these surfaces shipped, not that the drawings are real. */}
         <p className="reveal max-w-sm text-[0.95rem] text-muted">
-          Every readout below is a route people open daily. Nothing here is a mock-up of a roadmap.
+          Every readout below is a surface people open daily — shipped, not roadmap.
         </p>
       </header>
 

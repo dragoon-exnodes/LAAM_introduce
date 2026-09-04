@@ -8,12 +8,21 @@ import { Section } from "./Section";
  * machine registry; per-user chat with the cloud-first internal-model router;
  * the Tailscale Funnel/Serve runbook in docs/DEPLOYMENT.md), which undersold the
  * product to anyone who then saw it running. These three are genuinely open:
- *   - audit_log today carries agent writes and token grants, not every action;
+ *   - audit_log carries agent writes, token grants and user/role changes — but
+ *     not every action. (This line itself claimed only the first two until a
+ *     code-level re-check found role_change/user_disabled/user_enabled: the
+ *     "verified" above was not, and the error ran against our own product.)
  *   - vision is wired on the local model path only, not the cloud one;
  *   - voice STT is the browser's Web Speech API, so it needs Chrome.
  */
 const AHEAD = [
-  "Audit coverage beyond writes and token grants",
+  // The parenthetical above undercounted what shipped: audit_log also carries
+  // role_change, user_disabled and user_enabled. The gap is real — not every
+  // action is audited — but a page arguing for honesty cannot get its own
+  // self-criticism wrong, least of all in the direction of underselling.
+  "Audit coverage beyond writes, token grants and user/role changes",
+  // Worth reading against the chat copy: cloud is the path a deployment with a
+  // key actually gets, so this gap is wider than "not just" implies.
   "Vision on the cloud model path, not just the local one",
   "Self-hosted speech-to-text, so voice stops needing Chrome",
 ] as const;

@@ -62,12 +62,17 @@ export const CHANNELS: readonly Channel[] = [
     panel: "monitoring",
     tone: "signal",
     title: "Live agent telemetry",
-    body: "Every session from every machine, streaming over SSE. Sub-agent trees, tool-call waterfalls, and an alert the moment a run goes quiet for longer than it should.",
+    // Three corrections against the shipped code, all in the direction of claiming
+    // less: sub-agents render as a flat list with no parent/child edges (not a
+    // tree); nothing polls, so a quiet run is flagged on the next update rather
+    // than "the moment" it goes quiet; and there is no cost-by-project figure at
+    // all — that widget charts tokens, because the stat carries no cost field.
+    body: "Every session from every machine, streaming over SSE. Orchestrator-to-sub-agent breakdowns, tool-call waterfalls, and a stuck-run flag that fires as soon as the next update lands.",
     points: [
-      "Orchestrator → sub-agent graph",
+      "Orchestrator → sub-agent breakdown",
       "Filter by project, model, branch, machine",
       "Configurable stuck-agent threshold",
-      "Cost by model, project and day — exported as CSV or PDF",
+      "Cost by model and by day, with per-project token usage",
       "Slowest tools and highest error rates, surfaced automatically",
     ],
   },
@@ -76,8 +81,21 @@ export const CHANNELS: readonly Channel[] = [
     label: "Assistant",
     panel: "chat",
     tone: "trace",
-    title: "An assistant that costs nothing to ask",
-    body: "A local model answers by default and can reach every tool on this page. Claude and BytePlus are one dropdown away when a question earns them.",
+    title: "An assistant you can run for nothing",
+    /*
+     * This used to read "A local model answers by default", which the shipped
+     * code contradicts: `defaultChatModel()` is cloud-first — a BytePlus key
+     * outranks DEFAULT_CHAT_MODEL, and 2.5.0 is titled "Cloud-first internal
+     * model". The free local path is real and still reaches every tool, but it
+     * is what you get when you run WITHOUT a cloud key, not what you get by
+     * default. Stated as a condition the claim is true of every deployment,
+     * which is the only version that survives someone opening /chat on ours.
+     *
+     * Claude is dropped from the sentence rather than corrected: it is fully
+     * implemented but env-gated, and with no ANTHROPIC_API_KEY set the picker
+     * renders no Claude group at all.
+     */
+    body: "Run it against a local model and every answer is free — it still reaches every tool on this page. Add a BytePlus key and the same assistant, with the same tools, answers on a hosted model instead.",
     points: [
       "Vision, PDF/DOCX, OCR (vi/en/zh)",
       "Web search via self-hosted SearXNG",
@@ -103,11 +121,27 @@ export const CHANNELS: readonly Channel[] = [
     panel: "workflow",
     tone: "signal",
     title: "Durable graph automation",
-    body: "Connector, agent, condition, foreach, MCP and custom-agent nodes on one canvas. Runs survive a crash, resume per node, and can be scheduled. Describe the job in chat and the assistant drafts the graph — then dry-runs it against real data and rewrites itself from what came back.",
+    /*
+     * Two corrections. There are FIVE node kinds, not six — `custom-agent` is a
+     * preset field on the agent node ("Deliberately NOT a new WfNodeKind", says
+     * types.ts), and the presets bullet below already describes it, so listing it
+     * as a kind double-counted one feature. And the graph does not rewrite
+     * itself: a failed dry-run is logged, and the digest reaches the model on the
+     * author's next turn — the loop is real but human-triggered.
+     */
+    body: "Connector, agent, condition, foreach and MCP nodes on one canvas. Runs survive a crash, resume per node, and can be scheduled. Describe the job in chat and the assistant drafts the graph — then dry-runs it against real data and feeds the result back so the model can correct its own graph.",
     points: [
       "Parallel DAG — fan-out, fan-in",
       "AI-drafted graphs, corrected by dry-run",
-      "Every write pauses on a confirmation card, bound to a recipient allowlist",
+      // Was "Every write pauses on a confirmation card, bound to a recipient
+      // allowlist" — three errors in one line: the card is a chat mechanism,
+      // workflow runs fail closed rather than prompting, and a write with no
+      // recipient field never reaches the allowlist check at all. Naming the
+      // three moments separately is both true and a stronger promise than the
+      // single vague one it replaces.
+      "Writes never fire while the assistant drafts — they become nodes",
+      "In chat, every write stops on a confirmation card",
+      "At run time writes are fail-closed; messaging is bound to a recipient allowlist",
       "Custom-agent presets, saved once and reused across every graph",
       "Mid-run cancel, templates, clone",
     ],
@@ -246,7 +280,7 @@ export const RELIABILITY = {
 // out of line with the rest of the row.
 export const STATUS_FACTS = [
   { label: "Release", value: "v2.5.0" },
-  { label: "Model cost", value: "$0" },
+  { label: "Local model cost", value: "$0" },
   { label: "Connectors", value: "9 + MCP" },
   { label: "Agent changes", value: "None" },
 ] as const;

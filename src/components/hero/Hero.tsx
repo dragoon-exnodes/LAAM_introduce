@@ -110,7 +110,7 @@ export function Hero({ ready }: { ready: boolean }) {
           <div data-anim="eyebrow" className="flex flex-wrap items-center gap-x-3 gap-y-1">
             <Eyebrow tone="signal">Local-first</Eyebrow>
             <span className="hidden h-3 w-px bg-line-bright sm:block" aria-hidden="true" />
-            <Eyebrow tone="free">$0 model cost</Eyebrow>
+            <Eyebrow tone="free">$0 on a local model</Eyebrow>
             <span className="hidden h-3 w-px bg-line-bright sm:block" aria-hidden="true" />
             <Eyebrow>Zero instrumentation</Eyebrow>
           </div>
@@ -123,10 +123,17 @@ export function Hero({ ready }: { ready: boolean }) {
             ))}
           </h1>
 
+          {/* "nothing to install beside them" was the one word too far. The
+              zero-instrumentation half is true and is the strongest thing on the
+              page — no SDK changes, no wrappers, nothing touched on the agent
+              side. But every machine that isn't the host runs a collector script
+              with a minted token, which is exactly the multi-machine case this
+              paragraph describes. Naming the script costs one clause and removes
+              the objection a technical buyer would otherwise raise in the demo. */}
           <p data-anim="lead" className="mt-8 max-w-xl text-[length:var(--text-lead)] text-muted">
             LAAM reads the transcripts your Claude Code agents already write — no SDK changes, no
-            wrappers, nothing to install beside them. Then it puts a local-model assistant and durable
-            workflow automation on the same screen.
+            wrappers, nothing to change in your agents. One zero-dependency script per machine ships
+            them over. Then it puts an assistant and durable workflow automation on the same screen.
           </p>
 
           <div data-anim="actions" className="mt-10 flex flex-wrap items-center gap-3">

@@ -40,7 +40,7 @@ export function Contact() {
           </p>
 
           <div className="mt-10 flex flex-wrap justify-center gap-3">
-            <Button href="mailto:contact@exnodes.vn?subject=LAAM%20walkthrough">
+            <Button href="mailto:contact@ennam.vn?subject=LAAM%20walkthrough">
               Book a walkthrough
             </Button>
             <Button href="#top" variant="ghost">

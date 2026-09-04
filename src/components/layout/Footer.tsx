@@ -11,8 +11,20 @@ export function Footer() {
         <p className="font-mono text-[length:var(--text-eyebrow)] uppercase tracking-[0.18em] text-faint">
           LAAM — Local AI Agent Monitoring
         </p>
+        {/* The only outbound link on the page, so it carries the hover treatment
+            the nav links use rather than inventing a second one — and it moves the
+            underline onto the word itself, since "Internal platform" is not part
+            of what you are clicking through to. */}
         <p className="font-mono text-[length:var(--text-eyebrow)] uppercase tracking-[0.18em] text-faint">
-          Internal platform · Ennam
+          Internal platform ·{" "}
+          <a
+            href="https://ennam.vn/"
+            target="_blank"
+            rel="noreferrer"
+            className="underline decoration-line-bright underline-offset-4 transition-colors duration-[var(--duration-fast)] hover:text-ink hover:decoration-signal"
+          >
+            Ennam
+          </a>
         </p>
       </div>
     </footer>

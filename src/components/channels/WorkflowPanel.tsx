@@ -3,13 +3,20 @@ import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { PanelFrame } from "./PanelFrame";
 
 /**
- * The shipped `multi-source-report-email` template, drawn as the graph it
- * actually is.
+ * A weekly refund review, drawn as the graph the assistant actually compiles
+ * when someone describes that job in chat.
+ *
+ * It used to draw the shipped `multi-source-report-email` template with steps
+ * named after the mechanism (`research_web`, `synthesis`), which showed how a
+ * graph is shaped but not what one is for. This is the same shape doing a job a
+ * buyer recognises, and it is the only place on the page where the MCP claim —
+ * one line in the Connectors tab — is actually visible: two steps here read the
+ * company's own database through a mounted server.
  *
  * It used to be a flat vertical list, which quietly contradicted the copy beside
  * it: the whole claim is "parallel DAG — fan-out, fan-in", and a single column
- * cannot show a fan-out. The three research branches run at the same time and
- * converge on one synthesis node, so that is what this draws.
+ * cannot show a fan-out. The three reads run at the same time and converge on
+ * the node that writes the report, so that is what this draws.
  *
  * Node kind colours are LAAM's own (`NodesLibraryPanel.NODE_TYPES`), so a node
  * that is blue here is blue in the editor.
@@ -17,6 +24,12 @@ import { PanelFrame } from "./PanelFrame";
 const KIND = {
   agent: { color: "#2563eb", label: "agent" },
   connector: { color: "#06b6d4", label: "connector" },
+  // `mcp` is a real node kind in the editor, not a variety of connector, and it
+  // carries its own colour there (NODE_TYPES: #c026d3). Drawing it as a distinct
+  // kind is the whole point of this graph: the two steps that read the business's
+  // own database are visibly a different thing from the SaaS connector beside
+  // them, and from the agents that reason over what they return.
+  mcp: { color: "#c026d3", label: "mcp" },
   gate: { color: "#22d3ee", label: "write gate" },
 } as const;
 
@@ -68,11 +81,19 @@ const NODES: readonly Node[] = [
   // The canvas is still a viewport onto a graph, the way the editor's is: it
   // does not owe you the whole thing, and cropping the last node at the bottom
   // edge says "this continues" better than shrinking everything until it fits.
+  //
+  // The labels are a business question, not a demo. `research_laam` /
+  // `research_web` / `synthesis` described the mechanism and left a buyer to
+  // imagine the job; these describe the job — a weekly refund review that reads
+  // the company's own database, picks up the related tickets, writes the report
+  // and stops before sending it. Two of the three reads are `mcp` nodes, which
+  // is the one capability this page otherwise sold in a single bullet: an
+  // external server, mounted per user, queried as a first-class step in a graph.
   { id: "brief", label: "brief", kind: "agent", state: "done", x: 50, y: 6, w: 24 },
-  { id: "r1", label: "research_laam", kind: "agent", state: "done", x: 17, y: 29, w: 22 },
-  { id: "r2", label: "research_web", kind: "agent", state: "done", x: 50, y: 29, w: 22 },
-  { id: "r3", label: "fetch_tasks", kind: "connector", state: "done", x: 83, y: 29, w: 22 },
-  { id: "synthesis", label: "synthesis", kind: "agent", state: "done", x: 50, y: 52, w: 24 },
+  { id: "r1", label: "staff_ranking", kind: "mcp", state: "done", x: 17, y: 29, w: 22 },
+  { id: "r2", label: "store_totals", kind: "mcp", state: "done", x: 50, y: 29, w: 22 },
+  { id: "r3", label: "open_tickets", kind: "connector", state: "done", x: 83, y: 29, w: 22 },
+  { id: "synthesis", label: "compose_report", kind: "agent", state: "done", x: 50, y: 52, w: 24 },
   { id: "gate", label: "confirm send", kind: "gate", state: "waiting", x: 50, y: 75, w: 27 },
   { id: "send", label: "gmail_send", kind: "connector", state: "held", x: 50, y: 98, w: 24 },
 ] as const;
@@ -101,7 +122,7 @@ const NODE_H = 14;
  * The run replays on a loop instead of the edges drawing once and freezing.
  *
  * A static graph cannot show the two things this panel claims: that the three
- * research branches run AT THE SAME TIME, and that the run stops dead at the
+ * reads run AT THE SAME TIME, and that the run stops dead at the
  * write gate. Playing the run does both — and it earns continuous motion
  * honestly, where flowing every finished edge forever would just be saying a
  * completed run is still going.
@@ -160,7 +181,7 @@ export function WorkflowPanel({ active }: { active: boolean }) {
       <div className="flex min-h-0 flex-1 flex-col gap-4">
         <dl className="grid shrink-0 grid-cols-3 gap-px border border-line bg-line">
           {[
-            ["Workflow", "multi-source-report-email"],
+            ["Workflow", "weekly-refund-review"],
             ["Trigger", "schedule"],
             ["Run", "resumable · 1 held"],
           ].map(([label, value]) => (
@@ -347,7 +368,7 @@ export function WorkflowPanel({ active }: { active: boolean }) {
         </div>
 
         <p className="shrink-0 border-t border-line pt-3.5 font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
-          3 branches ran in parallel · next run 07:00 · resumes from the held node
+          2 steps read an external mcp datasource · 3 branches ran in parallel · resumes from the held node
         </p>
       </div>
     </PanelFrame>

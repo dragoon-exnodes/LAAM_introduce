@@ -10,7 +10,7 @@ import { Nav } from "./components/layout/Nav";
 import { Rail } from "./components/layout/Rail";
 import { Footer } from "./components/layout/Footer";
 import { Hero } from "./components/hero/Hero";
-import { TelemetryRibbon } from "./components/hero/TelemetryRibbon";
+import { InquiryRibbon } from "./components/hero/InquiryRibbon";
 import { Problem } from "./components/sections/Problem";
 import { Channels } from "./components/sections/Channels";
 import { Evidence } from "./components/sections/Evidence";
@@ -64,7 +64,7 @@ export default function App() {
       <BootSequence onDone={onBooted} skip={reduced} />
 
       <a
-        href="#watch"
+        href="#why"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[80] focus:bg-signal focus:px-4 focus:py-2 focus:font-mono focus:text-sm focus:text-void"
       >
         {COPY.skipToContent}
@@ -75,7 +75,7 @@ export default function App() {
 
       <main>
         <Hero ready={booted} />
-        <TelemetryRibbon />
+        <InquiryRibbon />
         <Problem />
         <Channels />
         <Evidence />

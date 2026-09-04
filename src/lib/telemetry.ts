@@ -10,8 +10,10 @@
  * derived, not stored** — it is computed from the time since the last transcript
  * write against `LAAM_STUCK_MIN` (default 10 minutes).
  *
- * Values are fixed seeds, not random: the ribbon must look identical on every
- * visit, and the only thing that genuinely moves is elapsed time.
+ * Values are fixed seeds, not random: the monitoring panel must look identical on
+ * every visit, and the only thing that genuinely moves is elapsed time. (This used
+ * to feed the hero ribbon too; that strip is now `InquiryRibbon`, fed by
+ * `lib/inquiry.ts`.)
  */
 
 export type SessionStatus = "running" | "idle" | "done";
@@ -23,23 +25,29 @@ export type Session = {
   machine: string;
   model: string;
   status: SessionStatus;
-  /** Derived at read time, never stored — see `src/lib/stuck.ts`. */
+  /** Derived at read time, never stored — computed from time since last write. */
   stuck: boolean;
   /** Seconds already elapsed when the page loads. */
   seed: number;
-  tools: number;
 };
 
+/*
+ * The project names used to be `orbit.api` / `orbit.worker` / `orbit.web` —
+ * services in an imaginary software product, from when this page was sold to
+ * engineering teams. They are now the kind of workspace a business actually
+ * runs, because the reader of this panel is the person who owns that business,
+ * and a list of microservice names tells them the product is not for them.
+ * Everything else about the rows is unchanged and still real: the id shape, the
+ * `running | idle | done` status the product stores, and `stuck` derived at read
+ * time rather than stored.
+ */
 export const SESSIONS: readonly Session[] = [
-  // The hero's scope readout features this session and reports its cost as $0.00,
-  // so the session it features has to be one that actually cost nothing to run —
-  // it used to be pinned to a Claude model here while the hero showed it as local.
-  { id: "4f2a9c", project: "orbit.api", machine: "ws-01", model: "qwen3-vl:8b", status: "running", stuck: false, seed: 257, tools: 12 },
-  { id: "8b1e04", project: "orbit.worker", machine: "ws-01", model: "qwen3-vl:8b", status: "running", stuck: false, seed: 1042, tools: 31 },
-  { id: "d33071", project: "orbit.web", machine: "ws-02", model: "claude-sonnet-4-6", status: "idle", stuck: false, seed: 88, tools: 4 },
-  { id: "0ac5f8", project: "orbit.worker", machine: "ws-03", model: "qwen3-vl:8b", status: "running", stuck: true, seed: 2314, tools: 7 },
-  { id: "6e92b7", project: "LAAM", machine: "ws-02", model: "gpt-oss-120b", status: "running", stuck: false, seed: 431, tools: 19 },
-  { id: "b70d15", project: "orbit.api", machine: "ws-01", model: "claude-opus-4-8", status: "done", stuck: false, seed: 3908, tools: 46 },
+  { id: "4f2a9c", project: "pharmacy-ops", machine: "ws-01", model: "qwen3-vl:8b", status: "running", stuck: false, seed: 257 },
+  { id: "8b1e04", project: "retail-ops", machine: "ws-01", model: "qwen3-vl:8b", status: "running", stuck: false, seed: 1042 },
+  { id: "d33071", project: "finance-ops", machine: "ws-02", model: "claude-sonnet-4-6", status: "idle", stuck: false, seed: 88 },
+  { id: "0ac5f8", project: "bookings", machine: "ws-03", model: "qwen3-vl:8b", status: "running", stuck: true, seed: 2314 },
+  { id: "6e92b7", project: "warehouse", machine: "ws-02", model: "gpt-oss-120b", status: "running", stuck: false, seed: 431 },
+  { id: "b70d15", project: "retail-ops", machine: "ws-01", model: "claude-opus-4-8", status: "done", stuck: false, seed: 3908 },
 ] as const;
 
 /* This colours the status DOT and the status LABEL from one value, so it has to
@@ -73,27 +81,39 @@ export function formatElapsed(totalSeconds: number): string {
 }
 
 /**
- * One orchestrator's sub-agent fan-out, for the tree the telemetry panel draws.
+ * One run, step by step — the tool-call trace the monitoring panel draws.
  *
- * This is the shape LAAM reconstructs from a transcript: an orchestrator session
- * that called the sub-agent tool, and each child it spawned with its own type,
- * status and duration. `subagent_type` values are the real preset names a Claude
- * Code run reports; the descriptions are invented, like everything else in this
- * file, because a real one carries the task text of whoever ran it.
+ * This slot used to hold an orchestrator's sub-agent fan-out, with Claude Code's
+ * own preset names (`code-reviewer`, `test-runner`) on the children. That drew
+ * the old thesis as a picture: it sat under a heading promising a business owner
+ * they could check what the assistant did, and answered with a diagram of a
+ * software team's agents. The SHAPE was worth keeping — a run and the things it
+ * spawned, drawn as a tree — so only what hangs off it changed.
+ *
+ * These are the tool names as they appear in a real trace: `mcp__<server>__<tool>`
+ * for a mounted system, bare names for LAAM's own. `held` is the state that earns
+ * this panel its heading — a send that reached the confirmation card and stopped
+ * there — and it is why the third status exists at all.
  */
-export type SubAgent = {
+export type RunStep = {
   id: string;
-  /** `subagent_type` as it arrives in the transcript. */
-  type: string;
-  description: string;
-  status: "running" | "done";
-  /** Seconds; null while still running. */
+  /** Tool name exactly as the trace records it. */
+  tool: string;
+  status: "done" | "running" | "held";
+  /** Seconds; null while running, and null for a step that never ran. */
   durationSec: number | null;
 };
 
-export const SUB_AGENTS: readonly SubAgent[] = [
-  { id: "a1", type: "code-reviewer", description: "Review auth middleware", status: "done", durationSec: 142 },
-  { id: "a2", type: "general-purpose", description: "Map connector call sites", status: "done", durationSec: 96 },
-  { id: "a3", type: "test-runner", description: "Re-run failing suite", status: "running", durationSec: null },
-  { id: "a4", type: "general-purpose", description: "Draft migration notes", status: "done", durationSec: 61 },
+export const RUN_STEPS: readonly RunStep[] = [
+  { id: "s1", tool: "mcp__pos__query_datasource", status: "done", durationSec: 4 },
+  { id: "s2", tool: "util_calc", status: "done", durationSec: 1 },
+  { id: "s3", tool: "mcp__pos__query_datasource", status: "running", durationSec: null },
+  { id: "s4", tool: "gmail_send_message", status: "held", durationSec: null },
 ] as const;
+
+/** Gold for `held`, matching `inquiry.ts`: gold is what reaches outside the building. */
+export const STEP_COLOR: Record<RunStep["status"], string> = {
+  done: "var(--color-trace)",
+  running: "var(--color-signal)",
+  held: "var(--color-link)",
+};

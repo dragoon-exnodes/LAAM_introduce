@@ -29,13 +29,13 @@ export type Placed = ConstNode & { x: number; y: number };
  * because an honest picture of a fresh install has some lights off.
  */
 export const NODES: readonly ConstNode[] = [
-  { id: "monitoring", label: "Monitoring", tint: "cyan" },
-  { id: "workflows", label: "Workflows", tint: "gold" },
-  { id: "connectors", label: "Connectors", tint: "gold" },
   { id: "chat", label: "Chat", tint: "cyan" },
-  { id: "voice", label: "Voice", tint: "cyan" },
-  { id: "search", label: "Search", tint: "cyan" },
+  { id: "connectors", label: "Connectors", tint: "gold" },
+  { id: "workflows", label: "Workflows", tint: "gold" },
+  { id: "monitoring", label: "Monitoring", tint: "cyan" },
   { id: "access", label: "Access", tint: "idle" },
+  { id: "search", label: "Search", tint: "cyan" },
+  { id: "voice", label: "Voice", tint: "cyan" },
 ] as const;
 
 /**

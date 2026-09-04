@@ -65,10 +65,13 @@ export function VoicePanel({ active }: { active: boolean }) {
             <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted">
               display panel
             </span>
-            {/* The badge is a trust boundary: "from tool" means the table came
-                straight out of kg_query_datasource, not from the model. */}
+            {/* The badge is a trust boundary: this table came straight out of
+                a query against the company's own system, not out of the model.
+                The server slug is deliberately generic — naming one particular
+                back end here would make the page read as being about that back
+                end rather than about whatever the reader connects. */}
             <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-ion">
-              kg_query_datasource
+              mcp__pos__query_datasource
             </span>
           </div>
           <dl className="space-y-1.5">

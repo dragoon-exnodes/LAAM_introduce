@@ -157,6 +157,10 @@ export function AuroraField({
 
       const canvas = gl.canvas;
       canvas.style.cssText = "width:100%;height:100%;display:block";
+      // Purely decorative light. The other two canvases on the page are marked in
+      // JSX; this one is created by the renderer, so it has to be marked here or a
+      // screen reader announces an unlabelled graphic in the middle of the page.
+      canvas.setAttribute("aria-hidden", "true");
       container.appendChild(canvas);
 
       const stops = colorStops.map(hexToRgb);

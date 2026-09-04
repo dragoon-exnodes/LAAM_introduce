@@ -37,7 +37,7 @@ export function Channels() {
           </h2>
         </div>
         {/* Two words carried a claim they couldn't keep. "A route" asserted a
-            one-to-one mapping the product doesn't have — the telemetry tab
+            one-to-one mapping the product doesn't have — the monitoring tab
             describes filtering, cost and tool timings that live on /agents and
             /dashboard, not /monitoring. And "mock-up" was the wrong word to
             reach for on a page whose panels ARE mock-ups: the point being made

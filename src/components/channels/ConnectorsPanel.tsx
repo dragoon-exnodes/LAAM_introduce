@@ -17,16 +17,22 @@ import { PanelFrame } from "./PanelFrame";
  * answer belongs to whoever is signed in. Some are off on purpose — an honest
  * picture of a working install has lights that are not lit yet.
  */
+// Ordered the way the reader meets them, not alphabetically and not the way the
+// registry happens to list them. GitHub, Jira and Trello used to lead, which made
+// the first impression of "what does this plug into" an engineering stack — the
+// wrong first three for someone who runs a business. They stay in the set (there
+// really are nine, and the copy says nine) but they follow the tools everyone in
+// the company already has open.
 const CONNECTORS = [
+  { name: "Gmail", connected: true },
+  { name: "Slack", connected: true },
+  { name: "Drive", connected: true },
+  { name: "Calendar", connected: false },
+  { name: "WhatsApp", connected: false },
+  { name: "Zalo OA", connected: false },
   { name: "GitHub", connected: true },
   { name: "Jira", connected: false },
   { name: "Trello", connected: false },
-  { name: "Drive", connected: true },
-  { name: "Calendar", connected: false },
-  { name: "Gmail", connected: true },
-  { name: "Slack", connected: true },
-  { name: "WhatsApp", connected: false },
-  { name: "Zalo OA", connected: false },
 ] as const;
 
 const CONNECTED = CONNECTORS.filter((c) => c.connected).length;
@@ -77,7 +83,7 @@ export function ConnectorsPanel() {
           <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">laam</p>
           <p className="mt-1.5 font-mono text-[10px] text-muted">
             + any MCP server
-            <span className="ml-2 text-muted">fail-closed · per user</span>
+            <span className="ml-2 text-muted">blocked by default · per user</span>
           </p>
         </div>
       </div>

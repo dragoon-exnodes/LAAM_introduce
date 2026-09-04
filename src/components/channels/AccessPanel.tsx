@@ -2,19 +2,23 @@ import { useEffect, useState } from "react";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { PanelFrame } from "./PanelFrame";
 
-// Deliberately generic handles: these are fabricated permission records, and they
-// should not read as claims about identifiable colleagues.
+// Fabricated permission records, and deliberately generic — they should not read
+// as claims about identifiable colleagues. Written as names rather than as the
+// `a.bennett` login handles they used to be: handles read as server accounts, and
+// this panel is about people leaving a company. The surnames are the ones
+// `VoicePanel` already puts in its refund table, so the two panels describe one
+// fictional company instead of two.
 const PEOPLE = [
-  { name: "a.bennett", role: "owner", tokens: 3 },
-  { name: "b.doyle", role: "admin", tokens: 2 },
-  { name: "c.fletcher", role: "member", tokens: 1 },
-  { name: "d.harper", role: "viewer", tokens: 0 },
-  { name: "e.mercer", role: "member", tokens: 2 },
-  { name: "k.whitfield", role: "member", tokens: 1 },
+  { name: "M. Bennett", role: "owner", tokens: 3 },
+  { name: "R. Doyle", role: "admin", tokens: 2 },
+  { name: "S. Fletcher", role: "member", tokens: 1 },
+  { name: "D. Harper", role: "viewer", tokens: 0 },
+  { name: "E. Mercer", role: "member", tokens: 2 },
+  { name: "K. Whitfield", role: "member", tokens: 1 },
 ] as const;
 
 /** The one who leaves, so the panel can show what the headline promises. */
-const LEAVER = "k.whitfield";
+const LEAVER = "K. Whitfield";
 
 const ROLE_COLOR: Record<string, string> = {
   owner: "text-signal border-signal/40",
@@ -29,13 +33,13 @@ const ROLE_COLOR: Record<string, string> = {
  * not `role_changed`. A row is { id, userId, action, target, createdAt }.
  */
 const AUDIT_BASE = [
-  "token_issued_for · a.bennett",
-  "role_change · d.harper → viewer",
+  "token_issued_for · M. Bennett",
+  "role_change · D. Harper → viewer",
   "agent_write · gmail_send · redacted",
 ] as const;
 
 /** What the off-boarding writes, and what it revokes. */
-const AUDIT_OFFBOARD = `user_disabled · ${LEAVER} · by a.bennett`;
+const AUDIT_OFFBOARD = `user_disabled · ${LEAVER} · by M. Bennett`;
 
 /**
  * The panel plays an off-boarding on a loop.
@@ -73,7 +77,7 @@ export function AccessPanel({ active }: { active: boolean }) {
   const audit = [...AUDIT_BASE, AUDIT_OFFBOARD];
 
   return (
-    <PanelFrame route="/settings/access" status="rbac on" tone="signal">
+    <PanelFrame route="/settings/access" status="roles on" tone="signal">
       <div className="flex min-h-0 flex-1 flex-col gap-4">
         {/* Fixed row height, NOT flex-1. Sharing the leftover height means every
             row moves the moment anything else in the panel changes size — which

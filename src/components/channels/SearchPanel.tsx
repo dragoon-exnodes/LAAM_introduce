@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { PanelFrame } from "./PanelFrame";
 
-const QUERY = "pgvector";
+const QUERY = "refunds";
 
 /**
  * Real result shape from `GET /api/search?q=` — three groups, and each hit is a
@@ -21,19 +21,19 @@ const GROUPS = [
     kind: "sessions",
     note: "org-shared",
     hits: [
-      { primary: "orbit.worker", meta: "running · sess-8b1e04" },
-      { primary: "orbit.api", meta: "done · sess-b70d15" },
+      { primary: "pharmacy-ops", meta: "running · sess-8b1e04" },
+      { primary: "retail-ops", meta: "done · sess-b70d15" },
     ],
   },
   {
     kind: "conversations",
     note: "yours only",
-    hits: [{ primary: "pgvector migration plan", meta: "updated 12 Aug" }],
+    hits: [{ primary: "Refunds by employee, August", meta: "updated 12 Aug" }],
   },
   {
     kind: "workflows",
     note: "yours only",
-    hits: [{ primary: "digest-overnight-agents", meta: "active · updated 9 Aug" }],
+    hits: [{ primary: "weekly-refund-digest", meta: "active · updated 9 Aug" }],
   },
 ] as const;
 

@@ -4,7 +4,7 @@ import { Section } from "./Section";
 
 export function Problem() {
   return (
-    <Section id="watch">
+    <Section id="why">
       <header className="max-w-4xl">
         <Eyebrow>{COPY.problem.eyebrow}</Eyebrow>
         <h2 className="reveal mt-5 text-[length:var(--text-section)] uppercase">

@@ -1,21 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "../../lib/motion";
 import { CHANNELS } from "../../lib/content";
-import { SESSIONS } from "../../lib/telemetry";
+import { INQUIRIES } from "../../lib/inquiry";
 import { AuroraField } from "./AuroraField";
 import { COPY } from "../../lib/i18n";
 
 // Both counts are read off the same data the rest of the page renders. Typed in by
-// hand they had already drifted: the boot screen claimed "4 hosts" against three
-// machines in the telemetry, and "6/6 channels" against a section headed "Seven
-// channels, one console" — the console announcing a system that does not match the
-// one it then shows you.
-const HOSTS = new Set(SESSIONS.map((session) => session.machine)).size;
+// hand they had already drifted once: the boot screen claimed "4 hosts" against
+// three machines in the telemetry, and "6/6 channels" against a section headed
+// "Seven channels, one console" — the console announcing a system that does not
+// match the one it then shows you. So the source count is derived too, from the
+// same questions the ribbon is about to scroll past.
+const SOURCES = new Set(INQUIRIES.map((inquiry) => inquiry.source)).size;
 
 const BOOT_LINES = [
   COPY.boot.calibrating,
   COPY.boot.mounting,
-  COPY.boot.hosts(HOSTS),
+  COPY.boot.sources(SOURCES),
   COPY.boot.channels(CHANNELS.length),
 ] as const;
 

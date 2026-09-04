@@ -7,9 +7,14 @@ import { Section } from "./Section";
 
 // The measured figures themselves — the same in every language, so they stay out
 // of the dictionary. Only their captions are translated.
-const EVIDENCE_FIGURES = [
+//
+// `of` is optional, and the middle one has none, because it never had a real
+// denominator: that finding was a single incident, and rendering it as "1/1" put
+// a ratio's shape around a number that is not a ratio. Beside a genuine "3/15" it
+// read as a score of 100%, which is the opposite of what it records.
+const EVIDENCE_FIGURES: readonly { value: number; of?: number }[] = [
   { value: 3, of: 15 },
-  { value: 1, of: 1 },
+  { value: 1 },
   { value: 3, of: 17 },
 ] as const;
 
@@ -63,34 +68,37 @@ export function Evidence() {
               key={item.measure}
               className="reveal grid gap-8 bg-void p-7 lg:grid-cols-[16rem_1fr] lg:gap-14 lg:p-10"
             >
-              {/* The before/after weighting was inverted, and so were its colours.
-                  Measured across the section, the three largest numerals on it were
-                  3/15, 1/1 and 3/17 — set at 48px in the primary cyan, four times
-                  the height and sixteen times the area of every good number on the
-                  page, all of which sat at 12px. The section reported the fix in a
-                  footnote and shouted how bad things were before it.
+              {/* Colour was fixed here once and reading ORDER was not, so the fix
+                  only half landed. Signal is "a live agent", the thing true NOW;
+                  trace is "already happened". Those were applied correctly — the
+                  outcome accented, the before-figure receded — and yet the first
+                  thing a skimmer met in every card was still a failure statistic
+                  set at 36px, because it came first. Under an eyebrow that read
+                  like a metric name, `3/15` was landing as this product's score
+                  rather than as the size of something already repaired.
 
-                  The colours were backwards by the palette's own definitions:
-                  signal is "a live agent", the thing happening NOW, and trace is
-                  "already happened, so it recedes from signal". A before-measurement
-                  is the definition of already-happened; the state after the fix is
-                  the one that is still true. Swapping them puts the accent on the
-                  outcome without editing a single number — and the number itself
-                  comes down to 36px, still the largest thing in the card, no longer
-                  the largest thing in the section. */}
+                  Inverting the numerals instead was the obvious fix and is not
+                  available: only the third finding has an after-figure (0 of 12).
+                  Manufacturing the other two would be the one thing a section
+                  called "measured, not asserted" cannot do. So the ORDER carries
+                  it — what is true now, then what it was — which costs no accuracy
+                  at all and beats type size, because nobody reads a card by
+                  scanning it for the largest number first. */}
               <div>
                 <Eyebrow>{item.measure}</Eyebrow>
-                <p className="mt-4 flex items-baseline gap-1.5 font-display text-4xl font-bold tabular-nums [font-stretch:118%]">
+                <p className="mt-4 font-mono text-[1.05rem] leading-snug text-signal">
+                  {item.after}
+                </p>
+                <p className="mt-5 flex items-baseline gap-1.5 border-t border-line pt-4 font-display text-3xl font-bold tabular-nums [font-stretch:118%]">
                   <span data-count={EVIDENCE_FIGURES[i].value} className="text-trace">
                     0
                   </span>
-                  <span className="text-xl text-faint">/{EVIDENCE_FIGURES[i].of}</span>
+                  {EVIDENCE_FIGURES[i].of !== undefined && (
+                    <span className="text-lg text-faint">/{EVIDENCE_FIGURES[i].of}</span>
+                  )}
                 </p>
                 <p className="mt-2 text-[0.85rem] text-muted">
                   {item.caption}
-                </p>
-                <p className="mt-5 border-t border-line pt-4 font-mono text-[0.95rem] text-signal">
-                  → {item.after}
                 </p>
               </div>
 

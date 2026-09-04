@@ -183,7 +183,7 @@ export function WorkflowPanel({ active }: { active: boolean }) {
           {[
             ["Workflow", "weekly-refund-review"],
             ["Trigger", "schedule"],
-            ["Run", "resumable · 1 held"],
+            ["Run", "picks up where it stopped · 1 waiting"],
           ].map(([label, value]) => (
             <div key={label} className="bg-panel px-3 py-2.5">
               <dt className="font-mono text-[9px] uppercase tracking-[0.16em] text-muted">{label}</dt>
@@ -368,7 +368,7 @@ export function WorkflowPanel({ active }: { active: boolean }) {
         </div>
 
         <p className="shrink-0 border-t border-line pt-3.5 font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
-          2 steps read an external mcp datasource · 3 branches ran in parallel · resumes from the held node
+          2 steps read the company's own database over mcp · 3 lookups ran at once · picks up from the step waiting on you
         </p>
       </div>
     </PanelFrame>

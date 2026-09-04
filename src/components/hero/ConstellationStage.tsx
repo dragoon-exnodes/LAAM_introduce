@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
+import { useMediaQuery } from "../../hooks/useMediaQuery";
 import { tokenHex, tokenRgb } from "../../lib/tokens";
 import { CYCLE_MS, NODES, levelAt, modeAt, placeNodes, type Mode, type Placed } from "../../lib/constellation";
 
@@ -17,9 +18,30 @@ import { CYCLE_MS, NODES, levelAt, modeAt, placeNodes, type Mode, type Placed } 
  * background, so the constellation stays a framed subject inside the hero box.
  */
 
-/** Ring radius and vertical squash, in percent of the box. */
+/**
+ * Ring radius and vertical squash, in percent of the box.
+ *
+ * The squash was 0.9 when the readout beneath was a single row of figures. The
+ * readout now carries a two-line question, which is taller and reaches further
+ * up the box — and the lower nodes landed inside it, printing "…ESS" through
+ * the middle of the sentence. Flattening the ellipse lifts them clear without
+ * touching the core, the beams or the label logic, and it runs WITH the reason
+ * the squash exists: labels want to sit left and right of the core, where there
+ * is width to hold them, rather than above and below it.
+ *
+ * It has to flatten further on a phone, and not because phones are narrow — the
+ * box is `aspect-square` there, so it is SHORTER in absolute terms while the
+ * question inside it is very nearly as tall as on a desktop. The text takes a
+ * far bigger share of a small box, so the ring has to concede more of it. Two
+ * steps rather than a formula: the crossover is the same `sm` the box's own
+ * aspect ratio changes at, so the layout and the ring change shape together.
+ */
 const RADIUS = 39;
-const SQUASH = 0.9;
+// Pulled in on a phone as well: at 320px the ring's widest label (`Workflows`,
+// the longest word on the right-hand side) ran 4px past the box's own border.
+const RADIUS_COMPACT = 34;
+const SQUASH = 0.62;
+const SQUASH_COMPACT = 0.4;
 
 type Rgb = readonly [number, number, number];
 const THINK: Rgb = [180, 232, 255];
@@ -28,6 +50,11 @@ export function ConstellationStage() {
   const hostRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const reduced = useReducedMotion();
+  // Below `sm` the box turns square and loses height, so the ring concedes more
+  // of it to the question underneath. See SQUASH_COMPACT.
+  const compact = useMediaQuery("(max-width: 639px)");
+  const squash = compact ? SQUASH_COMPACT : SQUASH;
+  const radius = compact ? RADIUS_COMPACT : RADIUS;
 
   useEffect(() => {
     // Workflows and Connectors wear this: they are the two surfaces that hold a
@@ -83,7 +110,7 @@ export function ConstellationStage() {
       cx = W / 2;
       cy = H / 2;
       coreR = Math.min(W, H) * 0.17;
-      placed = placeNodes(NODES, RADIUS, SQUASH);
+      placed = placeNodes(NODES, radius, squash);
     }
 
     function buildSwarm() {
@@ -365,9 +392,9 @@ export function ConstellationStage() {
       ro.disconnect();
       document.removeEventListener("visibilitychange", sync);
     };
-  }, [reduced]);
+  }, [reduced, squash, radius]);
 
-  const labels = placeNodes(NODES, RADIUS, SQUASH);
+  const labels = placeNodes(NODES, radius, squash);
 
   return (
     <div ref={hostRef} className="absolute inset-0">

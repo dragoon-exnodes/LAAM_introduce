@@ -96,13 +96,21 @@ export function Hero({ ready }: { ready: boolean }) {
   return (
     // Clipped because the parallax grid is deliberately oversized — it has to be
     // able to travel without widening the document.
-    <section ref={root} id="top" className="relative overflow-hidden pt-28 sm:pt-32 lg:pt-36">
+    //
+    // The top and bottom padding are tighter than the section rhythm elsewhere on
+    // the page, and deliberately: the ribbon underneath is the page's fastest
+    // argument — six questions from six different trades — and it was landing ~100px
+    // below the fold on a 900px screen, so nobody met it without scrolling. Trimming
+    // the lead paragraph recovered most of that; these two values recover the rest.
+    // Measured, not guessed: ribbon top was 997px, then 898, and the target is a
+    // viewport height of 900 with the strip fully visible.
+    <section ref={root} id="top" className="relative overflow-hidden pt-20 sm:pt-24 lg:pt-28">
       <div
         data-parallax="grid"
         className="grid-field pointer-events-none absolute -inset-16 opacity-[0.55] [mask-image:radial-gradient(ellipse_at_50%_0%,black,transparent_72%)]"
       />
 
-      <div className="relative mx-auto grid max-w-[1400px] items-center gap-12 px-5 pb-16 sm:px-8 lg:pb-24 lg:pl-[calc(var(--spacing-rail)+2rem)] xl:grid-cols-[1.05fr_0.95fr] xl:gap-14">
+      <div className="relative mx-auto grid max-w-[1400px] items-center gap-12 px-5 pb-14 sm:px-8 lg:pb-20 lg:pl-[calc(var(--spacing-rail)+2rem)] xl:grid-cols-[1.05fr_0.95fr] xl:gap-14">
         <div>
           {/* Separators only appear once the row is guaranteed to fit on one line —
               a wrapped list ending in a stray divider looks like a mistake.
@@ -128,28 +136,39 @@ export function Hero({ ready }: { ready: boolean }) {
             ))}
           </h1>
 
-          {/* "nothing to install beside them" was the one word too far. The
-              zero-instrumentation half is true and is the strongest thing on the
-              page — no SDK changes, no wrappers, nothing touched on the agent
-              side. But every machine that isn't the host runs a collector script
-              with a minted token, which is exactly the multi-machine case this
-              paragraph describes. Naming the script costs one clause and removes
-              the objection a technical buyer would otherwise raise in the demo. */}
+          {/* Two claims, and the second half exists to keep the first honest.
+              "No SQL" is the promise; "runs on your own machines" is the answer
+              to the question it immediately raises in an owner's head, which is
+              where their figures are going. The local-model clause is what makes
+              "no data leaves your infrastructure" true rather than a slogan — it
+              is a condition, and the sentence states it as one. */}
           <p data-anim="lead" className="mt-8 max-w-xl text-[length:var(--text-lead)] text-muted">
             <span className="text-ink">{COPY.hero.lead.ink}</span> {COPY.hero.lead.rest}
           </p>
 
           <div data-anim="actions" className="mt-10 flex flex-wrap items-center gap-3">
             <Button href="#contact">{COPY.hero.actions.primary}</Button>
-            <Button href="#watch" variant="ghost">
+            <Button href="#surfaces" variant="ghost">
               {COPY.hero.actions.secondary}
             </Button>
           </div>
         </div>
 
         <div data-anim="scope" data-parallax="scope" className="relative">
-          {/* The scope: LAAM's whole proposition is that something is being observed. */}
-          <div className="bracket relative aspect-square w-full border border-line bg-panel/40 sm:aspect-[5/4] lg:aspect-square">
+          {/* The scope. It used to be here because the proposition was that
+              something is being observed; it stays because the proposition is
+              now that a question reaches every surface on one core — which is
+              the same picture read the other way round, beams carrying a lookup
+              outward and an answer back rather than telemetry inward. */}
+          {/* Taller than wide on a phone, square from `sm` up. The box used to be
+              square at every width, and that stopped working when the readout
+              gained a two-line question above its figures: in a 280px square at
+              320px wide, the text took the bottom third and the two lowest
+              constellation labels printed straight through it. Flattening the ring
+              enough to clear it would have needed a squash of 0.22 — a ring drawn
+              as a horizontal line. Giving the box the height instead costs only
+              scroll, on a page that scrolls anyway. */}
+          <div className="bracket relative aspect-[4/5] w-full border border-line bg-panel/40 sm:aspect-[5/4] lg:aspect-square">
             <span
               data-anim="bracket"
               className="absolute -left-px -top-px h-4 w-4 border-l border-t border-signal"

@@ -23,10 +23,15 @@ export function PanelFrame({ route, status, tone = "trace", children }: Props) {
      * DAG collapsed to a 2px band and the connector canvas drew into a zero-height
      * box. One floor here fixes every panel, including ones written later.
      */
-    <div className="flex h-full min-h-[19rem] flex-col">
-      <header className="flex shrink-0 items-center justify-between gap-4 border-b border-line px-4 py-2.5">
-        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">{route}</span>
-        <span className={`flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] ${TONE[tone]}`}>
+    /* `min-w-0`: without it this panel is a grid/flex item whose automatic minimum
+       width is its own min-content width, and the header below refuses to shrink —
+       so the two longest pairs (`/constellation` + `listening`, `/settings/access`
+       + `roles on`) pushed the whole panel wider than its column and gave the
+       DOCUMENT a horizontal scrollbar at 320px. The route truncates instead. */
+    <div className="flex h-full min-h-[19rem] min-w-0 flex-col">
+      <header className="flex shrink-0 items-center justify-between gap-3 border-b border-line px-4 py-2.5 sm:gap-4">
+        <span className="min-w-0 truncate font-mono text-[10px] uppercase tracking-[0.2em] text-muted">{route}</span>
+        <span className={`flex shrink-0 items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] ${TONE[tone]}`}>
           <span className="h-1 w-1 rounded-full bg-current" aria-hidden="true" />
           {status}
         </span>

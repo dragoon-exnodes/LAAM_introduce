@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { SESSIONS, SUB_AGENTS, formatElapsed, sessionColor, sessionLabel } from "../../lib/telemetry";
+import { SESSIONS, RUN_STEPS, STEP_COLOR, formatElapsed, sessionColor, sessionLabel } from "../../lib/telemetry";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { PanelFrame } from "./PanelFrame";
 
 /*
- * Layout for the sub-agent tree, in the SVG's own coordinate space. The viewBox
+ * Layout for the step tree, in the SVG's own coordinate space. The viewBox
  * keeps its aspect ratio (unlike a stretched one) so the curves stay curves at
  * any panel width.
  */
@@ -20,16 +20,25 @@ import { PanelFrame } from "./PanelFrame";
 // own list. `ConnectorsPanel` already counts its badge from the data; so does this.
 const LIVE = SESSIONS.filter((session) => session.status === "running").length;
 
+// Derived, like LIVE above. These were literals — a hardcoded "1 held" beside a
+// derived step count, and an aria-label that spelled out "two finished, one still
+// running, and one send held". Edit RUN_STEPS and the screen-reader description
+// would have quietly described a picture that is no longer on screen, which is the
+// one kind of wrong a sighted check can never catch.
+const HELD = RUN_STEPS.filter((step) => step.status === "held").length;
+const DONE = RUN_STEPS.filter((step) => step.status === "done").length;
+const RUNNING = RUN_STEPS.filter((step) => step.status === "running").length;
+
 const VB = { w: 620, h: 170 };
-const ORCH = { x: 40, y: VB.h / 2 };
+const RUN_NODE = { x: 40, y: VB.h / 2 };
 const CHILD_X = 250;
 const ROW_H = 34;
-const FIRST_Y = VB.h / 2 - ((SUB_AGENTS.length - 1) * ROW_H) / 2;
+const FIRST_Y = VB.h / 2 - ((RUN_STEPS.length - 1) * ROW_H) / 2;
 
-/** Out of the orchestrator, across, into the child — a wiring run, not a diagonal. */
+/** Out of the run, across, into the step — a wiring run, not a diagonal. */
 function branch(y: number): string {
-  const midX = (ORCH.x + CHILD_X) / 2;
-  return `M ${ORCH.x + 6} ${ORCH.y} C ${midX} ${ORCH.y}, ${midX} ${y}, ${CHILD_X - 6} ${y}`;
+  const midX = (RUN_NODE.x + CHILD_X) / 2;
+  return `M ${RUN_NODE.x + 6} ${RUN_NODE.y} C ${midX} ${RUN_NODE.y}, ${midX} ${y}, ${CHILD_X - 6} ${y}`;
 }
 
 export function MonitoringPanel({ active }: { active: boolean }) {
@@ -73,19 +82,21 @@ export function MonitoringPanel({ active }: { active: boolean }) {
           ))}
         </ul>
 
-        {/* The panel's own first claim is "orchestrator -> sub-agent graph", and
-            until now nothing here showed one — the slot held a sparkline, which
-            every product on earth has. This is the shape LAAM reconstructs from a
-            transcript, and it draws itself when the panel comes up: each branch
-            strokes out to its child, and the child that is still running keeps a
-            flowing dash while the finished ones settle to a static line. */}
+        {/* The panel's heading promises you can check what the assistant did,
+            and this is where it is shown rather than claimed: one run, every
+            tool it called, in order. It draws itself when the panel comes up —
+            each branch strokes out to its step, the running one keeps a flowing
+            dash, the finished ones settle to a static line, and the held one
+            sits in gold at the end, never having fired. That last branch is the
+            most valuable thing in this panel: it is the send that stopped at
+            the confirmation card. */}
         <div className="mt-auto" key={active ? "on" : "off"}>
           <div className="mb-2 flex items-baseline justify-between">
             <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted">
-              orchestrator · sub-agents
+              one answer · every step
             </span>
             <span className="font-mono text-[11px] tabular-nums text-trace">
-              {SUB_AGENTS.length} spawned
+              {RUN_STEPS.length} steps · {HELD} held
             </span>
           </div>
 
@@ -93,25 +104,29 @@ export function MonitoringPanel({ active }: { active: boolean }) {
             viewBox={`0 0 ${VB.w} ${VB.h}`}
             className="w-full"
             role="img"
-            aria-label={`An orchestrator session that spawned ${SUB_AGENTS.length} sub-agents; one is still running.`}
+            aria-label={`One run and the ${RUN_STEPS.length} tools it called: ${DONE} finished, ${RUNNING} still running, and ${HELD} held for confirmation.`}
           >
-            {SUB_AGENTS.map((sub, i) => {
+            {RUN_STEPS.map((step, i) => {
               const y = FIRST_Y + i * ROW_H;
-              const running = sub.status === "running";
+              const running = step.status === "running";
+              const held = step.status === "held";
+              const color = STEP_COLOR[step.status];
               return (
-                <g key={sub.id}>
+                <g key={step.id}>
                   <path
                     d={branch(y)}
                     fill="none"
-                    stroke={running ? "var(--color-signal)" : "var(--color-line-bright)"}
-                    strokeWidth={running ? 1.4 : 1}
+                    stroke={running || held ? color : "var(--color-line-bright)"}
+                    strokeWidth={running || held ? 1.4 : 1}
                     vectorEffect="non-scaling-stroke"
                     pathLength={1}
                     style={
                       reduced
                         ? undefined
                         : {
-                            strokeDasharray: running ? "4 4" : 1,
+                            // The held branch keeps its dashes and never flows:
+                            // it is drawn as a route that exists and was not taken.
+                            strokeDasharray: running || held ? "4 4" : 1,
                             animation: running
                               ? // Once drawn, the running branch keeps flowing —
                                 // the same dash treatment the product uses for a
@@ -126,7 +141,7 @@ export function MonitoringPanel({ active }: { active: boolean }) {
                     cx={CHILD_X}
                     cy={y}
                     r={running ? 4.5 : 3.4}
-                    fill={running ? "var(--color-signal)" : "var(--color-trace)"}
+                    fill={color}
                     style={
                       reduced
                         ? undefined
@@ -140,7 +155,7 @@ export function MonitoringPanel({ active }: { active: boolean }) {
                     className="fill-[var(--color-muted)] font-mono"
                     style={{ fontSize: 11 }}
                   >
-                    {sub.type}
+                    {step.tool}
                   </text>
                   <text
                     x={CHILD_X + 14}
@@ -148,16 +163,16 @@ export function MonitoringPanel({ active }: { active: boolean }) {
                     className="fill-[var(--color-muted)] font-mono"
                     style={{ fontSize: 9.5 }}
                   >
-                    {running ? "running" : `${sub.durationSec}s`}
+                    {running ? "running" : held ? "held for confirmation" : `${step.durationSec}s`}
                   </text>
                 </g>
               );
             })}
 
-            {/* The orchestrator itself, drawn last so it sits over the branches. */}
-            <circle cx={ORCH.x} cy={ORCH.y} r={9} fill="var(--color-void)" stroke="var(--color-signal)" strokeWidth={1.4} vectorEffect="non-scaling-stroke" />
-            <circle cx={ORCH.x} cy={ORCH.y} r={3} fill="var(--color-signal)" />
-            <text x={ORCH.x} y={ORCH.y + 28} textAnchor="middle" className="fill-[var(--color-faint)] font-mono" style={{ fontSize: 9.5 }}>
+            {/* The run itself, drawn last so it sits over the branches. */}
+            <circle cx={RUN_NODE.x} cy={RUN_NODE.y} r={9} fill="var(--color-void)" stroke="var(--color-signal)" strokeWidth={1.4} vectorEffect="non-scaling-stroke" />
+            <circle cx={RUN_NODE.x} cy={RUN_NODE.y} r={3} fill="var(--color-signal)" />
+            <text x={RUN_NODE.x} y={RUN_NODE.y + 28} textAnchor="middle" className="fill-[var(--color-faint)] font-mono" style={{ fontSize: 9.5 }}>
               sess-4f2a9c
             </text>
           </svg>

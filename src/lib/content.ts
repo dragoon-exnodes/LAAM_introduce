@@ -23,6 +23,15 @@ export type PanelKey =
  * is zipped with this list by index. `label` stays here and stays English on
  * purpose: it names a surface the way `/monitoring` names a route, and the tab row
  * reads as product nomenclature rather than prose.
+ *
+ * That claim has to be earned, and two labels were not earning it. `Telemetry` and
+ * `Recall` were editorial inventions dressed as nomenclature — the routes are
+ * `/monitoring` and `/search`, the panel frames print those routes, and the hero's
+ * constellation already labels the same two surfaces `Monitoring` and `Search`. So
+ * one page was naming seven surfaces with two different vocabularies, and the
+ * invented half was the harder half to read. They now match everywhere. (`Telemetry`
+ * carried a second problem: it is the vocabulary of the product this page used to
+ * be selling.)
  */
 export type Channel = {
   route: string;
@@ -32,12 +41,12 @@ export type Channel = {
 };
 
 export const CHANNELS: readonly Channel[] = [
-  { route: "/monitoring", label: "Telemetry", panel: "monitoring", tone: "signal" },
+  { route: "/monitoring", label: "Monitoring", panel: "monitoring", tone: "signal" },
   { route: "/chat", label: "Assistant", panel: "chat", tone: "trace" },
   { route: "/constellation", label: "Voice", panel: "voice", tone: "ion" },
   { route: "/workflows", label: "Automation", panel: "workflow", tone: "signal" },
   { route: "/connectors", label: "Connectors", panel: "connectors", tone: "trace" },
-  { route: "/search", label: "Recall", panel: "search", tone: "trace" },
+  { route: "/search", label: "Search", panel: "search", tone: "trace" },
   { route: "/settings/access", label: "Access", panel: "access", tone: "signal" },
 ] as const;
 

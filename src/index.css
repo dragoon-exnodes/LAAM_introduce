@@ -249,7 +249,7 @@
   }
 }
 
-/* Telemetry tree: after a branch has drawn, the one whose sub-agent is still
+/* Run-step tree: after a branch has drawn, the one whose step is still
    running keeps its dashes moving toward the child — the same "this edge is
    live" language the product uses on /graph. */
 @keyframes tele-flow {

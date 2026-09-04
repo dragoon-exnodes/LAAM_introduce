@@ -1,29 +1,42 @@
 import { useEffect, useState } from "react";
-import { SESSIONS, formatElapsed } from "../../lib/telemetry";
+import { INQUIRIES, FEATURED_INDEX } from "../../lib/inquiry";
+import { CYCLE_MS, modeAt } from "../../lib/constellation";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
+import { COPY } from "../../lib/i18n";
 
 /**
- * The scope features one real row from the same session list the ribbon and the
- * monitoring panel render. Every field here used to be re-typed by hand against
- * that row, and the model had already drifted apart from it: the hero called
- * sess-4f2a9c a local model while the telemetry called it a Claude one — the same
- * session, two answers, one page. Reading the row is the only way that stays true.
+ * The readout laid over the scope: one question, and what answering it took.
+ *
+ * It used to be a run timer — elapsed, model, tool calls — because the page's
+ * claim was that LAAM watches a run second by second. The claim changed, so the
+ * instrument did: what a visitor should take from this box now is that a
+ * question in their own words reaches their own figures.
+ *
+ * The phase label is driven by `modeAt()`, the SAME scripted turn the
+ * constellation behind it plays. That is the point of reusing it rather than
+ * running a second timer: when the ring goes blue-white and the beams race
+ * inward, this says "looking it up", and when the ring turns gold it says
+ * "answering". Two independent clocks would drift within a minute and the box
+ * would be narrating a turn the picture is not playing.
  */
-const FEATURED = SESSIONS[0];
+const FEATURED = INQUIRIES[FEATURED_INDEX];
 
-/**
- * The readout laid over the scope. It ticks because the claim on this page is
- * that LAAM watches a run second by second — a frozen number would undercut it.
- */
 export function ScopeReadout() {
   const reduced = useReducedMotion();
-  const [elapsed, setElapsed] = useState(FEATURED.seed);
+  const [elapsed, setElapsed] = useState(0);
 
   useEffect(() => {
     if (reduced) return;
-    const id = window.setInterval(() => setElapsed((s) => s + 1), 1000);
+    const start = performance.now();
+    // Coarser than a frame on purpose — this drives three words, and the
+    // constellation is already carrying the continuous motion.
+    const id = window.setInterval(() => setElapsed((performance.now() - start) % CYCLE_MS), 200);
     return () => window.clearInterval(id);
   }, [reduced]);
+
+  const mode = reduced ? "idle" : modeAt(elapsed);
+  const phase = COPY.hero.phases[mode];
+  const featuredCopy = COPY.inquiries.items[FEATURED_INDEX];
 
   return (
     <div className="pointer-events-none absolute inset-0 flex flex-col justify-between p-4 sm:p-6">
@@ -34,9 +47,9 @@ export function ScopeReadout() {
       />
       <span
         aria-hidden="true"
-        className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-void/90 to-transparent"
+        className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-void/92 to-transparent"
       />
-      <div className="flex items-start justify-between gap-4">
+      <div className="relative flex items-start justify-between gap-4">
         <span className="flex items-center gap-2 font-mono text-[length:var(--text-eyebrow)] uppercase tracking-[0.18em] text-signal">
           <span className="relative flex h-1.5 w-1.5">
             {!reduced && (
@@ -44,31 +57,42 @@ export function ScopeReadout() {
             )}
             <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-signal" />
           </span>
-          session active
+          {phase}
         </span>
         <span className="font-mono text-[length:var(--text-eyebrow)] tracking-[0.14em] text-faint">
-          sess-{FEATURED.id}
+          {FEATURED.id}
         </span>
       </div>
 
-      <dl className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2 font-mono text-[length:var(--text-eyebrow)] tracking-[0.12em]">
-        <div>
-          <dt className="text-muted uppercase">elapsed</dt>
-          <dd className="mt-1 text-base text-ink tabular-nums">{formatElapsed(elapsed)}</dd>
-        </div>
-        <div>
-          <dt className="text-muted uppercase">model</dt>
-          <dd className="mt-1 text-ink">{FEATURED.model}</dd>
-        </div>
-        <div>
-          <dt className="text-muted uppercase">tool calls</dt>
-          <dd className="mt-1 text-ink tabular-nums">{FEATURED.tools}</dd>
-        </div>
-        <div className="hidden sm:block">
-          <dt className="text-muted uppercase">cost</dt>
-          <dd className="mt-1 text-free">$0.00</dd>
-        </div>
-      </dl>
+      {/* Question and figures share one band rather than stacking. Stacked, they
+          were two blocks eating the bottom third of a square box and crowding the
+          ring above them; side by side they read as a single instrument line and
+          give the constellation its room back. The question keeps its size, so it
+          still leads — what changed is the direction, not the weighting. Stacks
+          again below `sm`, where three columns of figures beside a sentence would
+          leave neither of them readable. */}
+      <div className="relative flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
+        {/* min-w-0 so a long question wraps inside the row instead of forcing it
+            wider than the box. */}
+        <p className="min-w-0 max-w-[26ch] text-balance text-[0.95rem] leading-snug text-ink sm:text-base">
+          “{featuredCopy.question}”
+        </p>
+
+        <dl className="flex shrink-0 flex-wrap items-end gap-x-6 gap-y-2 font-mono text-[length:var(--text-eyebrow)] tracking-[0.12em]">
+          <div>
+            <dt className="uppercase text-muted">{COPY.hero.sourceLabel}</dt>
+            <dd className="mt-1 text-ink">{FEATURED.source}</dd>
+          </div>
+          <div>
+            <dt className="uppercase text-muted">{COPY.hero.lookupLabel}</dt>
+            <dd className="mt-1 tabular-nums text-ink">{FEATURED.steps}</dd>
+          </div>
+          <div className="hidden sm:block">
+            <dt className="uppercase text-muted">{COPY.hero.costLabel}</dt>
+            <dd className="mt-1 text-free">$0.00</dd>
+          </div>
+        </dl>
+      </div>
     </div>
   );
 }

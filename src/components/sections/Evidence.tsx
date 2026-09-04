@@ -121,10 +121,12 @@ export function Evidence() {
           </dl>
 
           <p className="mt-7 border-t border-line pt-5 text-[0.95rem] text-muted">
-            Average {BENCHMARK.average}%. The failing row stays on the board
-            because a number you can check is worth more than one you cannot —
-            and because the case that still fails is the one you would want
-            named before you rely on this, not after.
+            Average {BENCHMARK.average}% across these three. The failing row
+            stays on the board because a number you can check is worth more than
+            one you cannot — and because the case that failed is the one you
+            would want named before you rely on this, not after. It is a dated
+            measurement, not a live gauge: the honest thing to say is what the
+            run found, not what we assume still holds.
           </p>
         </div>
 

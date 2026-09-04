@@ -200,16 +200,30 @@ export const EVIDENCE: readonly Evidence[] = [
   {
     measure: "instruction compliance",
     before: { value: 3, of: 15, caption: "static instructions followed" },
-    after: "model now self-corrects",
+    // Was "model now self-corrects". The changelog is explicit that the fix was
+    // confirmed by one end-to-end run — "một lần thử, không phải bảo đảm thống
+    // kê" — so pairing it with a hard 3/15 implied an after-rate that was never
+    // measured. Naming it as a single verification is the honest asymmetry.
+    after: "verified once end-to-end",
     title: "Showing the model beats telling it — and we can prove which",
-    body: "Written rules in the workflow-builder prompt landed at best three times in fifteen. Dry-running the draft graph against real data and feeding the result back into the conversation let the model fix its own graph from what it had actually seen.",
+    body: "Written rules in the workflow-builder prompt landed at best three times in fifteen. Dry-running the draft graph against real data and feeding the result back into the conversation let the model fix its own graph from what it had actually seen — confirmed once, all the way through, against real data rather than a fixture.",
   },
   {
     measure: "hardcoded values",
     before: { value: 1, of: 1, caption: "real id copied into a saved graph" },
-    after: "names only, never values",
-    title: "A rule the industry keeps learning the hard way",
-    body: "While probing tools, the model observed a real query id and pasted it into the saved workflow as a literal — which then broke on the very next run, because that id was only ever valid for that one probe. The probe prompt now shows parameter names and never their values.",
+    /*
+     * The absolute rule — "names only, never values" — was true when written and
+     * was deliberately narrowed on 2026-08-19: hiding every value left the probe
+     * sheet unable to tell four different metric queries apart, so free text,
+     * numbers and booleans are printed again and only ids and UUIDs are withheld.
+     * Reporting the first measurement and not the second, on a card about a rule
+     * learned the hard way, was the one thing this card could not afford to do.
+     * The second correction is also the better story: the fix that was too broad
+     * got measured too, and lost.
+     */
+    after: "ids withheld, not everything",
+    title: "A rule the industry keeps learning the hard way — twice",
+    body: "While probing tools, the model observed a real query id and pasted it into the saved workflow as a literal, which broke on the very next run: that id was only ever valid for that one probe. Hiding every value fixed it and broke something else — the sheet could no longer tell four similar queries apart. So the probe now withholds exactly what goes stale, ids and UUIDs, and still prints the arguments that distinguish one call from another.",
   },
   {
     measure: "voice turns without a lookup",
@@ -222,16 +236,33 @@ export const EVIDENCE: readonly Evidence[] = [
 
 /**
  * Real numbers from the selection-at-scale run: gpt-oss-120b, temperature 0.6,
- * k=8, against the production tool union — a 60-tool pool including 48 real MCP
- * tools. The failing row is here on purpose; a scoreboard with no zero on it is
- * marketing, not measurement.
+ * k=8, on 2026-08-03. The failing row is here on purpose; a scoreboard with no
+ * zero on it is marketing, not measurement.
+ *
+ * Two things were wrong with how this used to be presented, and both cut against
+ * the section's own argument.
+ *
+ * The caption said "48 of them real MCP tools". It isn't: `padToN` fills the
+ * 60-tool union in POOL order — internal, then connector, then MCP — and 12
+ * internal + 42 connector tools already exceed the 58 distractor slots, so only
+ * about six MCP tools ever reach the model. The 48 is the size of the MCP
+ * *distractor pool*, not of what was measured. (The suite's own comment, "60 = 12
+ * internal + 48 MCP", is arithmetically impossible for the same reason — a
+ * harness bug that had leaked into marketing copy.) Fixing `padToN` to sample
+ * across the pool, then re-running, is the only way to earn the original claim.
+ *
+ * And the run was dated in the code but not on the page, while the rows spoke in
+ * the present tense — "still failing" asserts a live state for a measurement that
+ * is a month and several hundred commits old. The behaviour suite below dates
+ * itself; this one now does too, and says as-of rather than still.
  */
 export const BENCHMARK = {
-  caption: "Tool selection · 60-tool pool · 48 of them real MCP tools · k=8",
+  caption:
+    "Tool selection · 60-tool union from a 102-tool pool (12 internal · 42 connector · 48 MCP) · k=8 · 2026-08-03",
   rows: [
     { label: "multi-read-write", score: 100, detail: "8 / 8" },
     { label: "ctx-audit-write", score: 100, detail: "8 / 8" },
-    { label: "ctx-web-write", score: 0, detail: "0 / 8 — still failing" },
+    { label: "ctx-web-write", score: 0, detail: "0 / 8 — as of this run" },
   ],
   average: 67,
 } as const;

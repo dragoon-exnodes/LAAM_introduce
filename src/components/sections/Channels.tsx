@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { CHANNELS } from "../../lib/content";
 import { ScrollTrigger } from "../../lib/motion";
 import { scrollToY } from "../../lib/scroll";
+import { COPY } from "../../lib/i18n";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
 import { ChannelPanel } from "../channels/ChannelPanel";
 import { Reticle } from "../system/Reticle";
@@ -30,9 +31,9 @@ export function Channels() {
     <Section id="surfaces" className="!pb-0">
       <header className="flex flex-wrap items-end justify-between gap-6">
         <div className="max-w-2xl">
-          <Eyebrow scramble>The platform</Eyebrow>
+          <Eyebrow scramble>{COPY.channels.eyebrow}</Eyebrow>
           <h2 className="reveal mt-5 text-[length:var(--text-section)] uppercase">
-            Seven channels, one console
+            {COPY.channels.heading}
           </h2>
         </div>
         {/* Two words carried a claim they couldn't keep. "A route" asserted a
@@ -47,8 +48,7 @@ export function Channels() {
             not belong on a marketing page. A page that argues for measurement
             cannot leave its own most obvious question unanswered. */}
         <p className="reveal max-w-sm text-[0.95rem] text-muted">
-          Every readout below is a surface people open daily — shipped, not roadmap. The data in
-          them is invented; real sessions belong to whoever is signed in.
+          {COPY.channels.lead}
         </p>
       </header>
 
@@ -111,6 +111,9 @@ function PinnedConsole() {
   };
 
   const channel = CHANNELS[index];
+  // Structure and language are two lists zipped by index: CHANNELS holds what is
+  // the same in every locale (route, panel, tone), COPY holds what is not.
+  const copy = COPY.channels.items[index];
 
   return (
     <div
@@ -167,13 +170,13 @@ function PinnedConsole() {
               {channel.route}
             </span>
             <h3 className="mt-5 text-3xl leading-[1.08] text-ink [font-stretch:112%] xl:text-4xl">
-              {channel.title}
+              {copy.title}
             </h3>
-            <p className="mt-5 max-w-md text-[0.95rem] text-muted">{channel.body}</p>
+            <p className="mt-5 max-w-md text-[0.95rem] text-muted">{copy.body}</p>
 
-            {channel.points.length > 0 && (
+            {copy.points.length > 0 && (
               <ul className="mt-6 space-y-2 border-t border-line pt-5">
-                {channel.points.map((point) => (
+                {copy.points.map((point) => (
                   <li key={point} className="flex gap-3 font-mono text-[length:var(--text-data)] text-muted">
                     <span aria-hidden="true" className="text-faint">
                       ›
@@ -206,15 +209,15 @@ function PinnedConsole() {
 function StackedChannels() {
   return (
     <div className="mt-14 space-y-16 pb-[var(--spacing-section)]">
-      {CHANNELS.map((channel) => (
+      {CHANNELS.map((channel, i) => (
         <article key={channel.route} className="reveal">
           <span
             className={`font-mono text-[length:var(--text-eyebrow)] uppercase tracking-[0.22em] ${TONE_TEXT[channel.tone]}`}
           >
             {channel.route}
           </span>
-          <h3 className="mt-4 text-2xl leading-[1.12] text-ink [font-stretch:112%]">{channel.title}</h3>
-          <p className="mt-4 text-[0.95rem] text-muted">{channel.body}</p>
+          <h3 className="mt-4 text-2xl leading-[1.12] text-ink [font-stretch:112%]">{COPY.channels.items[i].title}</h3>
+          <p className="mt-4 text-[0.95rem] text-muted">{COPY.channels.items[i].body}</p>
 
           {/* Auto height: stacked panels size to their own content rather than
               being cropped by a fixed frame borrowed from the pinned layout. The

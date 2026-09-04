@@ -67,13 +67,30 @@
     overflow: hidden;
   }
 
+  /* Display leading is a token because Vietnamese needs a different one.
+     Measured with canvas TextMetrics on Archivo 800: Latin uppercase inks 71
+     units per 100 of font-size, Vietnamese uppercase inks 125 — `Ế` stacks a
+     tone mark over a circumflex, `Ộ` adds a dot below, and the two together are
+     what closes the gap. The 0.94 line box that leaves Latin 23 units of slack
+     leaves Vietnamese 31 units SHORT, and every hero line sits inside an
+     overflow-hidden mask for its reveal, so the marks would simply be cut off.
+     1.25 clears the worst case. Keyed off :lang so it follows the document
+     language that has to be set for screen readers anyway. */
+  :root {
+    --leading-display: 0.94;
+  }
+
+  :root:lang(vi) {
+    --leading-display: 1.25;
+  }
+
   h1,
   h2,
   h3 {
     font-family: var(--font-display);
     font-weight: 700;
     font-stretch: 118%;
-    line-height: 0.94;
+    line-height: var(--leading-display);
     letter-spacing: -0.02em;
     margin: 0;
     text-wrap: balance;

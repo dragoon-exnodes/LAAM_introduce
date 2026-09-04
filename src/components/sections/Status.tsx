@@ -1,52 +1,29 @@
-import { STATUS_FACTS } from "../../lib/content";
+import { COPY } from "../../lib/i18n";
 import { Eyebrow } from "../ui/Eyebrow";
 import { Section } from "./Section";
 
 /*
- * Verified against the artifacts, not the changelog headings — the previous list
- * named three things that had already shipped (the collector + /api/ingest +
- * machine registry; per-user chat with the cloud-first internal-model router;
- * the Tailscale Funnel/Serve runbook in docs/DEPLOYMENT.md), which undersold the
- * product to anyone who then saw it running. These three are genuinely open:
- *   - audit_log carries agent writes, token grants and user/role changes — but
- *     not every action. (This line itself claimed only the first two until a
- *     code-level re-check found role_change/user_disabled/user_enabled: the
- *     "verified" above was not, and the error ran against our own product.)
- *   - vision is wired on the local model path only, not the cloud one;
- *   - voice STT is the browser's Web Speech API, so it needs Chrome.
+ * The roadmap copy lives in lib/i18n now, with the rest of the page's voice.
+ * Worth keeping the provenance: the three items were verified against LAAM's
+ * artifacts rather than its changelog headings, and one of them was wrong in the
+ * product's own favour until a code-level re-check — audit_log carries role
+ * changes and user enable/disable too, not just writes and token grants.
  */
-const AHEAD = [
-  // The parenthetical above undercounted what shipped: audit_log also carries
-  // role_change, user_disabled and user_enabled. The gap is real — not every
-  // action is audited — but a page arguing for honesty cannot get its own
-  // self-criticism wrong, least of all in the direction of underselling.
-  "Audit coverage beyond writes, token grants and user/role changes",
-  // Worth reading against the chat copy: cloud is the path a deployment with a
-  // key actually gets, so this gap is wider than "not just" implies.
-  "Vision on the cloud model path, not just the local one",
-  "Self-hosted speech-to-text, so voice stops needing Chrome",
-] as const;
-
 export function Status() {
   return (
     <Section id="status">
       <div className="grid gap-14 lg:grid-cols-[1.1fr_0.9fr]">
         <div>
-          <Eyebrow>Where it stands</Eyebrow>
+          <Eyebrow>{COPY.status.eyebrow}</Eyebrow>
           <h2 className="reveal mt-5 text-[length:var(--text-section)] uppercase">
-            An internal tool, in daily use
+            {COPY.status.heading}
           </h2>
           <p className="reveal mt-7 max-w-xl text-[length:var(--text-lead)] text-muted">
-            <span className="text-ink">
-              LAAM was built for our own engineers and it runs on our own machines.
-            </span>{" "}
-            It is not a hosted product and we are not pretending otherwise — what we can show you is a
-            working system, the decisions behind it, and what it would take to stand one up for your
-            team.
+            <span className="text-ink">{COPY.status.lead.ink}</span> {COPY.status.lead.rest}
           </p>
 
           <dl className="reveal mt-10 grid grid-cols-2 gap-px border border-line bg-line sm:grid-cols-4">
-            {STATUS_FACTS.map((fact) => {
+            {COPY.status.facts.map((fact) => {
               /* One fact answers the objection the whole page is arguing against,
                  and it is the only one wearing the reserved colour. It used to be
                  set at the same size as the other three, which meant the colour
@@ -90,9 +67,9 @@ export function Status() {
         </div>
 
         <div className="reveal border border-line bg-panel/40 p-8">
-          <Eyebrow tone="trace">Next</Eyebrow>
+          <Eyebrow tone="trace">{COPY.status.nextLabel}</Eyebrow>
           <ul className="mt-7 space-y-5">
-            {AHEAD.map((item) => (
+            {COPY.status.ahead.map((item) => (
               <li key={item} className="flex gap-4 border-b border-line pb-5 last:border-0 last:pb-0">
                 <span aria-hidden="true" className="mt-2 h-1 w-1 shrink-0 rounded-full bg-trace" />
                 <span className="text-[0.95rem] text-muted">{item}</span>

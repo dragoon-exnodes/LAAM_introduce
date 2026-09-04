@@ -3,6 +3,7 @@ import Lenis from "lenis";
 import { gsap, ScrollTrigger } from "./lib/motion";
 import { useReducedMotion } from "./hooks/useReducedMotion";
 import { registerLenis } from "./lib/scroll";
+import { COPY, applyDocumentLocale } from "./lib/i18n";
 import { BootSequence } from "./components/system/BootSequence";
 import { Grain, Vignette } from "./components/system/Grain";
 import { Nav } from "./components/layout/Nav";
@@ -53,6 +54,11 @@ export default function App() {
     return () => window.clearTimeout(id);
   }, [booted]);
 
+  // Sets <html lang>, the title and the description from the locale the URL
+  // chose. `lang` also drives the display leading — Vietnamese uppercase needs
+  // a taller line box than Latin (see index.css).
+  useEffect(applyDocumentLocale, []);
+
   return (
     <>
       <BootSequence onDone={onBooted} skip={reduced} />
@@ -61,7 +67,7 @@ export default function App() {
         href="#watch"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[80] focus:bg-signal focus:px-4 focus:py-2 focus:font-mono focus:text-sm focus:text-void"
       >
-        Skip to content
+        {COPY.skipToContent}
       </a>
 
       <Nav />

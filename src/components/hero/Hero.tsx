@@ -7,8 +7,7 @@ import { Eyebrow } from "../ui/Eyebrow";
 import { Reticle } from "../system/Reticle";
 import { ScopeReadout } from "./ScopeReadout";
 import { ConstellationStage } from "./ConstellationStage";
-
-const HEADLINE = ["Every agent.", "Every machine.", "In plain sight."];
+import { COPY } from "../../lib/i18n";
 
 export function Hero({ ready }: { ready: boolean }) {
   const root = useRef<HTMLElement>(null);
@@ -114,15 +113,15 @@ export function Hero({ ready }: { ready: boolean }) {
               now that the split starts at xl, and pushing the separators to xl to
               compensate only made three labels read as one run-on string. */}
           <div data-anim="eyebrow" className="flex flex-wrap items-center gap-x-3 gap-y-1">
-            <Eyebrow tone="signal">Local-first</Eyebrow>
+            <Eyebrow tone="signal">{COPY.hero.eyebrows[0]}</Eyebrow>
             <span className="hidden h-3 w-px bg-line-bright sm:block" aria-hidden="true" />
-            <Eyebrow tone="free">$0 on a local model</Eyebrow>
+            <Eyebrow tone="free">{COPY.hero.eyebrows[1]}</Eyebrow>
             <span className="hidden h-3 w-px bg-line-bright sm:block" aria-hidden="true" />
-            <Eyebrow>Zero instrumentation</Eyebrow>
+            <Eyebrow>{COPY.hero.eyebrows[2]}</Eyebrow>
           </div>
 
           <h1 className="mt-7 text-[length:var(--text-hero)] uppercase">
-            {HEADLINE.map((line, index) => (
+            {COPY.hero.headline.map((line, index) => (
               <span key={line} data-anim="line" className="block overflow-hidden pb-[0.06em]">
                 <span className={`block ${index === 2 ? "text-signal" : ""}`}>{line}</span>
               </span>
@@ -137,18 +136,13 @@ export function Hero({ ready }: { ready: boolean }) {
               paragraph describes. Naming the script costs one clause and removes
               the objection a technical buyer would otherwise raise in the demo. */}
           <p data-anim="lead" className="mt-8 max-w-xl text-[length:var(--text-lead)] text-muted">
-            <span className="text-ink">
-              LAAM reads the transcripts your Claude Code agents already write.
-            </span>{" "}
-            No SDK changes, no wrappers, nothing to change in your agents — one zero-dependency
-            script per machine ships them over. Then it puts an assistant and durable workflow
-            automation on the same screen.
+            <span className="text-ink">{COPY.hero.lead.ink}</span> {COPY.hero.lead.rest}
           </p>
 
           <div data-anim="actions" className="mt-10 flex flex-wrap items-center gap-3">
-            <Button href="#contact">Book a walkthrough</Button>
+            <Button href="#contact">{COPY.hero.actions.primary}</Button>
             <Button href="#watch" variant="ghost">
-              See what it watches
+              {COPY.hero.actions.secondary}
             </Button>
           </div>
         </div>
@@ -174,7 +168,7 @@ export function Hero({ ready }: { ready: boolean }) {
           </div>
 
           <p className="mt-3 font-mono text-[length:var(--text-eyebrow)] uppercase tracking-[0.16em] text-muted">
-            Assistant map — every surface on one core
+            {COPY.hero.scopeCaption}
           </p>
         </div>
       </div>

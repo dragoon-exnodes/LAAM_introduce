@@ -2,6 +2,7 @@ import { Button } from "../ui/Button";
 import { Eyebrow } from "../ui/Eyebrow";
 import { AuroraField } from "../system/AuroraField";
 import { Section } from "./Section";
+import { COPY } from "../../lib/i18n";
 
 export function Contact() {
   return (
@@ -30,22 +31,20 @@ export function Contact() {
         />
 
         <div className="relative mx-auto max-w-2xl">
-          <Eyebrow tone="signal">Talk to the team that built it</Eyebrow>
+          <Eyebrow tone="signal">{COPY.contact.eyebrow}</Eyebrow>
           <h2 className="mt-6 text-[length:var(--text-section)] uppercase">
-            We'll show you the live console
+            {COPY.contact.heading}
           </h2>
           <p className="mt-6 text-[length:var(--text-lead)] text-muted">
-            <span className="text-ink">Forty minutes, real sessions, real workflows</span> — including
-            the parts still on the roadmap. Bring the questions you'd ask before running something
-            like this yourself.
+            <span className="text-ink">{COPY.contact.lead.ink}</span> {COPY.contact.lead.rest}
           </p>
 
           <div className="mt-10 flex flex-wrap justify-center gap-3">
-            <Button href="mailto:contact@ennam.vn?subject=LAAM%20walkthrough">
-              Book a walkthrough
+            <Button href={`mailto:contact@ennam.vn?subject=${encodeURIComponent(COPY.contact.mailSubject)}`}>
+              {COPY.contact.primary}
             </Button>
             <Button href="#top" variant="ghost">
-              Back to the top
+              {COPY.contact.secondary}
             </Button>
           </div>
         </div>

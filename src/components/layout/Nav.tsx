@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { NAV_LINKS } from "../../lib/content";
+import { COPY, locale, urlForLocale } from "../../lib/i18n";
 
 export function Nav() {
   const [lifted, setLifted] = useState(false);
@@ -35,7 +35,7 @@ export function Nav() {
         </a>
 
         <ul className="hidden items-center gap-8 lg:flex">
-          {NAV_LINKS.map((link) => (
+          {COPY.nav.links.map((link) => (
             <li key={link.href}>
               <a
                 href={link.href}
@@ -47,12 +47,25 @@ export function Nav() {
           ))}
         </ul>
 
-        <a
-          href="#contact"
-          className="border border-line-bright px-4 py-2 font-mono text-[length:var(--text-eyebrow)] uppercase tracking-[0.18em] text-ink transition-colors duration-[var(--duration-fast)] hover:border-signal hover:text-signal"
-        >
-          Book a walkthrough
-        </a>
+        <div className="flex items-center gap-4">
+          {/* A real link, not a button: the locale lives in the URL, so switching
+              is a navigation. That also means it is shareable, opens in a new tab
+              the way a link should, and needs no client-side state at all. */}
+          <a
+            href={urlForLocale(locale === "vi" ? "en" : "vi")}
+            aria-label={COPY.langToggle.aria}
+            className="font-mono text-[length:var(--text-eyebrow)] uppercase tracking-[0.18em] text-muted transition-colors duration-[var(--duration-fast)] hover:text-ink"
+          >
+            {COPY.langToggle.label}
+          </a>
+
+          <a
+            href="#contact"
+            className="border border-line-bright px-4 py-2 font-mono text-[length:var(--text-eyebrow)] uppercase tracking-[0.18em] text-ink transition-colors duration-[var(--duration-fast)] hover:border-signal hover:text-signal"
+          >
+            {COPY.nav.cta}
+          </a>
+        </div>
       </nav>
     </header>
   );

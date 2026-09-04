@@ -1,4 +1,4 @@
-import { PROBLEMS } from "../../lib/content";
+import { COPY } from "../../lib/i18n";
 import { Eyebrow } from "../ui/Eyebrow";
 import { Section } from "./Section";
 
@@ -6,14 +6,14 @@ export function Problem() {
   return (
     <Section id="watch">
       <header className="max-w-4xl">
-        <Eyebrow>Why teams reach for it</Eyebrow>
+        <Eyebrow>{COPY.problem.eyebrow}</Eyebrow>
         <h2 className="reveal mt-5 text-[length:var(--text-section)] uppercase">
-          What breaks when agents outnumber operators
+          {COPY.problem.heading}
         </h2>
       </header>
 
       <ol className="mt-14 grid gap-px border border-line bg-line md:grid-cols-3">
-        {PROBLEMS.map((problem) => (
+        {COPY.problem.items.map((problem) => (
           <li key={problem.route} className="reveal bg-void p-7 lg:p-9">
             <Eyebrow tone="signal">{problem.route}</Eyebrow>
             <h3 className="mt-5 text-xl leading-[1.15] text-ink [font-stretch:110%]">
@@ -33,7 +33,7 @@ export function Problem() {
           quieter version of it: a panel that LOOKS like the others' panels but
           isn't actually built from the same values. */}
       <div className="reveal mt-8 border border-line bg-panel/40 p-7 lg:p-10">
-        <Eyebrow tone="trace">The answer</Eyebrow>
+        <Eyebrow tone="trace">{COPY.problem.answer.eyebrow}</Eyebrow>
         {/* The paragraph alone left the right two-thirds of a full-width panel
             empty — every other full-width panel on the page (the scoreboards in
             Evidence) fills that space with content, not air. The list earns that
@@ -43,18 +43,11 @@ export function Problem() {
             route with its own answer is the same reassurance without it. */}
         <div className="mt-4 grid gap-6 lg:grid-cols-[1fr_15rem] lg:gap-14">
           <p className="text-[length:var(--text-lead)]">
-            <span className="text-ink">Three problems, three answers, one screen.</span>{" "}
-            <span className="text-muted">
-              The blind spot closes from the transcripts your agents already
-              write to disk — point it at a machine and it starts reporting,
-              with nothing to add on the agent side. The other two are answered
-              by what sits beside that readout: an assistant you can ask without
-              starting a frontier model's meter, and automation that runs the
-              five-tool chore once.
-            </span>
+            <span className="text-ink">{COPY.problem.answer.ink}</span>{" "}
+            <span className="text-muted">{COPY.problem.answer.rest}</span>
           </p>
           <ul className="space-y-4 border-t border-line pt-5 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
-            {PROBLEMS.map((problem) => (
+            {COPY.problem.items.map((problem) => (
               <li key={problem.route}>
                 <span className="flex items-center gap-2.5 font-mono text-[length:var(--text-data)] uppercase tracking-[0.12em] text-trace">
                   <span className="text-signal">✓</span>

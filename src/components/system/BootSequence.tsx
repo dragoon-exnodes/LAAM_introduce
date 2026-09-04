@@ -3,6 +3,7 @@ import { gsap } from "../../lib/motion";
 import { CHANNELS } from "../../lib/content";
 import { SESSIONS } from "../../lib/telemetry";
 import { AuroraField } from "./AuroraField";
+import { COPY } from "../../lib/i18n";
 
 // Both counts are read off the same data the rest of the page renders. Typed in by
 // hand they had already drifted: the boot screen claimed "4 hosts" against three
@@ -12,10 +13,10 @@ import { AuroraField } from "./AuroraField";
 const HOSTS = new Set(SESSIONS.map((session) => session.machine)).size;
 
 const BOOT_LINES = [
-  "calibrating measurement grid",
-  "mounting transcript reader",
-  `resolving machines · ${HOSTS} hosts`,
-  `telemetry channels ${CHANNELS.length}/${CHANNELS.length} online`,
+  COPY.boot.calibrating,
+  COPY.boot.mounting,
+  COPY.boot.hosts(HOSTS),
+  COPY.boot.channels(CHANNELS.length),
 ] as const;
 
 type Props = { onDone: () => void; skip: boolean };

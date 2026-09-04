@@ -1,3 +1,5 @@
+import { COPY } from "../../lib/i18n";
+
 export function Footer() {
   return (
     <footer className="mt-[var(--spacing-section)] border-t border-line">
@@ -9,14 +11,14 @@ export function Footer() {
             while "Life" carries no meaning and "Assistant" is vaguer than "Agent"
             on a page headed "Every agent. Every machine." */}
         <p className="font-mono text-[length:var(--text-eyebrow)] uppercase tracking-[0.18em] text-muted">
-          LAAM — Local AI Agent Monitoring
+          {COPY.footer.wordmark}
         </p>
         {/* The only outbound link on the page, so it carries the hover treatment
             the nav links use rather than inventing a second one — and it moves the
             underline onto the word itself, since "Internal platform" is not part
             of what you are clicking through to. */}
         <p className="font-mono text-[length:var(--text-eyebrow)] uppercase tracking-[0.18em] text-muted">
-          Internal platform ·{" "}
+          {COPY.footer.org} ·{" "}
           <a
             href="https://ennam.vn/"
             target="_blank"

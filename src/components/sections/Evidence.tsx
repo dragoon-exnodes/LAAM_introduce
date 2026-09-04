@@ -1,9 +1,17 @@
 import { useEffect, useRef } from "react";
-import { EVIDENCE, MEASUREMENT } from "../../lib/content";
+import { COPY } from "../../lib/i18n";
 import { countUp } from "../../lib/motion";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { Eyebrow } from "../ui/Eyebrow";
 import { Section } from "./Section";
+
+// The measured figures themselves — the same in every language, so they stay out
+// of the dictionary. Only their captions are translated.
+const EVIDENCE_FIGURES = [
+  { value: 3, of: 15 },
+  { value: 1, of: 1 },
+  { value: 3, of: 17 },
+] as const;
 
 export function Evidence() {
   const root = useRef<HTMLDivElement>(null);
@@ -23,7 +31,7 @@ export function Evidence() {
   return (
     <Section id="evidence">
       <header className="max-w-4xl">
-        <Eyebrow tone="trace">Measured, not asserted</Eyebrow>
+        <Eyebrow tone="trace">{COPY.evidence.eyebrow}</Eyebrow>
         {/* Framing, not substance. The numbers and the stories are unchanged —
             what moved is what they are evidence OF. "Three things we got wrong"
             led with the failure; the same three findings are actually proof that
@@ -37,15 +45,11 @@ export function Evidence() {
             what reasoning cannot — so the headline now makes that claim, and the
             findings arrive as its evidence rather than as the announcement. */}
         <h2 className="reveal mt-5 text-[length:var(--text-section)] uppercase">
-          Reasoning would have missed all three
+          {COPY.evidence.heading}
         </h2>
         <p className="reveal mt-7 text-[length:var(--text-lead)] text-muted">
-          <span className="text-ink">
-            Each was caught by running the product against a real database rather
-            than reasoning about it.
-          </span>{" "}
-          Root-caused, fixed, and then re-measured — that loop is the reason to
-          trust anything else on this page.
+          <span className="text-ink">{COPY.evidence.lead.ink}</span>{" "}
+          {COPY.evidence.lead.rest}
         </p>
       </header>
 
@@ -54,7 +58,7 @@ export function Evidence() {
           numbers in the cards below have to be inside the scope this queries. */}
       <div ref={root}>
         <div className="mt-14 space-y-px border border-line bg-line">
-          {EVIDENCE.map((item) => (
+          {COPY.evidence.cards.map((item, i) => (
             <article
               key={item.measure}
               className="reveal grid gap-8 bg-void p-7 lg:grid-cols-[16rem_1fr] lg:gap-14 lg:p-10"
@@ -77,13 +81,13 @@ export function Evidence() {
               <div>
                 <Eyebrow>{item.measure}</Eyebrow>
                 <p className="mt-4 flex items-baseline gap-1.5 font-display text-4xl font-bold tabular-nums [font-stretch:118%]">
-                  <span data-count={item.before.value} className="text-trace">
+                  <span data-count={EVIDENCE_FIGURES[i].value} className="text-trace">
                     0
                   </span>
-                  <span className="text-xl text-faint">/{item.before.of}</span>
+                  <span className="text-xl text-faint">/{EVIDENCE_FIGURES[i].of}</span>
                 </p>
                 <p className="mt-2 text-[0.85rem] text-muted">
-                  {item.before.caption}
+                  {item.caption}
                 </p>
                 <p className="mt-5 border-t border-line pt-4 font-mono text-[0.95rem] text-signal">
                   → {item.after}
@@ -120,14 +124,14 @@ export function Evidence() {
             the measuring is done — not a score. */}
         <div className="reveal mt-10 border border-line bg-panel/40 p-7 lg:p-10">
           <div className="flex flex-wrap items-baseline justify-between gap-4">
-            <Eyebrow tone="trace">How it is measured</Eyebrow>
+            <Eyebrow tone="trace">{COPY.evidence.measurement.eyebrow}</Eyebrow>
             <span className="font-mono text-[length:var(--text-data)] text-muted">
-              Re-run against every release
+              {COPY.evidence.measurement.note}
             </span>
           </div>
 
           <dl className="mt-8 grid gap-px border border-line bg-line lg:grid-cols-2">
-            {MEASUREMENT.map((suite) => (
+            {COPY.evidence.measurement.suites.map((suite) => (
               <div key={suite.name} className="bg-void p-6 lg:p-8">
                 <div className="flex flex-wrap items-baseline justify-between gap-3">
                   <dt className="text-lg text-ink [font-stretch:110%]">{suite.name}</dt>
@@ -154,12 +158,8 @@ export function Evidence() {
           </dl>
 
           <p className="mt-7 border-t border-line pt-5 text-[0.95rem] text-muted">
-            <span className="text-ink">
-              The scores themselves are part of the walkthrough.
-            </span>{" "}
-            They are dated runs against a named model, weak rows included — which
-            is a conversation worth having with someone in the room, and a poor
-            thing to leave on a page as a number without its reasons.
+            <span className="text-ink">{COPY.evidence.measurement.footer.ink}</span>{" "}
+            {COPY.evidence.measurement.footer.rest}
           </p>
         </div>
 

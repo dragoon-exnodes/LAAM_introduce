@@ -72,7 +72,12 @@ export function ChatPanel({ active }: { active: boolean }) {
         </div>
 
         <div className="max-w-[88%] border-l-2 border-signal bg-panel-2/60 px-3.5 py-2.5">
-          <p className="min-h-[3.5rem] text-[13px] text-muted">
+          {/* min-h reserves space for the typewriter so the bubble doesn't grow
+              mid-type, but a guessed round number (previously 3.5rem) overshot the
+              answer's actual two-line wrap and left visible dead space once typing
+              finished. 2lh holds exactly two line-heights, whatever the line-height
+              computes to, instead of a number that only happened to be close. */}
+          <p className="min-h-[2lh] text-[13px] text-muted">
             {ANSWER.slice(0, typed)}
             {typed < ANSWER.length && (
               <span

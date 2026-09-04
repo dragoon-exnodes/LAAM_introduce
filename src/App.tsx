@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import Lenis from "lenis";
 import { gsap, ScrollTrigger } from "./lib/motion";
 import { useReducedMotion } from "./hooks/useReducedMotion";
+import { registerLenis } from "./lib/scroll";
 import { BootSequence } from "./components/system/BootSequence";
 import { Grain, Vignette } from "./components/system/Grain";
 import { Nav } from "./components/layout/Nav";
@@ -27,6 +28,9 @@ export default function App() {
     // the document without emitting a Lenis scroll, and every ScrollTrigger below
     // is left measuring a stale position.
     const lenis = new Lenis({ duration: 1.05, smoothWheel: true, anchors: true });
+    // Published so anything that needs to MOVE the page asks Lenis rather than the
+    // window — see lib/scroll.ts. The channel tabs are the first caller.
+    registerLenis(lenis);
 
     // Lenis drives the scroll position, so ScrollTrigger has to measure from it.
     lenis.on("scroll", ScrollTrigger.update);
@@ -36,6 +40,7 @@ export default function App() {
 
     return () => {
       gsap.ticker.remove(onRaf);
+      registerLenis(null);
       lenis.destroy();
     };
   }, [reduced]);

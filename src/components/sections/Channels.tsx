@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { CHANNELS } from "../../lib/content";
 import { ScrollTrigger } from "../../lib/motion";
+import { scrollToY } from "../../lib/scroll";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
 import { ChannelPanel } from "../channels/ChannelPanel";
 import { Reticle } from "../system/Reticle";
@@ -65,13 +66,14 @@ export function Channels() {
  */
 function PinnedConsole() {
   const track = useRef<HTMLDivElement>(null);
+  const trigger = useRef<ReturnType<typeof ScrollTrigger.create> | null>(null);
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
     const el = track.current;
     if (!el) return;
 
-    const trigger = ScrollTrigger.create({
+    const st = ScrollTrigger.create({
       trigger: el,
       start: "top top",
       end: "bottom bottom",
@@ -80,9 +82,33 @@ function PinnedConsole() {
         setIndex((current) => (current === next ? current : next));
       },
     });
+    trigger.current = st;
 
-    return () => trigger.kill();
+    return () => {
+      trigger.current = null;
+      st.kill();
+    };
   }, []);
+
+  /**
+   * Clicking a tab scrolls to that channel rather than setting the index.
+   *
+   * `index` is DERIVED from scroll position — the trigger above recomputes it on
+   * every update — so assigning it directly would be overwritten by the next
+   * frame, and the tab would flash and snap back. Moving the page instead leaves
+   * one source of truth and lets the same code path do the work whether the
+   * visitor scrolled or clicked.
+   *
+   * The trigger reports its own start and end in scroll pixels, so the band that
+   * maps to channel i is [i/N, (i+1)/N] of that span; aiming at the middle keeps
+   * the landing clear of the boundary, where a pixel either way would select the
+   * neighbour.
+   */
+  const goToChannel = (i: number) => {
+    const st = trigger.current;
+    if (!st) return;
+    scrollToY(st.start + (st.end - st.start) * ((i + 0.5) / CHANNELS.length));
+  };
 
   const channel = CHANNELS[index];
 
@@ -109,16 +135,23 @@ function PinnedConsole() {
         </div>
 
         <div className="flex flex-col py-2">
+          {/* Buttons, not a labelled tablist. A real `tablist` would promise that
+              these control which panel is shown, and they do not — the scroll
+              position does, and these move the scroll. `aria-current` says which
+              one you are on without claiming a relationship that isn't there. */}
           <ol className="flex flex-wrap gap-x-5 gap-y-2">
             {CHANNELS.map((item, i) => (
               <li key={item.route}>
-                <span
-                  className={`font-mono text-[10px] uppercase tracking-[0.18em] transition-colors duration-300 ${
+                <button
+                  type="button"
+                  onClick={() => goToChannel(i)}
+                  aria-current={i === index ? "true" : undefined}
+                  className={`cursor-pointer font-mono text-[10px] uppercase tracking-[0.18em] transition-colors duration-300 hover:text-ink focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-signal ${
                     i === index ? TONE_TEXT[item.tone] : "text-muted"
                   }`}
                 >
                   {item.label}
-                </span>
+                </button>
               </li>
             ))}
           </ol>

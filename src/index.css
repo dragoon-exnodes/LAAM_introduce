@@ -74,14 +74,40 @@
      what closes the gap. The 0.94 line box that leaves Latin 23 units of slack
      leaves Vietnamese 31 units SHORT, and every hero line sits inside an
      overflow-hidden mask for its reveal, so the marks would simply be cut off.
-     1.25 clears the worst case. Keyed off :lang so it follows the document
-     language that has to be set for screen readers anyway. */
+     Keyed off :lang so it follows the document language that has to be set for
+     screen readers anyway.
+
+     TWO tokens, because one number was wrong for half the page. 1.25 was derived
+     from the worst case of the ALPHABET, then applied to every display heading —
+     including the fifteen that are sentence case, where the capital stacks that
+     forced it never appear. Re-measured against the strings this page actually
+     renders, in the fonts and sizes it renders them at:
+
+       uppercase (h1, h2)   ink 1.231 of font-size  → 1.24
+       sentence case (h3)   ink 1.115 of font-size  → 1.15
+
+     So the sentence-case headings had been carrying 12% of leading that nothing
+     in them needed, which is what made the Vietnamese page read loose beside the
+     English one. The uppercase number barely moves: it was close to right, and
+     the hero's per-line overflow mask means anything under the ink height is not
+     "tight", it is clipped. Re-measure before changing either — the requirement
+     is a property of the strings, not of the language. */
   :root {
     --leading-display: 0.94;
+    --leading-display-text: 0.94;
+    /* The sticky channel title sets its own, tighter than the tier above because
+       it is the largest sentence-case type on the page. Tailwind utilities beat
+       the base layer whatever their specificity, so a language override has to
+       come through the value, not through a second selector. */
+    --leading-channel: 1.08;
   }
 
   :root:lang(vi) {
-    --leading-display: 1.25;
+    --leading-display: 1.24;
+    --leading-display-text: 1.15;
+    /* 1.08 leaves a two-line Vietnamese title 0.027em short: line two's tone
+       marks reach into line one's descenders. Measured, like the rest. */
+    --leading-channel: 1.15;
   }
 
   h1,
@@ -94,6 +120,11 @@
     letter-spacing: -0.02em;
     margin: 0;
     text-wrap: balance;
+  }
+
+  /* Sentence case, so none of the capital mark-stacks that set the tier above. */
+  h3 {
+    line-height: var(--leading-display-text);
   }
 
   p {

@@ -169,7 +169,7 @@ function PinnedConsole() {
             >
               {channel.route}
             </span>
-            <h3 className="mt-5 text-3xl leading-[1.08] text-ink [font-stretch:112%] xl:text-4xl">
+            <h3 className="mt-5 text-3xl leading-[var(--leading-channel)] text-ink [font-stretch:112%] xl:text-4xl">
               {copy.title}
             </h3>
             <p className="mt-5 max-w-md text-[0.95rem] text-muted">{copy.body}</p>

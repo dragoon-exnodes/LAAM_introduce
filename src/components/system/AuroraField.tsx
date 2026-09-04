@@ -175,18 +175,30 @@ export function AuroraField({
 
       const mesh = new Mesh(gl, { geometry: new Triangle(gl), program });
 
-      const setSize = () => {
-        const rect = container.getBoundingClientRect();
-        renderer.setSize(Math.max(1, rect.width), Math.max(1, rect.height));
+      const setSize = (width: number, height: number) => {
+        renderer.setSize(Math.max(1, width), Math.max(1, height));
         const res = program.uniforms.uResolution.value;
         res[0] = gl.drawingBufferWidth;
         res[1] = gl.drawingBufferHeight;
         renderer.render({ scene: mesh });
       };
 
-      const resizeObserver = new ResizeObserver(setSize);
+      // getBoundingClientRect() is screen-space and shrinks with any ancestor's
+      // CSS transform — this container often sits inside a `.reveal` panel that
+      // GSAP holds at `scale: 0.988` from the moment it mounts (eagerly, for
+      // every `.reveal` target on the page, regardless of scroll position) until
+      // it scrolls into view and un-scales. Measuring in screen-space during
+      // that window bakes a permanently too-small canvas: the panel's *layout*
+      // size never actually changes, only its rendered transform does, so
+      // ResizeObserver — which only reports layout/box-size changes — never
+      // fires again to correct it. offsetWidth/Height and ResizeObserver's own
+      // contentRect are both layout-space and immune to ancestor transforms, so
+      // they read the panel's true final size even while it sits scaled down.
+      const resizeObserver = new ResizeObserver(([entry]) => {
+        setSize(entry.contentRect.width, entry.contentRect.height);
+      });
       resizeObserver.observe(container);
-      setSize();
+      setSize(container.offsetWidth, container.offsetHeight);
 
       let raf = 0;
       let onScreen = true;

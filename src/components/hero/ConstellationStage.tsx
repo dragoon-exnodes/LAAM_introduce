@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
 import { tokenHex, tokenRgb } from "../../lib/tokens";
@@ -39,9 +39,30 @@ import { CYCLE_MS, NODES, levelAt, modeAt, placeNodes, type Mode, type Placed } 
 const RADIUS = 39;
 // Pulled in on a phone as well: at 320px the ring's widest label (`Workflows`,
 // the longest word on the right-hand side) ran 4px past the box's own border.
+// Radius is keyed to WIDTH because that is what a label runs out of.
 const RADIUS_COMPACT = 34;
-const SQUASH = 0.62;
-const SQUASH_COMPACT = 0.4;
+
+/**
+ * Squash is keyed to the box's measured HEIGHT, not to the viewport.
+ *
+ * It was a viewport media query, and that was the wrong axis. The thing the ring
+ * has to clear is the readout at the bottom of the box, whose height is roughly
+ * fixed — so what matters is how much of the box that readout eats, which is a
+ * function of the box's height alone. A phone found the bug first, so the fix
+ * was written against phone widths; then a tablet in landscape reached a 317px
+ * box at 1120px WIDE, sailed past the media query, and printed `SEARCH` through
+ * the question.
+ *
+ * The tiers come from the collision arithmetic rather than from taste. A label
+ * sits at `sin(115.7°) × RADIUS × squash` of the box height below centre — about
+ * `0.35 × squash × boxH` — and it has `boxH/2 − readout − 8` of room, where the
+ * readout runs 85-110px. Solving at each tier's floor, with margin.
+ */
+const SQUASH_BY_HEIGHT: readonly [minHeight: number, squash: number][] = [
+  [460, 0.62],
+  [360, 0.5],
+  [0, 0.4],
+];
 
 type Rgb = readonly [number, number, number];
 const THINK: Rgb = [180, 232, 255];
@@ -50,11 +71,12 @@ export function ConstellationStage() {
   const hostRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const reduced = useReducedMotion();
-  // Below `sm` the box turns square and loses height, so the ring concedes more
-  // of it to the question underneath. See SQUASH_COMPACT.
-  const compact = useMediaQuery("(max-width: 639px)");
-  const squash = compact ? SQUASH_COMPACT : SQUASH;
-  const radius = compact ? RADIUS_COMPACT : RADIUS;
+  // Width decides the radius (labels running past the border); the measured box
+  // height decides the squash (labels running into the readout).
+  const narrow = useMediaQuery("(max-width: 639px)");
+  const radius = narrow ? RADIUS_COMPACT : RADIUS;
+  const [boxHeight, setBoxHeight] = useState(0);
+  const squash = SQUASH_BY_HEIGHT.find(([min]) => boxHeight >= min)![1];
 
   useEffect(() => {
     // Workflows and Connectors wear this: they are the two surfaces that hold a
@@ -103,6 +125,7 @@ export function ConstellationStage() {
 
     function layout() {
       const rect = host!.getBoundingClientRect();
+      setBoxHeight(rect.height);
       W = canvas!.width = Math.max(1, Math.round(rect.width * DPR));
       H = canvas!.height = Math.max(1, Math.round(rect.height * DPR));
       canvas!.style.width = `${rect.width}px`;

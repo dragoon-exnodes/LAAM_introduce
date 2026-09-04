@@ -121,7 +121,17 @@ function PinnedConsole() {
       className="relative mt-16"
       style={{ height: `${CHANNELS.length * TRACK_PER_CHANNEL * 100}vh` }}
     >
-      <div className="sticky top-[16vh] grid h-[68vh] grid-cols-[1.05fr_0.95fr] gap-8">
+      {/* `h-[68vh]` alone made the console a fraction of the screen, and the
+          panels inside it are not fractions of anything: the workflow canvas
+          carries a 25rem floor because its node positions are percentages while
+          node heights are pixels, so below that they overlap. Add the frame
+          header, the info strip and the caption and the tallest panel needs about
+          597px — which 68vh only reaches at a viewport 878px tall. Every shorter
+          screen (iPad Pro 11" landscape at 834, and any 768 or 800px laptop) was
+          pushing that caption out through the bottom border. The floor is stated
+          here, once, rather than by trimming the panel that happens to be tallest
+          today. */}
+      <div className="sticky top-[16vh] grid h-[68vh] min-h-[38rem] grid-cols-[1.05fr_0.95fr] gap-8">
         <div className="bracket relative border border-line bg-panel/50">
           <Reticle />
           {CHANNELS.map((item, i) => (

@@ -41,7 +41,11 @@ export function PanelFrame({ route, status, tone = "trace", children }: Props) {
           against a flex-sized parent does not resolve. That is what left the
           workflow DAG a 2px band on tablet and phone even after the frame had a
           floor. Children now use flex-1 and take the space directly. */}
-      <div className="flex min-h-0 flex-1 flex-col p-4 sm:p-5">{children}</div>
+      {/* `overflow-hidden` is the invariant, not a fix for one panel: whatever a
+          panel decides it needs, it may not draw outside the border that makes it
+          read as a device. A panel that overflows should be cropped, which looks
+          deliberate, rather than spilling onto whatever sits beneath it. */}
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden p-4 sm:p-5">{children}</div>
     </div>
   );
 }

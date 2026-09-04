@@ -104,22 +104,26 @@ export function Hero({ ready }: { ready: boolean }) {
     //
     // The top padding still has a job the flexbox cannot do: the nav is fixed and
     // 64px tall, so the content has to clear it.
-    <section ref={root} id="top" className="relative flex flex-1 flex-col justify-center overflow-hidden pt-24 sm:pt-28 lg:pt-32">
+    <section ref={root} id="top" className="relative flex flex-1 flex-col justify-center overflow-hidden pt-24 sm:pt-28 lg:pt-28">
       <div
         data-parallax="grid"
         className="grid-field pointer-events-none absolute -inset-16 opacity-[0.55] [mask-image:radial-gradient(ellipse_at_50%_0%,black,transparent_72%)]"
       />
 
-      <div className="relative mx-auto grid max-w-[1400px] items-center gap-12 px-5 pb-14 sm:px-8 lg:pb-20 lg:pl-[calc(var(--spacing-rail)+2rem)] xl:grid-cols-[1.05fr_0.95fr] xl:gap-14">
+      {/* `w-full` is load-bearing now that the section is a flex column. `mx-auto`
+          means `margin-inline: auto`, and auto margins on a FLEX ITEM stop it
+          stretching to the cross axis — the container silently collapsed to
+          fit-content, which at 1194px left the hero 799px wide inside a 1183px
+          section. As a block child it had been full-width all along; the flex
+          parent changed what the same class means. */}
+      <div className="relative mx-auto grid w-full max-w-[1400px] items-center gap-12 px-5 pb-14 sm:px-8 lg:pb-20 lg:pl-[calc(var(--spacing-rail)+2rem)] min-[1120px]:grid-cols-[1.15fr_0.85fr] min-[1120px]:gap-10 xl:grid-cols-[1.05fr_0.95fr] xl:gap-14">
         <div>
           {/* Separators only appear once the row is guaranteed to fit on one line —
               a wrapped list ending in a stray divider looks like a mistake.
-              `sm` is the right gate and always was: the row is a fixed ~501px at
-              every width (the eyebrow size does not scale), so it fits from 576px
-              of column upward. The one place it used to wrap was 1024-1279, where
-              the two-column hero left this column just 431px — that cause is gone
-              now that the split starts at xl, and pushing the separators to xl to
-              compensate only made three labels read as one run-on string. */}
+              `sm` is the right gate: the row is a fixed ~501px at every width (the
+              eyebrow size does not scale), so it fits from 576px of column upward.
+              The Vietnamese labels are longer and do wrap here at some widths,
+              which is why the separators are hidden rather than shown mid-row. */}
           <div data-anim="eyebrow" className="flex flex-wrap items-center gap-x-3 gap-y-1">
             <Eyebrow tone="signal">{COPY.hero.eyebrows[0]}</Eyebrow>
             <span className="hidden h-3 w-px bg-line-bright sm:block" aria-hidden="true" />
@@ -168,7 +172,7 @@ export function Hero({ ready }: { ready: boolean }) {
               enough to clear it would have needed a squash of 0.22 — a ring drawn
               as a horizontal line. Giving the box the height instead costs only
               scroll, on a page that scrolls anyway. */}
-          <div className="bracket relative aspect-[4/5] w-full border border-line bg-panel/40 sm:aspect-[5/4] lg:aspect-square">
+          <div className="bracket @container relative aspect-[4/5] w-full border border-line bg-panel/40 sm:aspect-[5/4] lg:aspect-square">
             <span
               data-anim="bracket"
               className="absolute -left-px -top-px h-4 w-4 border-l border-t border-signal"

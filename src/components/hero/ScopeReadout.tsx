@@ -39,7 +39,7 @@ export function ScopeReadout() {
   const featuredCopy = COPY.inquiries.items[FEATURED_INDEX];
 
   return (
-    <div className="pointer-events-none absolute inset-0 flex flex-col justify-between p-4 sm:p-6">
+    <div className="pointer-events-none absolute inset-0 flex flex-col justify-between p-4 @[32rem]:p-6">
       {/* Scrims: the readout has to stay legible over whatever the scene is doing. */}
       <span
         aria-hidden="true"
@@ -69,12 +69,26 @@ export function ScopeReadout() {
           ring above them; side by side they read as a single instrument line and
           give the constellation its room back. The question keeps its size, so it
           still leads — what changed is the direction, not the weighting. Stacks
-          again below `sm`, where three columns of figures beside a sentence would
-          leave neither of them readable. */}
-      <div className="relative flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
+          again in a narrow box, where three columns of figures beside a sentence
+          would leave neither of them readable.
+
+          Keyed to the BOX's width via a container query, not the viewport's. It
+          was `sm:` — a 640px VIEWPORT — which is the wrong axis twice over: this
+          box is a grid column, so a 1120px-wide tablet gives it 396px, sailed
+          past the breakpoint, kept the row, wrapped the question to four lines
+          and printed `SEARCH` through it. What the layout depends on is how wide
+          this box is.
+
+          32rem, and derived rather than picked: the question is capped at 26ch
+          (~230px at this size), the three figure columns run ~200px, the gap is
+          24 and the box pads 48 — about 500px before the row is honest. 26rem
+          was tuned against the English question and let the longer Vietnamese one
+          wrap to four lines inside a 428px box, which put `ACCESS` back through
+          the text. Two locales, one threshold: size it for the longer one. */}
+      <div className="relative flex flex-col gap-3 @[32rem]:flex-row @[32rem]:items-end @[32rem]:justify-between @[32rem]:gap-6">
         {/* min-w-0 so a long question wraps inside the row instead of forcing it
             wider than the box. */}
-        <p className="min-w-0 max-w-[26ch] text-balance text-[0.95rem] leading-snug text-ink sm:text-base">
+        <p className="min-w-0 max-w-[26ch] text-balance text-[0.95rem] leading-snug text-ink @[32rem]:text-base">
           “{featuredCopy.question}”
         </p>
 
@@ -87,7 +101,7 @@ export function ScopeReadout() {
             <dt className="uppercase text-muted">{COPY.hero.lookupLabel}</dt>
             <dd className="mt-1 tabular-nums text-ink">{FEATURED.steps}</dd>
           </div>
-          <div className="hidden sm:block">
+          <div className="hidden @[32rem]:block">
             <dt className="uppercase text-muted">{COPY.hero.costLabel}</dt>
             <dd className="mt-1 text-free">$0.00</dd>
           </div>

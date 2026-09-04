@@ -186,8 +186,18 @@ function StackedChannels() {
           {/* Auto height: stacked panels size to their own content rather than
               being cropped by a fixed frame borrowed from the pinned layout. The
               min has to clear PanelFrame's own floor plus the frame chrome, or
-              the floor is what decides the height and the panel overflows. */}
-          <div className="bracket relative mt-6 min-h-[26rem] border border-line bg-panel/50">
+              the floor is what decides the height and the panel overflows.
+
+              `grid`, though, not a plain box — the same min-height trap the panel
+              chrome documents, one level up. PanelFrame is `h-full`, and a
+              percentage height cannot resolve against a parent carrying only a
+              MIN height, so it fell back to its own 19rem floor and sat 112px
+              short of this frame: dead space under every stacked panel, worst on
+              the connectors fan, where nine strands were crammed into two thirds
+              of the box they had been given. A grid's single child stretches to
+              the track, so the panel takes the whole 26rem and still grows past
+              it when its content needs more. */}
+          <div className="bracket relative mt-6 grid min-h-[26rem] border border-line bg-panel/50">
             <ChannelPanel panel={channel.panel} active />
           </div>
         </article>

@@ -50,11 +50,13 @@ export const CHANNELS: readonly Channel[] = [
     panel: "monitoring",
     tone: "signal",
     title: "Live agent telemetry",
-    body: "Every session from every machine, streaming over SSE. Sub-agent trees, tool-call waterfalls, and an alert the moment a run goes quiet for longer than it should. The dashboard turns the same rows into spend you can attribute — per model, per session, per branch — and exports it as CSV or PDF.",
+    body: "Every session from every machine, streaming over SSE. Sub-agent trees, tool-call waterfalls, and an alert the moment a run goes quiet for longer than it should.",
     points: [
       "Orchestrator → sub-agent graph",
       "Filter by project, model, branch, machine",
       "Configurable stuck-agent threshold",
+      "Cost by model, project and day — exported as CSV or PDF",
+      "Slowest tools and highest error rates, surfaced automatically",
     ],
   },
   {
@@ -94,6 +96,7 @@ export const CHANNELS: readonly Channel[] = [
       "Parallel DAG — fan-out, fan-in",
       "AI-drafted graphs, corrected by dry-run",
       "Every write pauses on a confirmation card, bound to a recipient allowlist",
+      "Custom-agent presets, saved once and reused across every graph",
       "Mid-run cancel, templates, clone",
     ],
   },

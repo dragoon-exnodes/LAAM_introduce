@@ -255,77 +255,53 @@ export const EVIDENCE: readonly Evidence[] = [
 ] as const;
 
 /**
- * Real numbers from the selection-at-scale run: gpt-oss-120b, temperature 0.6,
- * k=8, on 2026-08-03. The failing row is here on purpose; a scoreboard with no
- * zero on it is marketing, not measurement.
+ * What the measurement IS, not what it scored.
  *
- * Two things were wrong with how this used to be presented, and both cut against
- * the section's own argument.
+ * Both suites used to publish their grades here — the tool-selection scoreboard
+ * with a failing row, and the seven behaviour dimensions including a 67%. Those
+ * numbers are real and they are traceable to dated runs in the LAAM repo, and
+ * publishing them was a deliberate position: in a category where every claim is
+ * noise, a claim that costs something to make is the only one that carries.
  *
- * The caption said "48 of them real MCP tools". It isn't: `padToN` fills the
- * 60-tool union in POOL order — internal, then connector, then MCP — and 12
- * internal + 42 connector tools already exceed the 58 distractor slots, so only
- * about six MCP tools ever reach the model. The 48 is the size of the MCP
- * *distractor pool*, not of what was measured. (The suite's own comment, "60 = 12
- * internal + 48 MCP", is arithmetically impossible for the same reason — a
- * harness bug that had leaked into marketing copy.) Fixing `padToN` to sample
- * across the pool, then re-running, is the only way to earn the original claim.
+ * The position was right about the reader it imagined and wrong about the reader
+ * it gets. A page whose CTA books a forty-minute walkthrough has to survive
+ * everyone in a buying committee, including the people who never reach the
+ * paragraph explaining why a strict 67% is a good number — they see a red 67 and
+ * the evaluation ends before it reaches anyone able to read it. And the detail
+ * loses nothing by moving: the walkthrough is a room with a person in it, which
+ * is exactly where a number needs context.
  *
- * And the run was dated in the code but not on the page, while the rows spoke in
- * the present tense — "still failing" asserts a live state for a measurement that
- * is a month and several hundred commits old. The behaviour suite below dates
- * itself; this one now does too, and says as-of rather than still.
+ * What stays is the part the industry does publish and competitors mostly cannot
+ * match — the rigour itself, and the post-mortems above. Every fact below is a
+ * count, not a grade.
  */
-export const BENCHMARK = {
-  caption:
-    "Tool selection · 60-tool union from a 102-tool pool (12 internal · 42 connector · 48 MCP) · k=8 · 2026-08-03",
-  rows: [
-    { label: "multi-read-write", score: 100, detail: "8 / 8" },
-    { label: "ctx-audit-write", score: 100, detail: "8 / 8" },
-    { label: "ctx-web-write", score: 0, detail: "0 / 8 — as of this run" },
-  ],
-  average: 67,
-} as const;
-
-/**
- * The behaviour suite (`npm run eval`), a different measurement from BENCHMARK
- * above: 17 scenarios replayed five times each — 85 runs — against the same
- * agent loop production uses, scored per dimension rather than pass/fail.
- * gpt-oss-120b, 2026-09-03.
- *
- * Grounding is the low number and it stays on the page. It is the honest one:
- * it asks whether the answer actually cites the value the tool returned, which
- * is the hardest thing to get right and the thing worth being measured on.
- */
-export const RELIABILITY = {
-  caption:
-    "Behaviour suite · 17 scenarios × 5 runs · gpt-oss-120b · 2026-09-03",
-  rows: [
-    {
-      label: "restraint",
-      score: 100,
-      note: "no tool call when none is needed",
-    },
-    { label: "write-intent", score: 100, note: "every write reaches the gate" },
-    {
-      label: "rich-block",
-      score: 100,
-      note: "maps and charts render as blocks",
-    },
-    { label: "args", score: 97, note: "arguments match the tool's schema" },
-    {
-      label: "termination",
-      score: 90,
-      note: "loop stops inside its round budget",
-    },
-    { label: "tool-selection", score: 86, note: "reaches for the right tool" },
-    {
-      label: "grounding",
-      score: 67,
-      note: "answer cites what the tool returned",
-    },
-  ],
-} as const;
+export const MEASUREMENT = [
+  {
+    name: "Behaviour suite",
+    scale: "17 scenarios × 5 runs",
+    body: "Every scenario replayed five times and scored per dimension rather than pass/fail, so a run that reaches the right answer the wrong way still shows up.",
+    // `tags` is what each suite is BUILT from — the seven scored dimensions on one
+    // side, the three pools the union is drawn from on the other. Both panels
+    // carry a row so the pair reads as one composition rather than one filled
+    // block beside a half-empty one; the right panel's pool was a clause inside
+    // its own sentence, which left it 150px shorter than its neighbour.
+    tags: [
+      "tool selection",
+      "arguments",
+      "grounding",
+      "restraint",
+      "termination",
+      "write intent",
+      "rich blocks",
+    ],
+  },
+  {
+    name: "Tool selection at scale",
+    scale: "60-tool union · k=8",
+    body: "Each probe is answered against a union drawn from the full production pool, because picking the right tool out of six proves nothing about picking it out of sixty.",
+    tags: ["12 internal", "42 connector", "48 MCP"],
+  },
+] as const;
 
 // Labels stay short enough to hold one line — a wrapped label drops its value
 // out of line with the rest of the row.

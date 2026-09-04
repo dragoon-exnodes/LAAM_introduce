@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
-import { BENCHMARK, EVIDENCE, RELIABILITY } from "../../lib/content";
-import { countUp, fillBarsOnScroll } from "../../lib/motion";
+import { EVIDENCE, MEASUREMENT } from "../../lib/content";
+import { countUp } from "../../lib/motion";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { Eyebrow } from "../ui/Eyebrow";
 import { Section } from "./Section";
@@ -16,7 +16,6 @@ export function Evidence() {
     const cleanups = Array.from(
       scope.querySelectorAll<HTMLElement>("[data-count]"),
     ).map((el) => countUp(el, Number(el.dataset.count), reduced));
-    cleanups.push(fillBarsOnScroll(scope, reduced));
 
     return () => cleanups.forEach((fn) => fn());
   }, [reduced]);
@@ -29,24 +28,30 @@ export function Evidence() {
             what moved is what they are evidence OF. "Three things we got wrong"
             led with the failure; the same three findings are actually proof that
             the team measures behaviour it could not have reasoned its way to,
-            which is the harder and more useful capability to have. */}
+            which is the harder and more useful capability to have.
+
+            "Three bugs only a running system reveals" was the second draft of that
+            same mistake. It fixed the sentence and left the loudest word alone:
+            set at the section size, the thing a skimmer actually reads was THREE
+            BUGS. The claim underneath is about a method — that measuring finds
+            what reasoning cannot — so the headline now makes that claim, and the
+            findings arrive as its evidence rather than as the announcement. */}
         <h2 className="reveal mt-5 text-[length:var(--text-section)] uppercase">
-          Three bugs only a running system reveals
+          Reasoning would have missed all three
         </h2>
         <p className="reveal mt-7 text-[length:var(--text-lead)] text-muted">
           <span className="text-ink">
             Each was caught by running the product against a real database rather
             than reasoning about it.
           </span>{" "}
-          Root-caused, fixed, and then re-measured — that loop is why the numbers
-          below are worth reading at all.
+          Root-caused, fixed, and then re-measured — that loop is the reason to
+          trust anything else on this page.
         </p>
       </header>
 
       {/* Bound to `root` rather than to Section's own internal ref: Section is a
-          plain function component and doesn't forward one, and the two scoreboard
-          blocks below need to be in scope alongside the count-up cards for their
-          progress bars to be found by the same query. */}
+          plain function component and doesn't forward one, and the count-up
+          numbers in the cards below have to be inside the scope this queries. */}
       <div ref={root}>
         <div className="mt-14 space-y-px border border-line bg-line">
           {EVIDENCE.map((item) => (
@@ -54,18 +59,33 @@ export function Evidence() {
               key={item.measure}
               className="reveal grid gap-8 bg-void p-7 lg:grid-cols-[16rem_1fr] lg:gap-14 lg:p-10"
             >
+              {/* The before/after weighting was inverted, and so were its colours.
+                  Measured across the section, the three largest numerals on it were
+                  3/15, 1/1 and 3/17 — set at 48px in the primary cyan, four times
+                  the height and sixteen times the area of every good number on the
+                  page, all of which sat at 12px. The section reported the fix in a
+                  footnote and shouted how bad things were before it.
+
+                  The colours were backwards by the palette's own definitions:
+                  signal is "a live agent", the thing happening NOW, and trace is
+                  "already happened, so it recedes from signal". A before-measurement
+                  is the definition of already-happened; the state after the fix is
+                  the one that is still true. Swapping them puts the accent on the
+                  outcome without editing a single number — and the number itself
+                  comes down to 36px, still the largest thing in the card, no longer
+                  the largest thing in the section. */}
               <div>
                 <Eyebrow>{item.measure}</Eyebrow>
-                <p className="mt-4 flex items-baseline gap-1.5 font-display text-5xl font-bold tabular-nums [font-stretch:118%]">
-                  <span data-count={item.before.value} className="text-signal">
+                <p className="mt-4 flex items-baseline gap-1.5 font-display text-4xl font-bold tabular-nums [font-stretch:118%]">
+                  <span data-count={item.before.value} className="text-trace">
                     0
                   </span>
-                  <span className="text-2xl text-faint">/{item.before.of}</span>
+                  <span className="text-xl text-faint">/{item.before.of}</span>
                 </p>
                 <p className="mt-2 text-[0.85rem] text-muted">
                   {item.before.caption}
                 </p>
-                <p className="mt-5 border-t border-line pt-4 font-mono text-[length:var(--text-data)] text-trace">
+                <p className="mt-5 border-t border-line pt-4 font-mono text-[0.95rem] text-signal">
                   → {item.after}
                 </p>
               </div>
@@ -82,141 +102,67 @@ export function Evidence() {
           ))}
         </div>
 
+        {/* What replaced two published scoreboards.
+2
+            The grades were real and traceable, and printing them was a deliberate
+            position — in a category where every claim is noise, a claim that costs
+            something to make is the only one that carries. It was right about the
+            reader it imagined and wrong about the reader it gets: this page's CTA
+            books a walkthrough, so it has to survive a whole buying committee,
+            including the people who never reach the sentence explaining why a
+            strict 67% is a good number. They see a red 67 and the evaluation stops
+            before it reaches anyone equipped to read it.
+
+            So the numbers move to the room where someone can give them context,
+            which is the thing the CTA is selling anyway. What stays is what the
+            industry does publish and most competitors cannot match: the rigour,
+            and the three post-mortems above. Every figure below is a count of how
+            the measuring is done — not a score. */}
         <div className="reveal mt-10 border border-line bg-panel/40 p-7 lg:p-10">
           <div className="flex flex-wrap items-baseline justify-between gap-4">
-            <Eyebrow tone="trace">Current scoreboard</Eyebrow>
+            <Eyebrow tone="trace">How it is measured</Eyebrow>
             <span className="font-mono text-[length:var(--text-data)] text-muted">
-              {BENCHMARK.caption}
+              Re-run against every release
             </span>
           </div>
 
-          <dl className="mt-7 space-y-4">
-            {/* The row was one flex line with a 10rem label and an 11rem value
-                pinned at either end. That is 364px of fixed width before the bar
-                gets anything, and a phone's content column is about 294px — so
-                the bar, being the only flexible child, was squeezed to zero and
-                the value ran off the right edge. The scoreboard lost the one
-                thing it exists to show.
-
-                Below `sm` the label and the value share the first line and the
-                bar takes a full-width line of its own. Giving the bar its own
-                line is not just about fitting: bar LENGTH is the measurement, so
-                every track has to be the same length or the rows stop being
-                comparable — which is exactly what would happen if the value were
-                left to size itself ("8 / 8" is a third the width of "0 / 8 — as
-                of this run"). From `sm` up the original single line returns,
-                via order rather than duplicated markup. */}
-            {BENCHMARK.rows.map((row) => (
-              <div
-                key={row.label}
-                className="flex flex-wrap items-center gap-x-4 gap-y-2.5 sm:flex-nowrap"
-              >
-                <dt className="font-mono text-[length:var(--text-data)] text-muted sm:w-40 sm:shrink-0">
-                  {row.label}
-                </dt>
-                <dd
-                  className={`order-1 ml-auto whitespace-nowrap font-mono text-[length:var(--text-data)] tabular-nums sm:order-2 sm:ml-0 sm:w-44 sm:text-right ${
-                    row.score === 0 ? "text-alert" : "text-ink"
-                  }`}
-                >
-                  {row.detail}
-                </dd>
-                <div className="order-2 w-full sm:order-1 sm:w-auto sm:flex-1">
-                  <span
-                    className="relative block h-[3px] w-full bg-line"
-                    aria-hidden="true"
-                  >
-                    <span
-                      className="absolute inset-y-0 left-0 overflow-hidden"
-                      style={{ width: `${Math.max(row.score, 1.5)}%` }}
-                    >
-                      <span
-                        data-bar
-                        className={`block h-full w-full ${row.score === 0 ? "bg-alert" : "bg-signal"}`}
-                      />
-                    </span>
+          <dl className="mt-8 grid gap-px border border-line bg-line lg:grid-cols-2">
+            {MEASUREMENT.map((suite) => (
+              <div key={suite.name} className="bg-void p-6 lg:p-8">
+                <div className="flex flex-wrap items-baseline justify-between gap-3">
+                  <dt className="text-lg text-ink [font-stretch:110%]">{suite.name}</dt>
+                  <span className="font-mono text-[length:var(--text-data)] text-signal">
+                    {suite.scale}
                   </span>
                 </div>
+                <dd className="mt-4 text-[0.95rem] text-muted">{suite.body}</dd>
+
+                {suite.tags.length > 0 && (
+                  <ul className="mt-5 flex flex-wrap gap-x-2 gap-y-2 border-t border-line pt-5">
+                    {suite.tags.map((d) => (
+                      <li
+                        key={d}
+                        className="border border-line-bright px-2 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-trace"
+                      >
+                        {d}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             ))}
           </dl>
 
           <p className="mt-7 border-t border-line pt-5 text-[0.95rem] text-muted">
-            Average {BENCHMARK.average}% across these three. The failing row
-            stays on the board because a number you can check is worth more than
-            one you cannot — and because the case that failed is the one you
-            would want named before you rely on this, not after. It is a dated
-            measurement, not a live gauge: the honest thing to say is what the
-            run found, not what we assume still holds.
+            <span className="text-ink">
+              The scores themselves are part of the walkthrough.
+            </span>{" "}
+            They are dated runs against a named model, weak rows included — which
+            is a conversation worth having with someone in the room, and a poor
+            thing to leave on a page as a number without its reasons.
           </p>
         </div>
 
-        {/* The behaviour suite is a second, wider measurement: not "did it pick the
-          right tool out of sixty" but "did the whole loop behave" — scored per
-          dimension over 85 runs. Same rule as above: the weak number stays. */}
-        <div className="reveal mt-6 border border-line bg-panel/40 p-7 lg:p-10">
-          <div className="flex flex-wrap items-baseline justify-between gap-4">
-            <Eyebrow tone="trace">Behaviour, by dimension</Eyebrow>
-            <span className="font-mono text-[length:var(--text-data)] text-muted">
-              {RELIABILITY.caption}
-            </span>
-          </div>
-
-          <dl className="mt-7 space-y-4">
-            {RELIABILITY.rows.map((row) => (
-              <div
-                key={row.label}
-                className="flex flex-wrap items-center gap-x-4 gap-y-1"
-              >
-                {/* Same stacking as the scoreboard above. This block's value is
-                    only 3rem wide so it did fit on a phone, but it left the bar
-                    about 56px — a track too short to read a 67 against a 90 on.
-                    Consistency matters more than the few pixels saved: these two
-                    blocks sit one above the other and are meant to be read the
-                    same way. */}
-                <dt className="font-mono text-[length:var(--text-data)] text-muted sm:w-40 sm:shrink-0">
-                  {row.label}
-                </dt>
-                <dd
-                  className={`order-1 ml-auto text-right font-mono text-[length:var(--text-data)] tabular-nums sm:order-2 sm:ml-0 sm:w-12 ${
-                    row.score < 70 ? "text-alert" : "text-ink"
-                  }`}
-                >
-                  {row.score}%
-                </dd>
-                <div className="order-2 w-full sm:order-1 sm:w-auto sm:flex-1">
-                  <span
-                    className="relative block h-[3px] w-full bg-line"
-                    aria-hidden="true"
-                  >
-                    <span
-                      className="absolute inset-y-0 left-0 overflow-hidden"
-                      style={{ width: `${row.score}%` }}
-                    >
-                      <span
-                        data-bar
-                        className={`block h-full w-full ${row.score < 70 ? "bg-alert" : "bg-signal"}`}
-                      />
-                    </span>
-                  </span>
-                </div>
-                <p className="order-3 w-full pl-0 text-[0.8rem] text-muted sm:w-auto sm:basis-full sm:pl-44">
-                  {row.note}
-                </p>
-              </div>
-            ))}
-          </dl>
-
-          <p className="mt-7 border-t border-line pt-5 text-[0.95rem] text-muted">
-            Grounding is the one to read: it asks whether the answer carries the
-            exact value the tool returned rather than a paraphrase of it. The
-            score does not separate a paraphrase of the right number from the
-            wrong number — both count as a miss, which is why it reads lower
-            than the other six. That strictness is the point: a number you have
-            to go and check yourself is not yet an answer, so this is the one we
-            hold ourselves to and keep on the board.
-          </p>
-        </div>
       </div>
     </Section>
   );

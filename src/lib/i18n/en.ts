@@ -15,12 +15,17 @@
  * contrast and the elaboration one step down — a distinction the translation has
  * to be able to place differently, since the claim does not always land in the
  * same clause in another language.
+ *
+ * Writing rule for this pass: short sentences, the benefit stated before the
+ * mechanism, one idea per sentence. A reader with zero technical background and
+ * a reader who could build this themselves should both get the point on the
+ * first read — neither should have to re-read a sentence to find the subject.
  */
 export const en = {
   meta: {
     title: "LAAM — Your company's systems, now they answer back",
     description:
-      "Ask your own data a question the way you'd ask a colleague — no SQL, no report request, no waiting. LAAM looks the figures up, answers, and carries out the multi-step work that follows. It runs on your machines; on a local model, no question is metered.",
+      "Ask your own data a question the way you'd ask a colleague — no SQL, no report request, no waiting. LAAM looks up the real numbers, answers you, and carries out the work that follows. It runs on your own machines, and questions to a local model cost nothing.",
   },
 
   langToggle: { label: "Tiếng Việt", aria: "Xem trang bằng tiếng Việt" },
@@ -57,7 +62,7 @@ export const en = {
     headline: ["Your systems.", "Now they", "answer back."],
     lead: {
       ink: "Ask it the way you'd ask a colleague — no table names, no column names, no SQL.",
-      rest: "It reaches your databases, your documents and the systems you already run — a point-of-sale, a booking system, an internal service — looks up the real figures, and carries out the work that follows. When a question could mean two things it asks you back rather than guessing. It runs on your own machines — your data stays there.",
+      rest: "It connects to your databases, documents, and the tools you already run — point of sale, booking system, internal apps — pulls the real numbers, and finishes the work that comes after. If a question could mean two things, it asks you to clarify instead of guessing. And it runs on your own machines, so your data never leaves.",
     },
     actions: { primary: "Book a walkthrough", secondary: "See how it answers" },
     scopeCaption: "Assistant map · illustrative data",
@@ -93,7 +98,7 @@ export const en = {
       {
         route: "the queue",
         title: "Every question waits on somebody else",
-        body: "\"Who refunded the most this month?\" is a ten-second question. It queues behind whoever writes the queries, and comes back as a spreadsheet that is already a day old.",
+        body: "\"Who refunded the most this month?\" is a ten-second question. It queues behind whoever writes the queries, and comes back a day later as a spreadsheet that's already out of date.",
         answeredBy: "Asking in plain language",
       },
       {
@@ -105,55 +110,55 @@ export const en = {
       {
         route: "the leap of faith",
         title: "Handing work to an AI you can't check",
-        body: "Where did that number come from, which tool did it call, what did it nearly send and to whom. Without an answer to that, nobody sensible lets it near real data.",
+        body: "Where did that number come from? Which tool did it use? What was it about to send, and to whom? Without clear answers, no one should let it near real data.",
         answeredBy: "The confirmation gate, and the full record",
       },
     ],
     answer: {
       eyebrow: "The answer",
       ink: "Three problems, three answers, one screen.",
-      rest: "The queue clears because the question goes straight to the data — and when a question is genuinely ambiguous it asks you back rather than guessing. The chore runs itself once described. And nothing that can't be taken back happens without a confirmation, on a record you can read afterwards.",
+      rest: "The queue disappears because your question goes straight to the data — and if it's genuinely unclear, it asks you to clarify instead of guessing. The weekly chore runs itself once you've described it. And anything that can't be undone waits for your confirmation, logged so you can check it later.",
     },
   },
 
   channels: {
     eyebrow: "The platform",
     heading: "Seven surfaces, one console",
-    lead: "Every readout below is a surface people open daily — shipped, not roadmap. The data in them is invented; the real data belongs to whoever is signed in.",
+    lead: "Each screen below is something people use every day — shipped and working today, not a roadmap promise. The data you see here is sample data; your real data only appears once you're signed in.",
     items: [
       {
-        title: "Nothing it did is a mystery afterwards",
-        body: "Everything the assistant runs, from every machine, streaming as it happens: which tools it called and in what order, how long each took, what it cost, and a flag on anything that has stopped making progress.",
+        title: "Nothing it does is a mystery afterwards",
+        body: "Every action the assistant takes, from every machine, streams in live: which tools it used and in what order, how long each step took, what it cost, and a flag on anything that gets stuck.",
         points: [
-          "Tool-by-tool trace of a single run",
-          "Every answer traceable to the figures it read",
-          "Writes held for confirmation, with the recipient shown",
-          "Alerts on a run that has stalled",
-          "What it cost, by model and by day",
+          "Tool-by-tool trace of every run",
+          "Every answer traces back to the numbers it used",
+          "Data changes wait for your OK, with the recipient shown",
+          "Instant alerts on any run that gets stuck",
+          "Costs broken down by model and by day",
         ],
       },
       {
         title: "The everyday questions, answered on the spot",
-        body: "Ask it about your own figures, hand it a PDF or a photo of a delivery note, have it check something on the web — it answers from the real source rather than from memory. On a model running on your own machine every one of those answers costs nothing; add a hosted model and it is the same assistant, with the same reach.",
+        body: "Ask about your numbers, hand it a PDF or a photo of a delivery note, or have it check something online — it always answers from the real source, never from memory. Run it on a model on your own machine and every answer is free; add a hosted model later and it's the same assistant, with the same reach.",
         points: [
           "Reads photos, scans, PDFs and Word files (vi/en/zh)",
-          "Searches the web from a server you run yourself",
-          "Addresses, weather and nearby places",
-          "Save any answer as a PDF to send on",
+          "Searches the web using your own search server",
+          "Looks up addresses, weather, and nearby places",
+          "Saves any answer as a PDF to send on",
         ],
       },
       {
         title: "Ask out loud when your hands are busy",
-        body: "A fullscreen console you talk to. It reads the answer back as it arrives, and puts tables and charts on a panel beside it instead of reading numbers out one by one — so you can be at the counter, or walking the floor, and still get a straight answer.",
+        body: "A fullscreen console you can just talk to. It speaks the answer back as it comes, and shows tables and charts on a side panel instead of reading out every number — so whether you're at the counter or walking the floor, you still get a clear answer.",
         points: [
           "Keeps listening, so you can just keep asking",
-          "Read the conversation back, in place",
+          "Review the conversation anytime, right there",
           "Voice recognition comes from the browser today, so voice needs Chrome",
         ],
       },
       {
         title: "Describe the job once. It runs every week.",
-        body: "Tell the assistant what you want done, in the words you would use with a colleague — read last week's figures, pull up the complaints attached to them, write the summary, send it to the manager. It builds that job, tries it on your real data while you watch, and from then on it runs on its own. Nothing irreversible happens without you.",
+        body: "Tell the assistant what you want, in plain words — like you would with a colleague: read last week's numbers, pull up the related complaints, write a summary, send it to the manager. It builds that job, tests it on your real data while you watch, and then runs on its own from then on. Nothing irreversible happens without your say-so.",
         points: [
           "Set it up by describing it, not by drawing it",
           "Runs on a schedule, or the moment you ask",
@@ -164,17 +169,17 @@ export const en = {
       },
       {
         title: "It works inside the tools you already use",
-        body: "Gmail, Calendar, Drive, Slack, WhatsApp and Zalo OA — plus GitHub, Jira and Trello — most connected in one click. And whatever else your company runs can be plugged in, so the assistant reaches that too.",
+        body: "Gmail, Calendar, Drive, Slack, WhatsApp and Zalo OA — plus GitHub, Jira and Trello — most connect in one click. Whatever else your company runs can be plugged in too, so the assistant can reach it.",
         points: ["It never sends or changes anything quietly", "Each person's logins encrypted separately"],
       },
       {
         title: "Find the answer you got last month",
-        body: "One search across everything that has been run, asked and automated. What the team ran is shared with the team; your own conversations and jobs come back to you alone, as links rather than quoted text — so searching never exposes what a colleague wrote.",
+        body: "One search covers everything that's ever been run, asked, or automated. What the team ran is visible to the team; your own conversations and jobs come back to you alone, shown as links rather than quoted text — so a search never exposes what a colleague actually wrote.",
         points: ["Finds partial and misspelt words — Vietnamese, English, 中文"],
       },
       {
         title: "When someone leaves, their access leaves with them",
-        body: "Four roles, enforced on every screen. Everyone manages their own keys; an owner can hand one out or take it back on someone else's behalf, and every time that happens it is written down.",
+        body: "Four roles, enforced on every screen. Everyone manages their own keys; an owner can grant or revoke access for anyone else, and every change is logged.",
         points: ["Each person's logins encrypted separately", "Rate limiting and account lockout"],
       },
     ],
@@ -184,30 +189,30 @@ export const en = {
     eyebrow: "Measured, not asserted",
     heading: "Tried on real data before it reaches you",
     lead: {
-      ink: "Every release is run against a real database, not reasoned about.",
-      rest: "That is how the three below came to light — each one something no amount of thinking it through would have shown. Found, root-caused, fixed, and then measured again.",
+      ink: "We test every release against a real database — we don't just reason about whether it'll work.",
+      rest: "That's how we caught the three issues below — none of them the kind you'd catch by thinking it through. We found each one, traced it to the cause, fixed it, and measured it again.",
     },
     cards: [
       {
         measure: "finding 01 · fixed",
-        caption: "before: the rules were only written into its instructions",
+        caption: "before: we just told it the rules",
         after: "now it tries the draft on your real data first",
         title: "Telling the assistant the rules was not enough. Showing it was.",
-        body: "When the assistant drafts one of these jobs for you, we used to simply write the rules into its instructions. It followed them at best three times in fifteen. Now it runs the draft against your real data first and reads back what actually happened — and corrects itself from what it saw. Confirmed end to end, on real data rather than a rehearsal.",
+        body: "When the assistant builds one of these automated jobs for you, we used to just write the rules into its instructions — and it followed them correctly only 3 times out of 15. Now it tests the draft against your real data first, checks what actually happened, and corrects itself from what it sees. Confirmed end to end, on real data rather than a rehearsal.",
       },
       {
         measure: "finding 02 · fixed",
-        caption: "before: one saved job broken by a live reference",
+        caption: "before: a saved job broken by one hardcoded number",
         after: "now it hides only what goes out of date",
         title: "A mistake the whole industry keeps repeating — and we made it twice",
-        body: "While trying the tools out, the assistant saw a real reference number and wrote it into the saved job as a fixed value. It worked once and broke on the very next run — that number was only ever valid for that one attempt. Hiding every value fixed it and broke something else: the job could no longer tell four similar lookups apart. So it now hides exactly what goes out of date, and still shows what tells one lookup from another.",
+        body: "While testing the tools, the assistant saw a real reference number and saved it into the job as a fixed value. It worked once, then broke the very next run — that number was only ever valid for that one attempt. Our first fix, hiding every value, broke something else: the job could no longer tell four similar lookups apart. So it now hides only the values that expire, and keeps the ones that tell one lookup apart from another.",
       },
       {
         measure: "finding 03 · fixed",
         caption: "before: spoken answers given without checking",
         after: "now 0 of 12",
         title: "One line of wording was making it answer from memory",
-        body: 'Asked out loud, it answered without looking anything up 3 times in 17 — where the same questions typed failed 0 in 6. The cause was a single line telling it to be brief: it read that as check less, not say less. Separating how it speaks from how much it verifies took it to none in twelve.',
+        body: "Asked out loud, it skipped looking anything up 3 times out of 17 — but the exact same questions typed in failed 0 out of 6. The cause was one line of instructions telling it to 'be brief': it read that as check less, not say less. Once we separated how it speaks from how much it verifies, that dropped to 0 out of 12.",
       },
     ],
     measurement: {
@@ -217,7 +222,7 @@ export const en = {
         {
           name: "Behaviour check",
           scale: "17 scenarios × 5 runs",
-          body: "Every scenario replayed five times and scored on each quality separately rather than pass or fail, so an answer that comes out right for the wrong reason still shows up.",
+          body: "Every scenario runs five times and gets scored on several qualities separately, not just pass or fail — so an answer that's right for the wrong reason still gets caught.",
           tags: [
             "picked the right tool",
             "asked for the right details",
@@ -231,13 +236,13 @@ export const en = {
         {
           name: "Choosing among many tools",
           scale: "60 at a time, out of 102",
-          body: "Each question is answered with the whole set of tools in play, because picking the right one out of six proves nothing about picking it out of sixty.",
+          body: "Every question is tested with the whole toolset available — because picking the right tool out of six proves nothing about picking it out of sixty.",
           tags: ["12 built in", "42 from connected apps", "48 from mounted systems"],
         },
       ],
       footer: {
         ink: "The scores themselves are part of the walkthrough.",
-        rest: "They are dated runs against a named model, weak rows included — which is a conversation worth having with someone in the room, and a poor thing to leave on a page as a number without its reasons.",
+        rest: "These are dated test runs against a named model, weak results included. That's a conversation worth having in person — and a poor thing to leave on a page as a number without its reasons.",
       },
     },
   },
@@ -247,7 +252,7 @@ export const en = {
     heading: "An internal tool, in daily use",
     lead: {
       ink: "LAAM was built for our own team and it runs on our own machines.",
-      rest: "It is not a hosted product and we are not pretending otherwise — what we can show you is a working system, the decisions behind it, and what it would take to stand one up for your team.",
+      rest: "It's not a hosted product, and we're not pretending it is — what we can show you is a working system, the decisions behind it, and what it would take to build one for your team.",
     },
     facts: [
       { label: "Release", value: "v2.5.0" },
@@ -257,7 +262,7 @@ export const en = {
     ],
     nextLabel: "Next",
     ahead: [
-      "A fuller activity record — today it covers writes, access grants and role changes",
+      "A more complete activity log — today it covers data changes, access grants and role changes",
       "Reading images and scans on the hosted model too, not only the local one",
       "Speech recognition we host ourselves, so voice stops needing Chrome",
     ],

@@ -48,8 +48,13 @@ export function HowItWorks() {
       {/* The console gets its own header rather than running straight on from the
           steps: the four steps above are the ARGUMENT, and what follows is the
           evidence — four shipped screens. Without a break the panels read as a
-          fifth step. */}
-      <div className="reveal mt-24 flex flex-wrap items-end justify-between gap-6 border-t border-line pt-14">
+          fifth step.
+
+          That break is the steps list closing itself (`last:border-b`), and this
+          header carries no rule of its own. It used to carry a `border-t` too,
+          which put two full-width rules 96px apart with nothing between them —
+          the list shutting and the header opening, both saying the same thing. */}
+      <div className="reveal mt-20 flex flex-wrap items-end justify-between gap-6">
         <div className="max-w-2xl">
           <Eyebrow tone="trace">{COPY.howItWorks.surfaces.eyebrow}</Eyebrow>
           <h3 className="mt-5 text-3xl uppercase [font-stretch:112%]">

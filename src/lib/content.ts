@@ -16,22 +16,26 @@ export type PanelKey =
   | "access";
 
 /**
- * The STRUCTURE of the seven channels — everything that is not language.
+ * The STRUCTURE of the channels — everything that is not language.
  *
  * Route, panel and tone are product facts, identical in every locale; the titles,
- * bodies and bullet points moved to lib/i18n, which holds them per language and
- * is zipped with this list by index. `label` stays here and stays English on
- * purpose: it names a surface the way `/monitoring` names a route, and the tab row
- * reads as product nomenclature rather than prose.
+ * bodies and bullet points live in lib/i18n, which holds them per language and is
+ * zipped with this list BY INDEX. Nothing in the type system enforces that pairing,
+ * so the two lists have to be edited together: change the count or the order here
+ * and `COPY.howItWorks.items` must move with it, or panels silently pair with the
+ * wrong prose and the build still passes.
  *
- * That claim has to be earned, and two labels were not earning it. `Telemetry` and
- * `Recall` were editorial inventions dressed as nomenclature — the routes are
- * `/monitoring` and `/search`, the panel frames print those routes, and the hero's
- * constellation already labels the same two surfaces `Monitoring` and `Search`. So
- * one page was naming seven surfaces with two different vocabularies, and the
- * invented half was the harder half to read. They now match everywhere. (`Telemetry`
- * carried a second problem: it is the vocabulary of the product this page used to
- * be selling.)
+ * Four, not the seven this page used to show. The marketing brief the copy now
+ * follows names four surfaces under "How LAAM Works" — chat, voice, automation and
+ * the connected tools — and says nothing about monitoring or search. Rather than
+ * write copy the brief does not contain for two panels, the panels stand down.
+ * `MonitoringPanel` and `SearchPanel` are still built and still wired through
+ * `ChannelPanel`; they are simply not on the page. Adding a row back here plus a
+ * matching entry in both locales is all it takes to bring one in.
+ *
+ * `label` stays here and stays English on purpose: it names a surface the way
+ * `/chat` names a route, so the tab row reads as product nomenclature rather than
+ * prose.
  */
 export type Channel = {
   route: string;
@@ -41,12 +45,8 @@ export type Channel = {
 };
 
 export const CHANNELS: readonly Channel[] = [
-  { route: "/monitoring", label: "Monitoring", panel: "monitoring", tone: "signal" },
   { route: "/chat", label: "Assistant", panel: "chat", tone: "trace" },
   { route: "/constellation", label: "Voice", panel: "voice", tone: "ion" },
   { route: "/workflows", label: "Automation", panel: "workflow", tone: "signal" },
   { route: "/connectors", label: "Connectors", panel: "connectors", tone: "trace" },
-  { route: "/search", label: "Search", panel: "search", tone: "trace" },
-  { route: "/settings/access", label: "Access", panel: "access", tone: "signal" },
 ] as const;
-

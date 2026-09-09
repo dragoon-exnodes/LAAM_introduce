@@ -104,7 +104,7 @@ export function Hero({ ready }: { ready: boolean }) {
     //
     // The top padding still has a job the flexbox cannot do: the nav is fixed and
     // 64px tall, so the content has to clear it.
-    <section ref={root} id="top" className="relative flex flex-1 flex-col justify-center overflow-hidden pt-24 sm:pt-28 lg:pt-28">
+    <section ref={root} id="top" className="relative flex flex-1 flex-col justify-center overflow-hidden pt-24 sm:pt-28 lg:pt-24">
       <div
         data-parallax="grid"
         className="grid-field pointer-events-none absolute -inset-16 opacity-[0.55] [mask-image:radial-gradient(ellipse_at_50%_0%,black,transparent_72%)]"
@@ -116,7 +116,7 @@ export function Hero({ ready }: { ready: boolean }) {
           fit-content, which at 1194px left the hero 799px wide inside a 1183px
           section. As a block child it had been full-width all along; the flex
           parent changed what the same class means. */}
-      <div className="relative mx-auto grid w-full max-w-[1400px] items-center gap-12 px-5 pb-14 sm:px-8 lg:pb-20 lg:pl-[calc(var(--spacing-rail)+2rem)] min-[1120px]:grid-cols-[1.15fr_0.85fr] min-[1120px]:gap-10 xl:grid-cols-[1.05fr_0.95fr] xl:gap-14">
+      <div className="relative mx-auto grid w-full max-w-[1400px] items-center gap-12 px-5 pb-10 sm:px-8 lg:pb-12 lg:pl-[calc(var(--spacing-rail)+2rem)] min-[1120px]:grid-cols-[1.15fr_0.85fr] min-[1120px]:gap-10 xl:grid-cols-[1.05fr_0.95fr] xl:gap-14">
         <div>
           {/* Separators only appear once the row is guaranteed to fit on one line —
               a wrapped list ending in a stray divider looks like a mistake.
@@ -132,10 +132,10 @@ export function Hero({ ready }: { ready: boolean }) {
             <Eyebrow>{COPY.hero.eyebrows[2]}</Eyebrow>
           </div>
 
-          <h1 className="mt-7 text-[length:var(--text-hero)] uppercase">
+          <h1 className="mt-6 text-[length:var(--text-hero)] uppercase">
             {COPY.hero.headline.map((line, index) => (
               <span key={line} data-anim="line" className="block overflow-hidden pb-[0.06em]">
-                <span className={`block ${index === 2 ? "text-signal" : ""}`}>{line}</span>
+                <span className={`block ${index === COPY.hero.headline.length - 1 ? "text-signal" : ""}`}>{line}</span>
               </span>
             ))}
           </h1>
@@ -146,13 +146,13 @@ export function Hero({ ready }: { ready: boolean }) {
               where their figures are going. The local-model clause is what makes
               "no data leaves your infrastructure" true rather than a slogan — it
               is a condition, and the sentence states it as one. */}
-          <p data-anim="lead" className="mt-8 max-w-xl text-[length:var(--text-lead)] text-muted">
+          <p data-anim="lead" className="mt-7 max-w-xl text-[length:var(--text-lead)] text-muted">
             <span className="text-ink">{COPY.hero.lead.ink}</span> {COPY.hero.lead.rest}
           </p>
 
-          <div data-anim="actions" className="mt-10 flex flex-wrap items-center gap-3">
+          <div data-anim="actions" className="mt-8 flex flex-wrap items-center gap-3">
             <Button href="#contact">{COPY.hero.actions.primary}</Button>
-            <Button href="#surfaces" variant="ghost">
+            <Button href="#how-it-works" variant="ghost">
               {COPY.hero.actions.secondary}
             </Button>
           </div>

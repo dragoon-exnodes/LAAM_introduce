@@ -101,10 +101,6 @@ export function ScopeReadout() {
             <dt className="uppercase text-muted">{COPY.hero.lookupLabel}</dt>
             <dd className="mt-1 tabular-nums text-ink">{FEATURED.steps}</dd>
           </div>
-          <div className="hidden @[32rem]:block">
-            <dt className="uppercase text-muted">{COPY.hero.costLabel}</dt>
-            <dd className="mt-1 text-free">$0.00</dd>
-          </div>
         </dl>
       </div>
     </div>

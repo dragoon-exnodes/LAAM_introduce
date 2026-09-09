@@ -29,9 +29,6 @@ export function Nav() {
           >
             LAAM
           </span>
-          <span className="hidden font-mono text-[length:var(--text-eyebrow)] uppercase tracking-[0.2em] text-faint sm:inline">
-            v2.5.0
-          </span>
         </a>
 
         <ul className="hidden items-center gap-8 lg:flex">

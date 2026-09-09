@@ -11,10 +11,10 @@ import { Rail } from "./components/layout/Rail";
 import { Footer } from "./components/layout/Footer";
 import { Hero } from "./components/hero/Hero";
 import { InquiryRibbon } from "./components/hero/InquiryRibbon";
-import { Problem } from "./components/sections/Problem";
-import { Channels } from "./components/sections/Channels";
-import { Evidence } from "./components/sections/Evidence";
-import { Status } from "./components/sections/Status";
+import { Solutions } from "./components/sections/Solutions";
+import { HowItWorks } from "./components/sections/HowItWorks";
+import { Security } from "./components/sections/Security";
+import { Custom } from "./components/sections/Custom";
 import { Contact } from "./components/sections/Contact";
 
 export default function App() {
@@ -64,7 +64,7 @@ export default function App() {
       <BootSequence onDone={onBooted} skip={reduced} />
 
       <a
-        href="#why"
+        href="#solutions"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[80] focus:bg-signal focus:px-4 focus:py-2 focus:font-mono focus:text-sm focus:text-void"
       >
         {COPY.skipToContent}
@@ -89,10 +89,10 @@ export default function App() {
           <Hero ready={booted} />
           <InquiryRibbon />
         </div>
-        <Problem />
-        <Channels />
-        <Evidence />
-        <Status />
+        <Solutions />
+        <HowItWorks />
+        <Security />
+        <Custom />
         <Contact />
       </main>
 

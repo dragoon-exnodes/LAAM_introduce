@@ -39,6 +39,10 @@ export function Contact() {
             <span className="text-ink">{COPY.contact.lead.ink}</span> {COPY.contact.lead.rest}
           </p>
 
+          <p className="mt-6 font-mono text-[length:var(--text-data)] uppercase tracking-[0.14em] text-signal">
+            {COPY.contact.tagline}
+          </p>
+
           <div className="mt-10 flex flex-wrap justify-center gap-3">
             <Button href={`mailto:contact@ennam.vn?subject=${encodeURIComponent(COPY.contact.mailSubject)}`}>
               {COPY.contact.primary}

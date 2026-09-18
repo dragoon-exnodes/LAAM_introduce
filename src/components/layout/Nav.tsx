@@ -74,7 +74,12 @@ export function Nav() {
           <a
             href={urlForLocale(locale === "vi" ? "en" : "vi")}
             aria-label={COPY.langToggle.aria}
-            className="font-mono text-[length:var(--text-eyebrow)] uppercase tracking-[0.18em] text-muted transition-colors duration-[var(--duration-fast)] hover:text-ink"
+            // `-m-3 p-3`: the visible "VI"/"EN" glyph is ~17x18px, well under
+            // the ~40-44px minimum tap target. Padding grows the hit area and
+            // the matching negative margin cancels it back out visually, so
+            // the nav's own gap-4 spacing to its neighbours is unchanged —
+            // only the invisible tappable region grows.
+            className="-m-3 p-3 font-mono text-[length:var(--text-eyebrow)] uppercase tracking-[0.18em] text-muted transition-colors duration-[var(--duration-fast)] hover:text-ink"
           >
             {COPY.langToggle.label}
           </a>

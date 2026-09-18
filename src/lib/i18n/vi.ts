@@ -27,7 +27,7 @@ export const vi: typeof en = {
       "LAAM là AI Agent cho doanh nghiệp, kết nối AI với dữ liệu, công cụ và workflow mà doanh nghiệp đang sử dụng. Hỏi bằng ngôn ngữ tự nhiên, nhận câu trả lời từ nguồn dữ liệu thật, và hành động ngay trong cùng một cuộc trò chuyện.",
   },
 
-  langToggle: { label: "English", aria: "View this page in English" },
+  langToggle: { label: "EN", aria: "View this page in English" },
 
   nav: {
     links: [

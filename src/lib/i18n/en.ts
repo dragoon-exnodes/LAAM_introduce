@@ -26,7 +26,7 @@ export const en = {
       "LAAM is an Enterprise AI Agent connected to the data, tools and workflows your business already runs on. Ask in plain language, get the answer from the real source, and carry out the work that follows — in one conversation.",
   },
 
-  langToggle: { label: "Tiếng Việt", aria: "Xem trang bằng tiếng Việt" },
+  langToggle: { label: "VI", aria: "Xem trang bằng tiếng Việt" },
 
   nav: {
     links: [

@@ -310,9 +310,18 @@ export const en = {
     primary: "Book a demo",
     secondary: "Back to the top",
     mailSubject: "LAAM demo",
+    note: "A product of Ennam SJC",
   },
 
-  footer: { wordmark: "LAAM", org: "Enterprise AI Agent" },
+  footer: {
+    wordmark: "LAAM",
+    // Condensed from `meta.description`'s first sentence — the footer's
+    // measure is one line at `max-w-[56ch]`, not the two full sentences the
+    // meta tag can afford.
+    tagline:
+      "An Enterprise AI Agent connected to the data, tools and workflows your business already runs on.",
+    org: "Enterprise AI Agent",
+  },
 
   skipToContent: "Skip to content",
 };

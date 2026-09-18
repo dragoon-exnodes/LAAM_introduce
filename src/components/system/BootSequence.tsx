@@ -31,8 +31,8 @@ type Props = { onDone: () => void; skip: boolean };
  * than staying flat, so the cut into the hero reads as depth, not a wipe. An
  * earlier version collapsed the panel to a bright line with a bloom, a CRT
  * power-down; it read as a dated TV gimmick rather than as this page's own
- * instrument, so it is gone. On the way out the wordmark still flies to the
- * exact box it occupies in the nav, so the mark is never re-drawn — it lands.
+ * instrument, so it is gone. On the way out the icon mark still flies to the
+ * exact box it occupies in the nav, so it is never re-drawn — it lands.
  */
 export function BootSequence({ onDone, skip }: Props) {
   const root = useRef<HTMLDivElement>(null);
@@ -77,7 +77,14 @@ export function BootSequence({ onDone, skip }: Props) {
 
       intro
         .from("[data-boot='rule']", { scaleX: 0, duration: 0.9 })
-        .from("[data-boot='mark']", { opacity: 0, duration: 0.4 }, 0.15)
+        // `scale: 0.9`, not opacity alone — left over from when this was
+        // fading in a block of text. A bordered square's edges are far
+        // crisper than an antialiased letterform's, so a pure opacity fade on
+        // one reads as a flicker/pop rather than an arrival, especially under
+        // `expo.out`, which front-loads almost all of the opacity change into
+        // the first frames. The scale gives the eye something continuous to
+        // track — it settles into place instead of switching on.
+        .from("[data-boot='mark']", { opacity: 0, scale: 0.9, duration: 0.4 }, 0.15)
         .from("[data-boot='line']", { opacity: 0, x: -10, duration: 0.45, stagger: 0.14 }, 0.3)
         .to(
           readout,
@@ -168,11 +175,20 @@ export function BootSequence({ onDone, skip }: Props) {
 
         <div className="relative mx-auto w-full max-w-[1400px]">
           <div className="flex items-end justify-between gap-8">
+            {/* The product's own icon mark, not the wordmark — matched to
+                AAAA_introduce's own boot screen, and to what Nav.tsx now
+                wears too: a bordered square scales down cleanly onto another
+                bordered square, where a block of text scaling onto a square
+                icon would have looked like a bad crop. Sized well above the
+                nav's own `size-8` (`size-12`/`size-14`) because the FLIP
+                lands by scaling DOWN — starting smaller than the target would
+                mean scaling UP, which softens a bordered edge instead of
+                sharpening it. */}
             <span
               data-boot="mark"
-              className="inline-block origin-top-left font-display text-2xl font-bold tracking-[0.08em] [font-stretch:125%] sm:text-3xl"
+              className="grid size-12 origin-top-left place-items-center border border-signal font-display text-xl font-bold text-signal sm:size-14 sm:text-2xl"
             >
-              LAAM
+              L
             </span>
             <span
               data-boot="count"

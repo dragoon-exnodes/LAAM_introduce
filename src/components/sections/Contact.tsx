@@ -51,6 +51,18 @@ export function Contact() {
               {COPY.contact.secondary}
             </Button>
           </div>
+
+          {/* Matches AAAA_introduce's own closing CTA: the maker's name, once,
+              at the very end of the page — after the ask has already been
+              made, not before it. */}
+          <a
+            href="https://ennam.vn/"
+            target="_blank"
+            rel="noreferrer"
+            className="mt-10 inline-block font-mono text-[length:var(--text-eyebrow)] uppercase tracking-[0.18em] text-muted underline decoration-line-bright underline-offset-4 transition-colors duration-[var(--duration-fast)] hover:text-ink hover:decoration-signal"
+          >
+            {COPY.contact.note}
+          </a>
         </div>
       </div>
     </Section>

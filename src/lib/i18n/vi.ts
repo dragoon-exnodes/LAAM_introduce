@@ -302,9 +302,15 @@ export const vi: typeof en = {
     primary: "Đặt lịch xem demo",
     secondary: "Về đầu trang",
     mailSubject: "Đặt lịch demo LAAM",
+    note: "Một sản phẩm của Ennam SJC",
   },
 
-  footer: { wordmark: "LAAM", org: "AI Agent doanh nghiệp" },
+  footer: {
+    wordmark: "LAAM",
+    tagline:
+      "AI Agent cho doanh nghiệp, kết nối AI với dữ liệu, công cụ và workflow mà doanh nghiệp đang sử dụng.",
+    org: "AI Agent doanh nghiệp",
+  },
 
   skipToContent: "Tới nội dung chính",
 };

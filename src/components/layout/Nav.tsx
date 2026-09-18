@@ -21,13 +21,36 @@ export function Nav() {
         aria-label="Main navigation"
         className="mx-auto flex h-16 max-w-[1400px] items-center justify-between gap-6 px-5 sm:px-8 lg:pl-[var(--spacing-rail)]"
       >
-        <a href="#top" className="flex items-baseline gap-2.5">
-          {/* The boot sequence flies its own wordmark to this element's box on exit. */}
+        <a href="#top" className="flex items-center gap-3">
+          {/* The product's own initial on a lit square, the shape LAAM's own
+              app wears in its header. `data-navmark`: the boot sequence's OWN
+              icon mark (the same bordered square, larger) FLIPs onto this
+              exact box on exit, so it is never redrawn — it lands. It lives
+              here rather than on the wordmark text now, because the boot mark
+              is an icon square too; landing an icon on an icon scales
+              cleanly, where the earlier text-onto-square pairing would have
+              read as a crop. */}
           <span
             data-navmark
-            className="font-display text-lg font-bold tracking-[0.06em] [font-stretch:125%]"
+            aria-hidden="true"
+            className="grid size-8 shrink-0 place-items-center border border-signal font-display text-sm font-bold text-signal"
           >
-            LAAM
+            L
+          </span>
+          <span className="flex flex-col leading-none">
+            <span className="font-display text-base font-bold tracking-[0.04em] [font-stretch:125%]">
+              LAAM
+            </span>
+            {/* "Ennam SJC", not `COPY.footer.org` ("Enterprise AI Agent"):
+                this line names who MADE the product, the same role
+                AAAA_introduce's nav subtitle plays for its own maker —
+                `footer.org` here is a product descriptor, not a maker's name,
+                and "by Enterprise AI Agent" reads as nonsense. Matches the
+                footer's own "Ennam SJC" link text below rather than
+                introducing a second spelling. */}
+            <span className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-faint">
+              by Ennam SJC
+            </span>
           </span>
         </a>
 
@@ -56,9 +79,15 @@ export function Nav() {
             {COPY.langToggle.label}
           </a>
 
+          {/* Stands down below `sm`, matching AAAA_introduce's own nav: the
+              mark grew from bare text into an icon-plus-two-line block, which
+              leaves this row tighter than it was, and a phone reaches the same
+              destination through the hero's primary button a screen-length
+              below and through the closing CTA — this one is not the only
+              path to it. */}
           <a
             href="#contact"
-            className="border border-line-bright px-4 py-2 font-mono text-[length:var(--text-eyebrow)] uppercase tracking-[0.18em] text-ink transition-colors duration-[var(--duration-fast)] hover:border-signal hover:text-signal"
+            className="hidden border border-line-bright px-4 py-2 font-mono text-[length:var(--text-eyebrow)] uppercase tracking-[0.18em] text-ink transition-colors duration-[var(--duration-fast)] hover:border-signal hover:text-signal sm:block"
           >
             {COPY.nav.cta}
           </a>

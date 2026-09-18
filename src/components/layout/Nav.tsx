@@ -54,7 +54,18 @@ export function Nav() {
           </span>
         </a>
 
-        <ul className="hidden items-center gap-8 lg:flex">
+        {/* `xl:flex`, not `lg:flex`. Five links, and the longest label
+            ("Custom for Your Business" / "Tùy chỉnh cho doanh nghiệp") pushes
+            the single-line width to ~705px EN / ~704px VI including gaps.
+            At `lg` (1024, an iPad Pro portrait width) the space actually left
+            for this list — nav width minus the logo, the language toggle, the
+            CTA and the outer gaps — is only ~604px, so every link wraps to two
+            lines and the header looks broken rather than just tight.
+            Binary-searched in-browser rather than guessed: EN stops wrapping
+            at 1160px, VI (the wider case) at 1280px. `xl` (1280) clears both
+            with real margin, not a hairline one — re-check both locales if a
+            link label changes. */}
+        <ul className="hidden items-center gap-8 xl:flex">
           {COPY.nav.links.map((link) => (
             <li key={link.href}>
               <a
